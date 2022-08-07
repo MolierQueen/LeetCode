@@ -11,8 +11,8 @@ public class ListNode {
     public var val: Int
     public var next: ListNode?
     public init() { self.val = 0; self.next = nil; }
-    public init(val: Int) { self.val = val; self.next = nil; }
-    public init(val: Int, next: ListNode?) { self.val = val; self.next = next; }
+    public init(_ val: Int) { self.val = val; self.next = nil; }
+    public init(_ val: Int, _ next: ListNode?) { self.val = val; self.next = next; }
 }
 
 class ViewController: UIViewController {
@@ -24,14 +24,16 @@ class ViewController: UIViewController {
         
         
         // 第二题
-        let l13 = ListNode(val: 3)
-        let l12 = ListNode(val: 4, next: l13)
-        let l11 = ListNode(val: 2, next: l12)
+        let l13 = ListNode(3)
+        let l12 = ListNode(4, l13)
+        let l11 = ListNode(2, l12)
         
-        let l23 = ListNode(val: 4)
-        let l22 = ListNode(val: 6, next: l23)
-        let l21 = ListNode(val: 5, next: l22)
-        print("addTwoNumbers =",self.addTwoNumbers(l12,l21))
+        let l23 = ListNode(4)
+        let l22 = ListNode(6, l23)
+        let l21 = ListNode(5, l22)
+        
+        let ret = self.addTwoNumbers(l11,l21)
+        print("addTwoNumbers =",ret!)
 
        
     }
@@ -59,68 +61,54 @@ class ViewController: UIViewController {
         fatalError("No valid outputs")
     }
     
+    
+    
     func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
-        
 //        输入：l1 = [2,4,3], l2 = [5,6,4]
 //        输出：[7,0,8]
 //        解释：342 + 465 = 807.
         
         
-        var l111 = l1
-        var l222 = l2
-        var count:Double = 0.1
-        while l111 != nil || l222 != nil {
-            print(l111?.val ?? 0, l222!.val)
-            if l111 != nil {
-                l111 = l111?.next
+        /******学习（此题是基于以下原理）*****/
+        //        a 保存链表，用b去遍历 保存到a中
+        var a  = ListNode(1)
+        var b = a
+        
+//        同一个内存地址要加都加 所以b.next 就是a.next
+        b.next = ListNode(2)
+        
+//        把b指向 b的next 其实也就是a的next
+        b = b.next!
+        
+//        同一个内存地址下.next赋值都是同时赋值 所以a.next.next也一起被赋值
+        b.next = ListNode(3)
+        print(a,b)
+        /***************/
+        
+        var l11 = l1
+        var l22 = l2
+//        这里比较巧妙，直接吧进位值加到sum中一起计算，不用单独变量
+        var sum:Int = 0
+        let result:ListNode =  ListNode()
+        var current = result
+        while l11 != nil || l22 != nil {
+            if l11 != nil {
+                sum = sum + l11!.val
+                l11 = l11?.next
             }
-            
-            if l222 != nil {
-                l222 = l222?.next
+            if l22 != nil {
+                sum = sum + l22!.val
+                l22 = l22?.next
             }
-            count = count*10
+            current.next = ListNode(sum % 10)
+            sum /= 10
+            current = current.next!
         }
-        print(1)
         
-        
-        
-        
-//        var l11 = l1
-//        var count1 = 1
-//        var arr1:[Int] = []
-//        while l11 != nil  {
-//            arr1.insert(l11!.val, at: 0)
-//            l11 = l11!.next
-//            count1 = count1 * 10
-//        }
-//        count1 = count1 / 10
-//
-//        var l22 = l2
-//        var count2 = 1
-//        var arr2:[Int] = []
-//        while l22 != nil {
-//            arr2.insert(l22!.val, at: 0)
-//            l22 = l22!.next
-//            count2 = count2 * 10
-//        }
-//        count2 = count2 / 10
-//
-//        var number1 = 0
-//        for (i,number) in arr1.enumerated() {
-//            if i>0 {
-//                number1 = number1 + count1/(i*10) * number
-//            } else {
-//                number1 = number1 + count1*number
-//            }
-//        }
-        
-//        print(count2)
-        
-        return l1
+        //        最后要记得可能有进位
+        if sum > 0 {
+            current.next = ListNode(sum % 10)
+        }
+        return result.next
     }
-
-}
-
-func getNext(l1: ListNode?) -> ListNode? {
-    return l1?.next
 }
