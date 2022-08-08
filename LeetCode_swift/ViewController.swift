@@ -19,11 +19,11 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // 第一题
-        print("twoSum =",self.twoSum([3,2,4], 6))
+        // 第1题
+        print("第1题twoSum =",self.twoSum_1([3,2,4], 6))
         
         
-        // 第二题
+        // 第2题
         let l13 = ListNode(3)
         let l12 = ListNode(4, l13)
         let l11 = ListNode(2, l12)
@@ -32,15 +32,17 @@ class ViewController: UIViewController {
         let l22 = ListNode(6, l23)
         let l21 = ListNode(5, l22)
         
-        let ret = self.addTwoNumbers(l11,l21)
-        print("addTwoNumbers =",ret!)
-
+        let ret = self.addTwoNumbers_2(l11,l21)
+        print("第2题addTwoNumbers =\(ret)")
+        
+        
+        // 第206题
+        print("第206题reverseList = ", self.reverseList_206(l11)!)
        
     }
 
     
-    
-    func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+    func twoSum_1(_ nums: [Int], _ target: Int) -> [Int] {
 //        for i in 0...nums.count - 1 {
 //            for j in i + 1 ... nums.count - 1 {
 //                if ((nums[i] + nums[j]) == target) {
@@ -63,7 +65,7 @@ class ViewController: UIViewController {
     
     
     
-    func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
+    func addTwoNumbers_2(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
 //        输入：l1 = [2,4,3], l2 = [5,6,4]
 //        输出：[7,0,8]
 //        解释：342 + 465 = 807.
@@ -140,4 +142,31 @@ class ViewController: UIViewController {
 //        }
 //        return result.next
     }
+    
+    func reverseList_206(_ head: ListNode?) -> ListNode? {
+        //        2 4 3
+        var list = head
+        var arr:[ListNode] = Array()
+        while list != nil {
+            arr.append(list!)
+            list = list!.next
+        }
+        
+        let result:ListNode = ListNode(0)
+        var moveNode = result
+
+        for node in arr.reversed() {
+            print(node.val)
+            moveNode.next = node
+            if let tmpNode = moveNode.next {
+                //往下走
+                moveNode = tmpNode
+            } else {
+                moveNode.next = nil
+            }
+        }
+        return result.next
+    }
+    
+    
 }
