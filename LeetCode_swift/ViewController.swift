@@ -19,11 +19,8 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // 第1题
-        print("第1题twoSum =",self.twoSum_1([3,2,4], 6))
         
-        
-        // 第2题
+        //        链表
         let l13 = ListNode(3)
         let l12 = ListNode(4, l13)
         let l11 = ListNode(2, l12)
@@ -32,12 +29,17 @@ class ViewController: UIViewController {
         let l22 = ListNode(6, l23)
         let l21 = ListNode(5, l22)
         
-        let ret = self.addTwoNumbers_2(l11,l21)
-        print("第2题addTwoNumbers =\(ret)")
+        // 第1题
+        print("第1题twoSum =",self.twoSum_1([3,2,4], 6))
+        
+        
+        // 第2题
+        print("第2题addTwoNumbers =\(self.addTwoNumbers_2(l11,l21)!)")
         
         
         // 第206题
         print("第206题reverseList = ", self.reverseList_206(l11)!)
+        
        
     }
 
@@ -145,27 +147,61 @@ class ViewController: UIViewController {
     
     func reverseList_206(_ head: ListNode?) -> ListNode? {
         //        2 4 3
-        var list = head
-        var arr:[ListNode] = Array()
-        while list != nil {
-            arr.append(list!)
-            list = list!.next
-        }
+        //        创建一个变量保存前置节点
+        var prev: ListNode?
         
-        let result:ListNode = ListNode(0)
-        var moveNode = result
+        //        创建一个移动指针往下走
+           var curr: ListNode? = head
+        
+        //        开始遍历
+           while curr != nil {
+               
+               //               先把之后的节点保存下，方便后面往下移动
+               let next: ListNode? = curr?.next
+               
+//               把前置节点给到当前节点的下一个，
+//               换句话说就是把当前节点插到上一个节点的前面
+               curr?.next = prev
+               
+//               保存上一个节点
+               prev = curr
+               
+//               往下移动
+               curr = next
+           }
+    
+        
+        
+           return prev
+        
+        
 
-        for node in arr.reversed() {
-            print(node.val)
-            moveNode.next = node
-            if let tmpNode = moveNode.next {
-                //往下走
-                moveNode = tmpNode
-            } else {
-                moveNode.next = nil
-            }
-        }
-        return result.next
+        
+        
+        
+        /****************第一次*********************/
+//        var list = head
+//        var arr:[ListNode] = Array()
+//        while list != nil {
+//            let tmpNode:ListNode = ListNode(list!.val)
+//            arr.append(tmpNode)
+//            list = list!.next
+//        }
+//
+//        let result:ListNode = ListNode(0)
+//        var moveNode = result
+//
+//        for node in arr.reversed() {
+//            print(node.val)
+//            moveNode.next = node
+//            if let tmpNode = moveNode.next {
+//                //往下走
+//                moveNode = tmpNode
+//            } else {
+//                moveNode.next = nil
+//            }
+//        }
+//        return result.next
     }
     
     
