@@ -147,37 +147,70 @@ class ViewController: UIViewController {
     
     func reverseList_206(_ head: ListNode?) -> ListNode? {
         //        2 4 3
-        //        创建一个变量保存前置节点
-        var prev: ListNode?
-        
-        //        创建一个移动指针往下走
-           var curr: ListNode? = head
-        
-        //        开始遍历
-           while curr != nil {
-               
-               //               先把之后的节点保存下，方便后面往下移动
-               let next: ListNode? = curr?.next
-               
-//               把前置节点给到当前节点的下一个，
-//               换句话说就是把当前节点插到上一个节点的前面
-               curr?.next = prev
-               
-//               保存上一个节点
-               prev = curr
-               
-//               往下移动
-               curr = next
-           }
-    
-        
-        
-           return prev
-        
-        
+
+//        翻转 A->B->C->D->nil
+//        第一步：nil<-C<-D
+//        第二步：nil<-B<-C<-D
+//        第三步：nil<-A<-B<-C<-D
+//        所以先找到最后一个节点，然后从后往前走
 
         
+        //        结束条件、下一个节点为空（最后一个节点）
+        guard let currentNode = head, let _ = head?.next else {return head}
         
+        //        一层层递归找到最后一个节点
+        let newList = self.reverseList_206(currentNode.next)
+        
+        //        A -> B   变成   B -> A
+        currentNode.next?.next = currentNode
+        //        B -> A  变成   B -> A -> nil
+        currentNode.next = nil
+        
+//        永远返回最后一个节点，因为翻转后最后一个节点就是头节点，
+//        所以最后返回的就是反转后的链表
+        return newList
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        /****************第二次*********************/
+//        //        迭代方法2
+//        //        创建一个变量保存前置节点
+//        var prev: ListNode?
+//
+//        //        创建一个移动指针往下走
+//           var curr: ListNode? = head
+//
+//        //        开始遍历
+//           while curr != nil {
+//
+//               //               先把之后的节点保存下，方便后面往下移动
+//               let next: ListNode? = curr?.next
+//
+////               把前置节点给到当前节点的下一个，
+////               换句话说就是把当前节点插到上一个节点的前面
+//               curr?.next = prev
+//
+////               保存上一个节点
+//               prev = curr
+//
+////               往下移动
+//               curr = next
+//           }
+//
+//
+//
+//           return prev
         
         /****************第一次*********************/
 //        var list = head
