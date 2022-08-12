@@ -1,0 +1,103 @@
+# #
+# # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+
+# ## Build generated
+# build/
+# DerivedData/
+
+# ## Various settings
+# *.xcuserstate
+# *.DS_Store
+# *.pbxuser
+# !default.pbxuser
+# *.mode1v3
+# !default.mode1v3
+# *.mode2v3
+# !default.mode2v3
+# *.perspectivev3
+# !default.perspectivev3
+# xcuserdata/
+
+# ## Other
+# *.moved-aside
+# *.xccheckout
+# *.xcscmblueprint
+
+# ## Obj-C/Swift specific
+# *.hmap
+# *.ipa
+# *.dSYM.zip
+# *.dSYM
+
+
+# # CocoaPods
+# #
+# # We recommend against adding the Pods directory to your .gitignore. However
+# # you should judge for yourself, the pros and cons are mentioned at:
+# # https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
+# #
+Pods/
+
+# # Carthage
+# #
+# # Add this line if you want to avoid checking in source code from Carthage dependencies.
+# # Carthage/Checkouts
+
+# Carthage/Build
+
+# # fastlane
+# #
+# # It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# # screenshots whenever they are needed.
+# # For more information about the recommended setup visit:
+# # https://docs.fastlane.tools/best-practices/source-control/#source-control
+
+# fastlane/report.xml
+# fastlane/Preview.html
+# fastlane/screenshots
+# fastlane/test_output
+
+# # Code Injection
+# #
+# # After new code Injection tools there's a generated folder /iOSInjectionProject
+# # https://github.com/johnno1962/injectionforxcode
+
+# iOSInjectionProject/
+
+*~
+.DS_Store
+xcuserdata/
+DrivedData/
+*.moved-aside
+*.swp
+Packages/
+.idea/
+QQKSong/Librarys/UploadSDK/UploadLibDebug/libuploadlib\.a
+QQKSong/Librarys/UploadSDK/build
+QQKSong/Librarys/UploadSDK/UploadLib.xcodeproj/project.xcworkspace
+QQKSong.xcworkspace/xcshareddata
+DevPods
+appDir
+build
+results_*
+QQKSong.xcodeproj/project.pbxproj.orig
+QQKSong/Resources/strings/zh-Hant.lproj/text.strings.orig
+b-*-context.log
+
+# 热重载 Mac 端工具
+Tools/CocoaHotReload/Cocoa Hot Reload.app
+WeSing_iOS.xlsx
+translate_wesing_ios_latest_WeSing_iOS.xlsx
+LaunchOptimize/FindUnusedCode/QQKSong.app
+hello.sh
+
+# Podfile_local 为本地开发调试版本，不提交
+Podfile_local
+
+# Pods_Sources.xcodeproj 是二进制对应的源码，不需要提交到 git 仓库，只需本地使用即可
+Pods_Sources.xcodeproj/project.pbxproj
+Pods_Sources.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+/.clang-format
+
+# githooks
+.githooks
