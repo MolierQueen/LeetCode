@@ -40,11 +40,27 @@ class ViewController: UIViewController {
         // 第206题
         print("第206题reverseList = ", self.reverseList_206(l11)!)
         
-       
+        
+        // 第3题
+        print("第3题 lengthOfLongestSubstring =",self.lengthOfLongestSubstring_3("aab"))
+        
     }
 
     
     func twoSum_1(_ nums: [Int], _ target: Int) -> [Int] {
+        
+        
+        var dic:[Int:Int] = [:]
+        for (index, number) in nums.enumerated() {
+            if let cha = dic[target - number] {
+                return [cha, index]
+            }
+            dic[number] = index
+        }
+        fatalError("No valid outputs")
+
+        
+        
 //        for i in 0...nums.count - 1 {
 //            for j in i + 1 ... nums.count - 1 {
 //                if ((nums[i] + nums[j]) == target) {
@@ -55,14 +71,14 @@ class ViewController: UIViewController {
 //        return []
         
         
-        var dict = [Int: Int]()
-        for (i, num) in nums.enumerated() {
-            if let lastIndex = dict[target - num] {
-                return [lastIndex, i]
-            }
-            dict[num] = i
-        }
-        fatalError("No valid outputs")
+//        var dict = [Int: Int]()
+//        for (i, num) in nums.enumerated() {
+//            if let lastIndex = dict[target - num] {
+//                return [lastIndex, i]
+//            }
+//            dict[num] = i
+//        }
+//        fatalError("No valid outputs")
     }
     
     
@@ -147,40 +163,56 @@ class ViewController: UIViewController {
     
     func reverseList_206(_ head: ListNode?) -> ListNode? {
         //        2 4 3
+        
+//        if head == nil {
+//            return nil
+//        }
+//
+//        if head?.next == nil {
+//            return head
+//        }
+//
+//        var ret = self.reverseList_206(head?.next)
+//
+//        head?.next?.next = head
+//        head?.next = nil
+//        return ret
+        
+        var cur = head
+        var pre:ListNode?
+        
+        while cur != nil {
+            let next = cur!.next
+            
+            cur!.next = pre
+            pre = cur!
+            cur = next
+        }
+        
+        return pre
+        
 
 //        翻转 A->B->C->D->nil
-//        第一步：nil<-C<-D
-//        第二步：nil<-B<-C<-D
+//        第一步：A->B->C<-D
+//        第二步：A->B<-C<-D
 //        第三步：nil<-A<-B<-C<-D
 //        所以先找到最后一个节点，然后从后往前走
 
         
-        //        结束条件、下一个节点为空（最后一个节点）
-        guard let currentNode = head, let _ = head?.next else {return head}
-        
-        //        一层层递归找到最后一个节点
-        let newList = self.reverseList_206(currentNode.next)
-        
-        //        A -> B   变成   B -> A
-        currentNode.next?.next = currentNode
-        //        B -> A  变成   B -> A -> nil
-        currentNode.next = nil
-        
-//        永远返回最后一个节点，因为翻转后最后一个节点就是头节点，
-//        所以最后返回的就是反转后的链表
-        return newList
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+//        //        结束条件、下一个节点为空（最后一个节点）
+//        guard let currentNode = head, let _ = head?.next else {return head}
+//
+//        //        一层层递归找到最后一个节点
+//        let newList = self.reverseList_206(currentNode.next)
+//
+//        //        A -> B   变成   B -> A
+//        currentNode.next?.next = currentNode
+//        //        B -> A  变成   B -> A -> nil
+//        currentNode.next = nil
+//
+////        永远返回最后一个节点，因为翻转后最后一个节点就是头节点，
+////        所以最后返回的就是反转后的链表
+//        return newList
         
         
         /****************第二次*********************/
@@ -237,5 +269,56 @@ class ViewController: UIViewController {
 //        return result.next
     }
     
+    
+    func lengthOfLongestSubstring_3(_ s: String) -> Int {
+    
+        
+        
+        var dic = [Character : Int]()
+//        var finalResult = 0
+//        for (i, ele) in s.enumerated() {
+//            if let index = dic[ele] {
+//                if i-index >= finalResult {
+//                    finalResult = i-index
+//                }
+//            }
+//            dic[ele] = i
+//        }
+//        if finalResult == 0 {
+//            finalResult = s.count
+//        }
+//        return finalResult
+        
+        
+        
+        
+        
+        
+        
+//        var count = 0
+//        var finalResult = 0
+//        for (i, ele) in s.enumerated() {
+//
+//            if let _ = dic[ele] {
+//                let count = dic.count
+//                if count >= finalResult {
+//                    finalResult = count
+//                }
+//                dic.removeAll()
+//                dic[ele] = i
+////                count = 1
+//            } else {
+//                dic[ele] = i
+////                count += 1
+//                let count = dic.count
+//
+//                // 注意这里要处理下如果最后一个字母进到这个循环也需要跟finalResult比一下，不然算不上数
+//                if count >= finalResult {
+//                    finalResult = count
+//                }
+//            }
+//        }
+//        return finalResult
+    }
     
 }
