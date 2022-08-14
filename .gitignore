@@ -101,3 +101,5 @@ Pods_Sources.xcodeproj/project.xcworkspace/contents.xcworkspacedata
 
 # githooks
 .githooks
+*.xcuserstate
+.DS_Store

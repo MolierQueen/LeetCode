@@ -272,53 +272,34 @@ class ViewController: UIViewController {
     
     func lengthOfLongestSubstring_3(_ s: String) -> Int {
     
+        /****************第一次*********************/
+        //        题解说是动态规划，但是没有太听懂，不过代码明白
         
-        
-        var dic = [Character : Int]()
-//        var finalResult = 0
-//        for (i, ele) in s.enumerated() {
-//            if let index = dic[ele] {
-//                if i-index >= finalResult {
-//                    finalResult = i-index
-//                }
-//            }
-//            dic[ele] = i
-//        }
-//        if finalResult == 0 {
-//            finalResult = s.count
-//        }
-//        return finalResult
-        
-        
-        
-        
-        
-        
-        
-//        var count = 0
-//        var finalResult = 0
-//        for (i, ele) in s.enumerated() {
-//
-//            if let _ = dic[ele] {
-//                let count = dic.count
-//                if count >= finalResult {
-//                    finalResult = count
-//                }
-//                dic.removeAll()
-//                dic[ele] = i
-////                count = 1
-//            } else {
-//                dic[ele] = i
-////                count += 1
-//                let count = dic.count
-//
-//                // 注意这里要处理下如果最后一个字母进到这个循环也需要跟finalResult比一下，不然算不上数
-//                if count >= finalResult {
-//                    finalResult = count
-//                }
-//            }
-//        }
-//        return finalResult
+//        还是用字典 空间换时间
+        var dic = [Character: Int]()
+        var start = 0
+        var result = 0
+        for (index, char) in s.enumerated() {
+            
+            //            找到之前存在过的字母的下标，没找到就是-1
+            let previousIndex = dic[char] ?? -1
+            
+            //            如果之前的下标大于star，说明找到了了重复的，
+            if previousIndex >= start {
+                //                那么滑动窗口的起始位置就从之前找到重复的下一个进行
+                start = previousIndex + 1
+            }
+            
+            //            当前的长度就是，当前坐标减去其实坐标+1
+            let currentLength = index - start + 1
+            
+            //            记录最长的长度
+            result = max(result, currentLength)
+            
+            //            给字典赋值 Key 是字母   value是下标 注意你要找谁就用谁当Key
+            dic[char] = index
+        }
+        return result
     }
     
 }
