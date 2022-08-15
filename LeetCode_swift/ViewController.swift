@@ -39,15 +39,30 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         let title = self.dataSource[indexPath.row]
-        let method = NSSelectorFromString(title)
-        self.twoSum_1()
-//        if self.responds(to: method) {
-//            self.perform(method)
-//        }
+        let method:Selector = NSSelectorFromString(title)
+        if self.responds(to: method) {
+            self.perform(method)
+        }
     }
+    
+    //        链表
+    let l13 = ListNode(3)
+    let l12 = ListNode(4)
+    let l11 = ListNode(2)
+    
+    let l23 = ListNode(4)
+    let l22 = ListNode(6)
+    let l21 = ListNode(5)
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        self.l11.next = self.l12
+        self.l12.next = self.l13
+        
+        self.l21.next = self.l22
+        self.l22.next = self.l23
         
         //        创建tableview
         let mainTable = UITableView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
@@ -55,35 +70,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         mainTable.dataSource = self
         mainTable.register(UITableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
         self.view.addSubview(mainTable)
-        
-        
-        //        链表
-        let l13 = ListNode(3)
-        let l12 = ListNode(4, l13)
-        let l11 = ListNode(2, l12)
-        
-        let l23 = ListNode(4)
-        let l22 = ListNode(6, l23)
-        let l21 = ListNode(5, l22)
-        
-        // 第1题
-//        print("第1题twoSum =",self.twoSum_1([3,2,4], 6))
-        
-        
-        // 第2题
-        print("第2题addTwoNumbers =\(self.addTwoNumbers_2(l11,l21)!)")
-        
-        
-        // 第206题
-        print("第206题reverseList = ", self.reverseList_206(l11)!)
-        
-        
-        // 第3题
-        print("第3题 lengthOfLongestSubstring =",self.lengthOfLongestSubstring_3("aab"))
-        
     }
     
-    public func twoSum_1() {
+    
+    
+    @objc func twoSum_1() {
         print("第1题twoSum =",self.twoSum([3,2,4], 6))
     }
 
@@ -123,10 +114,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     
-    func addTwoNumbers_2(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
-//        输入：l1 = [2,4,3], l2 = [5,6,4]
-//        输出：[7,0,8]
-//        解释：342 + 465 = 807.
+    @objc func addTwoNumbers_2() {
+        // 第2题
+        print("第2题addTwoNumbers =\(self.addTwoNumbers(l11,l21)!)")
+    }
+    func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
+        //        输入：l1 = [2,4,3], l2 = [5,6,4]
+        //        输出：[7,0,8]
+        //        解释：342 + 465 = 807.
         
         var list1 = l1
         var list2 = l2
@@ -158,50 +153,55 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         
         /*********************首次编码************************/
-//        /******学习（此题是基于以下原理）*****/
-//        //        a 保存链表，用b去遍历 保存到a中
-//        var a  = ListNode(1)
-//        var b = a
-//
-////        同一个内存地址要加都加 所以b.next 就是a.next
-//        b.next = ListNode(2)
-//
-////        把b指向 b的next 其实也就是a的next
-//        b = b.next!
-//
-////        同一个内存地址下.next赋值都是同时赋值 所以a.next.next也一起被赋值
-//        b.next = ListNode(3)
-//        print(a,b)
-//        /*****************************************/
-//
-//        var l11 = l1
-//        var l22 = l2
-////        这里比较巧妙，直接吧进位值加到sum中一起计算，不用单独变量
-//        var sum:Int = 0
-//        let result:ListNode =  ListNode()
-//        var current = result
-//        while l11 != nil || l22 != nil {
-//            if l11 != nil {
-//                sum = sum + l11!.val
-//                l11 = l11?.next
-//            }
-//            if l22 != nil {
-//                sum = sum + l22!.val
-//                l22 = l22?.next
-//            }
-//            current.next = ListNode(sum % 10)
-//            sum /= 10
-//            current = current.next!
-//        }
-//
-//        //        最后要记得可能有进位
-//        if sum > 0 {
-//            current.next = ListNode(sum % 10)
-//        }
-//        return result.next
+        //        /******学习（此题是基于以下原理）*****/
+        //        //        a 保存链表，用b去遍历 保存到a中
+        //        var a  = ListNode(1)
+        //        var b = a
+        //
+        ////        同一个内存地址要加都加 所以b.next 就是a.next
+        //        b.next = ListNode(2)
+        //
+        ////        把b指向 b的next 其实也就是a的next
+        //        b = b.next!
+        //
+        ////        同一个内存地址下.next赋值都是同时赋值 所以a.next.next也一起被赋值
+        //        b.next = ListNode(3)
+        //        print(a,b)
+        //        /*****************************************/
+        //
+        //        var l11 = l1
+        //        var l22 = l2
+        ////        这里比较巧妙，直接吧进位值加到sum中一起计算，不用单独变量
+        //        var sum:Int = 0
+        //        let result:ListNode =  ListNode()
+        //        var current = result
+        //        while l11 != nil || l22 != nil {
+        //            if l11 != nil {
+        //                sum = sum + l11!.val
+        //                l11 = l11?.next
+        //            }
+        //            if l22 != nil {
+        //                sum = sum + l22!.val
+        //                l22 = l22?.next
+        //            }
+        //            current.next = ListNode(sum % 10)
+        //            sum /= 10
+        //            current = current.next!
+        //        }
+        //
+        //        //        最后要记得可能有进位
+        //        if sum > 0 {
+        //            current.next = ListNode(sum % 10)
+        //        }
+        //        return result.next
     }
     
-    func reverseList_206(_ head: ListNode?) -> ListNode? {
+    @objc func reverseList_206() {
+        // 第206题
+        print("第206题reverseList = \(self.reverseList(l11)!)")
+    }
+    
+    func reverseList(_ head: ListNode?) -> ListNode? {
         //        2 4 3
         
 //        if head == nil {
@@ -309,37 +309,57 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        return result.next
     }
     
+    @objc func lengthOfLongestSubstring_3() {
+        // 第3题
+        print("第3题 lengthOfLongestSubstring =",self.lengthOfLongestSubstring("aab"))
+    }
     
-    func lengthOfLongestSubstring_3(_ s: String) -> Int {
+    func lengthOfLongestSubstring(_ s: String) -> Int {
+        
+        var dic:[Character:Int] = [Character:Int]()
+        var start = 0
+        var result = 0
+        for (index, cha) in s.enumerated() {
+            let last = dic[cha] ?? -1
+            if  last >= start {
+                start = last + 1
+            }
+            result = max(result, index - start + 1)
+            dic[cha] = index
+        }
+        return result
+        
+        
+        
     
         /****************第一次*********************/
         //        题解说是动态规划，但是没有太听懂，不过代码明白
         
 //        还是用字典 空间换时间
-        var dic = [Character: Int]()
-        var start = 0
-        var result = 0
-        for (index, char) in s.enumerated() {
-            
-            //            找到之前存在过的字母的下标，没找到就是-1
-            let previousIndex = dic[char] ?? -1
-            
-            //            如果之前的下标大于star，说明找到了了重复的，
-            if previousIndex >= start {
-                //                那么滑动窗口的起始位置就从之前找到重复的下一个进行
-                start = previousIndex + 1
-            }
-            
-            //            当前的长度就是，当前坐标减去其实坐标+1
-            let currentLength = index - start + 1
-            
-            //            记录最长的长度
-            result = max(result, currentLength)
-            
-            //            给字典赋值 Key 是字母   value是下标 注意你要找谁就用谁当Key
-            dic[char] = index
-        }
-        return result
+//        var dic = [Character: Int]()
+//        var start = 0
+//        var result = 0
+//        for (index, char) in s.enumerated() {
+//
+//            //            找到之前存在过的字母的下标，没找到就是-1
+//            let previousIndex = dic[char] ?? -1
+//
+//            //            如果之前的下标大于star，说明找到了了重复的，
+//            if previousIndex >= start {
+//                //                那么滑动窗口的起始位置就从之前找到重复的下一个进行
+//                start = previousIndex + 1
+//            }
+//
+//            //            当前的长度就是，当前坐标减去其实坐标+1
+//            let currentLength = index - start + 1
+//
+//            //            记录最长的长度
+//            result = max(result, currentLength)
+//
+//            //            给字典赋值 Key 是字母   value是下标 注意你要找谁就用谁当Key
+//            dic[char] = index
+//        }
+//        return result
     }
     
 }
