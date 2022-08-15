@@ -15,10 +15,47 @@ public class ListNode {
     public init(_ val: Int, _ next: ListNode?) { self.val = val; self.next = next; }
 }
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+//    datasource
+    var dataSource:Array = ["twoSum_1",
+                            "addTwoNumbers_2",
+                            "reverseList_206",
+                            "lengthOfLongestSubstring_3"]
+    
+    
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.dataSource.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let title = self.dataSource[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = title
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        let title = self.dataSource[indexPath.row]
+        let method = NSSelectorFromString(title)
+        self.twoSum_1()
+//        if self.responds(to: method) {
+//            self.perform(method)
+//        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //        创建tableview
+        let mainTable = UITableView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        mainTable.delegate = self
+        mainTable.dataSource = self
+        mainTable.register(UITableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
+        self.view.addSubview(mainTable)
+        
         
         //        链表
         let l13 = ListNode(3)
@@ -30,7 +67,7 @@ class ViewController: UIViewController {
         let l21 = ListNode(5, l22)
         
         // 第1题
-        print("第1题twoSum =",self.twoSum_1([3,2,4], 6))
+//        print("第1题twoSum =",self.twoSum_1([3,2,4], 6))
         
         
         // 第2题
@@ -45,9 +82,12 @@ class ViewController: UIViewController {
         print("第3题 lengthOfLongestSubstring =",self.lengthOfLongestSubstring_3("aab"))
         
     }
-
     
-    func twoSum_1(_ nums: [Int], _ target: Int) -> [Int] {
+    public func twoSum_1() {
+        print("第1题twoSum =",self.twoSum([3,2,4], 6))
+    }
+
+    func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
         
         
         var dic:[Int:Int] = [:]
