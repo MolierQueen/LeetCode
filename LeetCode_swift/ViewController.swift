@@ -21,7 +21,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var dataSource:Array = ["twoSum_1",
                             "addTwoNumbers_2",
                             "reverseList_206",
-                            "lengthOfLongestSubstring_3"]
+                            "lengthOfLongestSubstring_3",
+                            "longestPalindrome_5"]
     
     
     
@@ -360,6 +361,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //            dic[char] = index
 //        }
 //        return result
+    }
+                
+    
+    @objc func longestPalindrome_5() {
+        print("第5题 longestPalindrome =",self.longestPalindrome("aab"))
+    }
+    
+    func longestPalindrome(_ s: String) -> String {
+        return s
     }
     
 }
