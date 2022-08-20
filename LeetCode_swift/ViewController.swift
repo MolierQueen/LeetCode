@@ -22,7 +22,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "addTwoNumbers_2",
                             "reverseList_206",
                             "lengthOfLongestSubstring_3",
-                            "longestPalindrome_5"]
+                            "longestPalindrome_5",
+                            "deleteMiddle_2095"]
     
     
     
@@ -365,11 +366,163 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 
     
     @objc func longestPalindrome_5() {
-        print("第5题 longestPalindrome =",self.longestPalindrome("aab"))
+        print("第5题 longestPalindrome =",self.longestPalindrome("aaba"))
     }
     
+    //    第五题最长回文字符串
     func longestPalindrome(_ s: String) -> String {
-        return s
+        /************第二次提交，自己复习******************/
+
+        let stringArr:[String] = s.map({String($0)})
+        if stringArr.count <= 0 {
+            return ""
+        }
+        
+        if stringArr.count < 2 {
+            return s
+        }
+        
+        var length = 0
+        var star = 0
+        var end = 0
+        for i in 0 ..< stringArr.count {
+//            从中心扩散法，找到中心的那个\2个字符，然后往两边匀速扩散，
+            length = max(self.findHuiWen(stringArr: stringArr, leftIndex: i, rightIndex: i), self.findHuiWen(stringArr: stringArr, leftIndex: i, rightIndex: i+1))
+            
+//            如果结果比上一次的要长，就更新start和end
+            if(length > end - star) {
+//                算起止下标的，仔细想想就明白了
+                if length % 2 > 0 {
+                    star = i - length/2
+                } else {
+                    star = i + 1 - length/2
+                }
+                end = i + length/2
+            }
+        }
+        
+        //        拿到起止下标 最后再分割字符串
+        return stringArr.dropFirst(star).prefix(end-star+1).joined()
+
+        /************第一次提交，记录下超过百分百用户✌🏻******************/
+//        if s.count < 2 {
+//            return s
+//        }
+//        var start = 0
+//        var end = 0
+//        var array = s.map({ String.init($0)})
+//        for i in 0 ..< s.count {
+//            let len1 = expandCenter(array: array, left: i, right: i)
+//            let len2 = expandCenter(array: array, left: i, right: i + 1)
+//            let len = max(len1, len2)
+//            if(len > end - start) {
+//
+//                if len % 2 > 0 {
+//                    start = i - len/2
+//                } else {
+//                    start = i + 1 - len/2
+//                }
+////                start = i - (len - 1) / 2
+//                end = i + len / 2
+//
+//            }
+//        }
+//        array.removeFirst(start)
+//        let sub = array.prefix(end - start + 1).joined()
+//        return sub
+    }
+    
+    func expandCenter(stringArr: [String], leftIndex: Int, rightIndex: Int) -> Int {
+        var l = leftIndex
+        var r = rightIndex
+        while l >= 0 && r < stringArr.count && stringArr[l] == stringArr[r] {
+            l -= 1
+            r += 1
+        }
+        return r - l - 1
+    }
+    
+    func findHuiWen(stringArr:[String], leftIndex:Int, rightIndex:Int) -> Int {
+        var left = leftIndex
+        var right = rightIndex
+        while left > 0 && right < stringArr.count && stringArr[left] == stringArr[right] {
+            //            开始往两边扩散，条件为两边到头，或者两边值不相等
+            left = left - 1
+            right = right + 1
+        }
+        return right - left - 1
+    }
+    
+    // 冒泡排序 自己练习
+    func paix(arr:[Int]) -> [Int] {
+        var arr1 = arr
+        for i in 0 ..< arr1.count {
+            for j in 0 ..< arr1.count - i - 1 {
+                if arr1[j] > arr1[j+1] {
+                    let tmp = arr1[j+1]
+                    arr1[j+1] = arr1[j]
+                    arr1[j] = tmp
+                }
+            }
+        }
+        return arr1
+    }
+    
+    // 第2095题删除链表中间节点
+    @objc func deleteMiddle_2095() {
+        //        2 4 3
+        let head = self.deleteMiddle(self.l11)
+        print("第2095题 deleteMiddle = \(head)")
+    }
+
+    func deleteMiddle(_ head: ListNode?) -> ListNode? {
+//        由于链表不支持随机访问，因此常见的找出链表中间节点的方法是使用快慢指针：即我们使用两个指针 \textit{fast}fast 和 \textit{slow}slow 对链表进行遍历，其中快指针 \textit{fast}fast 每次遍历两个元素，慢指针 \textit{slow}slow 每次遍历一个元素。这样在快指针遍历完链表时，慢指针就恰好在链表的中间位置。
+        if head == nil || head?.next == nil{
+            return nil
+        }
+        var fast = head
+//        之所以slow要是哑结点，是因为我要删除中间节点，slow必须要停留在中间节点的上一个节点才能执行 slow?.next = slow?.next?.next 进行删除，所以slow先指向前一个节点，慢个一拍
+        var slow:ListNode = ListNode.init()
+        slow.next = head
+        let res = slow
+        while fast?.next != nil {
+            slow = slow.next!
+            fast = fast?.next?.next
+        }
+        slow.next = slow.next?.next
+        return res.next
+        
+        
+        
+        /************第一次提交，暴力解法，还可以******************/
+
+//        if head == nil {
+//            return nil
+//        }
+//        if head?.next == nil {
+//            return nil
+//        }
+//        var count:Int = 0
+//        var count1:Int = 0
+//        var current = head
+//        var current1 = head
+//        let current2 = current1
+//        while current != nil {
+//            count = count+1
+//            current = current!.next
+//        }
+//
+//        count = count/2
+//
+//        while current1 != nil {
+//            count1 = count1+1
+//            if count1 == count {
+//                current1?.next = current1?.next?.next
+//                break
+//            }
+//            current1 = current1?.next
+//        }
+//        return current2
     }
     
 }
