@@ -23,7 +23,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "reverseList_206",
                             "lengthOfLongestSubstring_3",
                             "longestPalindrome_5",
-                            "deleteMiddle_2095"]
+                            "deleteMiddle_2095",
+                            "findMedianSortedArrays_4"];
     
     
     
@@ -525,4 +526,54 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        return current2
     }
     
+    //    第四题. 寻找两个正序数组的中位数
+   @objc func findMedianSortedArrays_4() -> Void {
+        let arr1:[Int] = [1,2]
+        let arr2:[Int] = [3,4]
+        print("中位数为 = \(self.findMedianSortedArrays(arr1, arr2))")
+    }
+    
+    func findMedianSortedArrays(_ nums1: [Int], _ nums2: [Int]) -> Double {
+        
+        /************第一次提交，暴力解法，冒泡一次过******************/
+        let totalCount = nums2.count + nums1.count
+        var centerNum = 0
+        if totalCount < 2 {
+            if let fir = nums1.first {
+                return Double(fir)
+            } else {
+                return Double(nums2.first!)
+            }
+        }
+        
+        var totalArr:[Int] = [Int]()
+        for num in nums1 {
+            totalArr.append(num)
+        }
+        for num in nums2 {
+            totalArr.append(num)
+        }
+        
+        var isOK:Bool = true
+        for i in 0 ..< totalArr.count {
+            for j in 0 ..< totalArr.count - i-1 {
+                if totalArr[j] > totalArr[j+1] {
+                    isOK = false
+                    let tmp = totalArr[j+1]
+                    totalArr[j+1] = totalArr[j]
+                    totalArr[j] = tmp
+                }
+            }
+            if isOK {
+                break
+            }
+        }
+        
+        if (totalCount % 2) == 0 {
+            centerNum = totalCount/2 - 1
+            return (Double(totalArr[centerNum])+Double(totalArr[centerNum+1]))/2.0
+        }
+        centerNum = totalCount/2
+        return Double(totalArr[centerNum])
+    }
 }
