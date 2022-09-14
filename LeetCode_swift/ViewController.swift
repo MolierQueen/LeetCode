@@ -48,6 +48,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
+    func showAlert(title:String, message:String) -> Void {
+        let alert:UIAlertController = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        let alertOK:UIAlertAction = UIAlertAction.init(title: "知道了", style: UIAlertAction.Style.destructive)
+        alert.addAction(alertOK)
+        self.present(alert, animated: true)
+    }
+    
     //        链表
     let l13 = ListNode(3)
     let l12 = ListNode(4)
@@ -78,6 +85,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     @objc func twoSum_1() {
+        self.showAlert(title: "第1题twoSum", message: self.twoSum([3,2,4], 6).debugDescription)
         print("第1题twoSum =",self.twoSum([3,2,4], 6))
     }
 
@@ -119,6 +127,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @objc func addTwoNumbers_2() {
         // 第2题
+        self.showAlert(title: "第2题addTwoNumbers", message: self.addTwoNumbers(l11,l21).debugDescription)
         print("第2题addTwoNumbers =\(self.addTwoNumbers(l11,l21)!)")
     }
     func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
@@ -201,6 +210,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @objc func reverseList_206() {
         // 第206题
+        self.showAlert(title: "第206题reverseList", message: self.reverseList(l11).debugDescription)
         print("第206题reverseList = \(self.reverseList(l11)!)")
     }
     
@@ -314,6 +324,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @objc func lengthOfLongestSubstring_3() {
         // 第3题
+        self.showAlert(title: "第3题 lengthOfLongestSubstring", message: String(self.lengthOfLongestSubstring("aab")))
         print("第3题 lengthOfLongestSubstring =",self.lengthOfLongestSubstring("aab"))
     }
     
@@ -367,6 +378,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 
     
     @objc func longestPalindrome_5() {
+        self.showAlert(title: "第5题 longestPalindrome", message: self.longestPalindrome("aaba").debugDescription)
         print("第5题 longestPalindrome =",self.longestPalindrome("aaba"))
     }
     
@@ -473,6 +485,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @objc func deleteMiddle_2095() {
         //        2 4 3
         let head = self.deleteMiddle(self.l11)
+        self.showAlert(title: "第2095题 deleteMiddle", message: head.debugDescription)
         print("第2095题 deleteMiddle = \(head)")
     }
 
@@ -530,6 +543,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
    @objc func findMedianSortedArrays_4() -> Void {
         let arr1:[Int] = [1,2]
         let arr2:[Int] = [3,4]
+       self.showAlert(title: "第4题findMedianSortedArrays", message: self.findMedianSortedArrays(arr1, arr2).debugDescription)
         print("中位数为 = \(self.findMedianSortedArrays(arr1, arr2))")
     }
     
