@@ -24,7 +24,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "lengthOfLongestSubstring_3",
                             "longestPalindrome_5",
                             "deleteMiddle_2095",
-                            "findMedianSortedArrays_4"];
+                            "findMedianSortedArrays_4",
+                            "bubbleSort_me",
+                            "InsertionSort_me",];
     
     
     
@@ -486,7 +488,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //        2 4 3
         let head = self.deleteMiddle(self.l11)
         self.showAlert(title: "第2095题 deleteMiddle", message: head.debugDescription)
-        print("第2095题 deleteMiddle = \(head)")
+        print("第2095题 deleteMiddle = \(String(describing: head))")
     }
 
     func deleteMiddle(_ head: ListNode?) -> ListNode? {
@@ -589,5 +591,38 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         centerNum = totalCount/2
         return Double(totalArr[centerNum])
+    }
+    
+    @objc func bubbleSort_me() ->(){
+//        需要遍历i （数组个数）次，每一次遍历都会将自己与自己下一个数进行比较根据题意来进行是否交换（正序，逆序），当一次遍历完成后（j < arr.count-i-1 因为遍历过后就已经有序，所以便利了i次就是已经有倒数i个数字是有序的，减一是因为不包含自己），最后的那个数已经到了他自己该在的位置上。
+        var arr:Array = [3, 5, 2, 9, 4, 10, 7, 8 ,1]
+        for i in 0 ..< arr.count {
+            for j in 0 ..< arr.count - 1 - i {
+                if arr[j] > arr[j+1] {
+                    let tmp = arr[j]
+                    arr[j] = arr[j+1]
+                    arr[j+1]=tmp
+                }
+            }
+        }
+        self.showAlert(title: "bubbleSort_me", message: String(describing: arr))
+    }
+    
+    @objc func InsertionSort_me() ->(){
+        var arr:Array = [3, 1, 2, 9, 4, 10, 7, 8 ,12]
+        
+        if arr.count <= 1 {
+            return
+        }
+        for i in (1 ..< arr.count).reversed() {
+            let needInsert = arr[i]
+            var index = i - 1
+            while index >= 0 && needInsert < arr[index] {
+                arr[index + 1] = arr[index]
+                index-=1
+            }
+            arr[index+1]=needInsert
+        }
+        self.showAlert(title: "InsertionSort_me", message: String(describing: arr))
     }
 }
