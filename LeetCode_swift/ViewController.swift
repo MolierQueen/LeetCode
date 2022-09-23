@@ -26,7 +26,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "deleteMiddle_2095",
                             "findMedianSortedArrays_4",
                             "bubbleSort_me",
-                            "InsertionSort_me",];
+                            "InsertionSort_me",
+                            "MergeSort_me",
+                            "Quicksort_me"];
     
     
     
@@ -593,12 +595,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return Double(totalArr[centerNum])
     }
     
+        //冒泡排序
     @objc func bubbleSort_me() ->(){
 //        需要遍历i （数组个数）次，每一次遍历都会将自己与自己下一个数进行比较根据题意来进行是否交换（正序，逆序），当一次遍历完成后（j < arr.count-i-1 因为遍历过后就已经有序，所以便利了i次就是已经有倒数i个数字是有序的，减一是因为不包含自己），最后的那个数已经到了他自己该在的位置上。
         var arr:Array = [3, 5, 2, 9, 4, 10, 7, 8 ,1]
         for i in 0 ..< arr.count {
-            for j in 0 ..< arr.count - 1 - i {
-                if arr[j] > arr[j+1] {
+            for j in 0 ..< arr.count - i - 1 {
+                if arr[j + 1] < arr[j] {
                     let tmp = arr[j]
                     arr[j] = arr[j+1]
                     arr[j+1]=tmp
@@ -608,21 +611,123 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.showAlert(title: "bubbleSort_me", message: String(describing: arr))
     }
     
+    //    插入排序
     @objc func InsertionSort_me() ->(){
         var arr:Array = [3, 1, 2, 9, 4, 10, 7, 8 ,12]
         
         if arr.count <= 1 {
             return
         }
-        for i in (1 ..< arr.count).reversed() {
+        
+        for i in 1 ..< arr.count {
             let needInsert = arr[i]
             var index = i - 1
-            while index >= 0 && needInsert < arr[index] {
-                arr[index + 1] = arr[index]
-                index-=1
+            while index >= 0 && needInsert <= arr[index] {
+                arr[index+1] = arr[index]
+                index -= 1
             }
             arr[index+1]=needInsert
         }
         self.showAlert(title: "InsertionSort_me", message: String(describing: arr))
+    }
+
+    func feibo(num:Int) -> Int{
+//        斐波那契遍历
+      var a = 1
+        var b = 1
+        var c = 0
+        for _ in 0..<num {
+            a = b
+            b = c
+            c = a + b
+        }
+
+          return c
+        
+//   斐波那契递归
+        if num==1||num==2 {
+            return 1
+        }
+        return self.feibo(num: num-1)+self.feibo(num: num-2)
+    }
+    
+    //    归并排序
+    @objc func MergeSort_me() ->(){
+        var arr:Array = [3, 1, 2, 9, 4, 10, 7, 8 ,12]
+        if arr.count <= 1 {
+            return
+        }
+        
+        self.processing(arr: &arr, start:0, end: arr.count-1)
+        
+        self.showAlert(title: "MergeSort_me", message: String(describing: arr))
+    }
+    
+    func processing(arr: inout [Int], start:Int, end:Int) -> Void {
+        if start >= end {return}
+        var middle = start + (end - start) / 2
+        self.processing(arr: &arr, start: start, end: middle)
+        self.processing(arr: &arr, start: middle + 1, end: end)
+//        self.merge(arr: &arr, left: start, middle: middle, right: end)
+        self.merge(arr: &arr, start: start, middle: middle, end: end)
+    }
+    
+    func merge(arr:inout [Int], start:Int,middle:Int, end:Int) -> Void {
+        var leftPoint = start
+        var rightPoint = middle + 1
+        var tmpArr:[Int] = []
+        
+        while leftPoint <= middle && rightPoint <= end {
+            
+//            if arr[leftPoint] <= arr[rightPoint] {
+//                tmpArr.append(arr[leftPoint])
+//                leftPoint += 1
+//            } else {
+//                tmpArr.append(arr[rightPoint])
+//                rightPoint += 1
+//            }
+            
+            if arr[leftPoint] > arr[rightPoint] {
+                tmpArr.append(arr[rightPoint])
+                rightPoint += 1
+            } else {
+                tmpArr.append(arr[leftPoint])
+                leftPoint += 1
+            }
+        }
+        
+        while leftPoint <= middle {
+            tmpArr.append(arr[leftPoint])
+            leftPoint += 1
+        }
+        
+        while rightPoint <= end {
+            tmpArr.append(arr[rightPoint])
+            rightPoint += 1
+        }
+
+        
+//        var index = start
+//        for item in tmpArr {
+//            arr[index] = item
+//            index += 1
+//        }
+//
+        
+        for (index, i) in tmpArr.enumerated() {
+            arr[index+start] = i
+        }
+    }
+    
+    // 快速排序
+    @objc func Quicksort_me() ->(){
+        var arr:Array = [3, 1, 2, 9, 4, 10, 7, 8 ,12]
+        if arr.count <= 1 {
+            return
+        }
+        self.showAlert(title: "Quicksort_me", message: String(describing: arr))
+    }
+    
+    func quickSort(arr:inout [Int], left:Int, right:Int) -> Void {
     }
 }
