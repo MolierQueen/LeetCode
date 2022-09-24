@@ -28,7 +28,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "bubbleSort_me",
                             "InsertionSort_me",
                             "MergeSort_me",
-                            "Quicksort_me"];
+                            "Quicksort_me",
+                            "CountingSort_me"];
     
     
     
@@ -219,7 +220,46 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func reverseList(_ head: ListNode?) -> ListNode? {
-        //        2 4 3
+        //        2 -> 4 -> 3
+//        var perNode:ListNode?
+//        var currentNode = head
+//
+//        while currentNode != nil {
+//            let nextNode = currentNode?.next
+//            currentNode!.next = perNode
+//            perNode = currentNode!
+//            currentNode = nextNode
+//        }
+//
+//        return perNode
+        
+        
+        var curren = head
+        if curren?.next == nil {
+            return curren
+        }
+        let node = self.reverseList(curren?.next)
+        curren?.next?.next = curren
+        curren?.next = nil
+        return node
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
 //        if head == nil {
 //            return nil
@@ -235,18 +275,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        head?.next = nil
 //        return ret
         
-        var cur = head
-        var pre:ListNode?
-        
-        while cur != nil {
-            let next = cur!.next
-            
-            cur!.next = pre
-            pre = cur!
-            cur = next
-        }
-        
-        return pre
+//        var cur = head
+//        var pre:ListNode?
+//
+//        while cur != nil {
+//            let next = cur!.next
+//
+//            cur!.next = pre
+//            pre = cur!
+//            cur = next
+//        }
+//
+//        return pre
         
 
 //        翻转 A->B->C->D->nil
@@ -601,13 +641,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         var arr:Array = [3, 5, 2, 9, 4, 10, 7, 8 ,1]
         for i in 0 ..< arr.count {
             for j in 0 ..< arr.count - i - 1 {
-                if arr[j + 1] < arr[j] {
-                    let tmp = arr[j]
+                if arr[j] > arr[j+1] {
+                    var tmp = arr[j]
                     arr[j] = arr[j+1]
-                    arr[j+1]=tmp
+                    arr[j+1] = tmp
                 }
             }
         }
+   
         self.showAlert(title: "bubbleSort_me", message: String(describing: arr))
     }
     
@@ -619,15 +660,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             return
         }
         
-        for i in 1 ..< arr.count {
-            let needInsert = arr[i]
-            var index = i - 1
-            while index >= 0 && needInsert <= arr[index] {
-                arr[index+1] = arr[index]
-                index -= 1
+        for i in 0 ..< arr.count {
+            var current = arr[i]
+            
+            var index = 0
+            while index < i && arr[index] <= current {
+                index += 1
             }
-            arr[index+1]=needInsert
+            arr.swapAt(i, index)
+            
+
+//            var index = i - 1
+//            while index >= 0 && current < arr[index] {
+//                arr[index + 1] = arr[index]
+//                index -= 1
+//            }
+//            arr[index+1] = current
         }
+        
         self.showAlert(title: "InsertionSort_me", message: String(describing: arr))
     }
 
@@ -657,36 +707,23 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if arr.count <= 1 {
             return
         }
-        
-        self.processing(arr: &arr, start:0, end: arr.count-1)
-        
+        self.processing(arr: &arr, left: 0, right: arr.count-1)
         self.showAlert(title: "MergeSort_me", message: String(describing: arr))
     }
     
-    func processing(arr: inout [Int], start:Int, end:Int) -> Void {
-        if start >= end {return}
-        var middle = start + (end - start) / 2
-        self.processing(arr: &arr, start: start, end: middle)
-        self.processing(arr: &arr, start: middle + 1, end: end)
-//        self.merge(arr: &arr, left: start, middle: middle, right: end)
-        self.merge(arr: &arr, start: start, middle: middle, end: end)
+    func processing(arr:inout [Int], left:Int , right:Int) -> Void {
+        if left == right {return}
+        let middle = left + (right - left) / 2
+        self.processing(arr: &arr, left: left, right: middle)
+        self.processing(arr: &arr, left: middle + 1, right: right)
+        self.mergeArr(arr: &arr, left: left, middle: middle, right: right)
     }
-    
-    func merge(arr:inout [Int], start:Int,middle:Int, end:Int) -> Void {
-        var leftPoint = start
-        var rightPoint = middle + 1
-        var tmpArr:[Int] = []
-        
-        while leftPoint <= middle && rightPoint <= end {
-            
-//            if arr[leftPoint] <= arr[rightPoint] {
-//                tmpArr.append(arr[leftPoint])
-//                leftPoint += 1
-//            } else {
-//                tmpArr.append(arr[rightPoint])
-//                rightPoint += 1
-//            }
-            
+
+    func mergeArr(arr:inout [Int], left:Int, middle:Int, right:Int) -> Void {
+        var leftPoint:Int = left
+        var rightPoint:Int = middle + 1
+        var tmpArr:[Int] = [Int]()
+        while leftPoint <= middle && rightPoint <= right {
             if arr[leftPoint] > arr[rightPoint] {
                 tmpArr.append(arr[rightPoint])
                 rightPoint += 1
@@ -696,38 +733,139 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         
-        while leftPoint <= middle {
-            tmpArr.append(arr[leftPoint])
-            leftPoint += 1
-        }
-        
-        while rightPoint <= end {
-            tmpArr.append(arr[rightPoint])
-            rightPoint += 1
-        }
-
-        
-//        var index = start
-//        for item in tmpArr {
-//            arr[index] = item
-//            index += 1
+//        while leftPoint <= middle {
+//            tmpArr.append(arr[leftPoint])
+//            leftPoint += 1
 //        }
 //
-        
-        for (index, i) in tmpArr.enumerated() {
-            arr[index+start] = i
+//        while rightPoint <= right {
+//            tmpArr.append(arr[rightPoint])
+//            rightPoint += 1
+//        }
+//
+        if leftPoint >= middle {
+            for i in rightPoint ..< (right+1) {
+                tmpArr.append(arr[i])
+            }
         }
+        if rightPoint >= right {
+            for i in leftPoint ..< (middle+1) {
+                tmpArr.append(arr[i])
+            }
+        }
+        
+        for (index, num) in tmpArr.enumerated() {
+            let realIndex = index + left
+            arr[realIndex] = num
+        }
+        
+        
     }
     
     // 快速排序
     @objc func Quicksort_me() ->(){
-        var arr:Array = [3, 1, 2, 9, 4, 10, 7, 8 ,12]
+        var arr:Array = [3, 1, 2, 9, 4, 10, 7, 8 ,12, 6]
         if arr.count <= 1 {
             return
         }
+        self.quickSort(arr: &arr, left: 0, right: arr.count - 1)
         self.showAlert(title: "Quicksort_me", message: String(describing: arr))
     }
     
     func quickSort(arr:inout [Int], left:Int, right:Int) -> Void {
+        if left >= right{return}
+        var standard = self.findStandardIndex(arr: &arr, left: left, right: right)
+        self.quickSort(arr: &arr, left: left, right: standard - 1)
+        self.quickSort(arr: &arr, left: standard + 1, right: right)
     }
+    
+    func findStandardIndex(arr: inout [Int], left:Int, right:Int) -> Int {
+        var tmpEle = arr[right]
+        var start = left
+        for i in left ..< right {
+            if arr[i] <= tmpEle {
+                arr.swapAt(i, start)
+//                var tmp:Int
+//                tmp = arr[i]
+//                arr[i] = arr[start]
+//                arr[start] = tmp
+                start += 1
+            }
+        }
+        
+        arr.swapAt(start, right)
+
+//        var tmp1:Int = 0
+//        tmp1 = arr[right]
+//        arr[right] = arr[start]
+//        arr[start] = tmp1
+        
+        return start
+    }
+    
+    // 计数排序   https://blog.csdn.net/weixin_48992199/article/details/108055666
+    @objc func CountingSort_me() ->(){
+        let arr:Array = [3,5,1,3,2,5,4,1,3,2]
+        var max = 0
+        for i in 0 ..< arr.count {
+            if arr[i] >= max {
+                max = arr[i]
+            }
+        }
+        
+        var tmpArr:[Int] = [Int]()
+        for _ in 0 ..< max+1 {
+            tmpArr.append(0)
+        }
+        
+        for num in arr {
+            tmpArr[num] += 1
+        }
+        
+        //        这样也可以 显得牛逼
+//        for i in 0 ..< arr.count {
+//            tmpArr[arr[i]] += 1
+//        }
+        
+        // 把数组加累加
+        for i in 1 ..< tmpArr.count {
+            tmpArr[i] += tmpArr[i - 1]
+        }
+        
+        var resultArr:[Int] = [Int]()
+        for _ in 0 ..< arr.count {
+            resultArr.append(0)
+        }
+        
+        for num in arr {
+            var index = tmpArr[num] - 1
+            //            不需要判断大于0  能取到一定是有值的
+//            if index >= 0 {
+                resultArr[index] = num
+                tmpArr[num] -= 1
+//            }
+        }
+        
+//        for i in 0 ..< arr.count {
+//            var index = tmpArr[arr[i]] - 1
+//            if index >= 0 {
+//                resultArr[index] = arr[i]
+//                tmpArr[arr[i]] -= 1
+//            }
+//        }
+
+        
+        
+//        for i in 0 ..< tmpArr.count {
+//            let times = tmpArr[i]
+//            if times > 0 {
+//                for _ in 0 ..< times {
+//                    resultArr.append(i)
+//                }
+//            }
+//        }
+        self.showAlert(title: "Quicksort_me", message: String(describing: resultArr))
+    }
+
+    
 }
