@@ -29,7 +29,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "InsertionSort_me",
                             "MergeSort_me",
                             "Quicksort_me",
-                            "CountingSort_me"];
+                            "CountingSort_me",
+                            "BinarySearch_me",
+                            "merge_88",
+                            "collectionRain_42",
+                            "numIslands_200",
+                            "maxProfit_121"];
     
     
     
@@ -374,18 +379,34 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func lengthOfLongestSubstring(_ s: String) -> Int {
         
-        var dic:[Character:Int] = [Character:Int]()
-        var start = 0
-        var result = 0
-        for (index, cha) in s.enumerated() {
-            let last = dic[cha] ?? -1
-            if  last >= start {
-                start = last + 1
-            }
-            result = max(result, index - start + 1)
-            dic[cha] = index
-        }
-        return result
+        
+        var dic:[Character:Int] = Dictionary()
+                var star = 0
+                var length = 0
+                for (index, string) in s.enumerated() {
+                    var lastIndex = dic[string] ?? -1
+                    if lastIndex >= star {
+                        star = lastIndex + 1
+                    }
+                    dic[string] = index
+                   length = max(length, index - star + 1)
+                }
+                return length
+        
+        
+        
+//        var dic:[Character:Int] = [Character:Int]()
+//        var start = 0
+//        var result = 0
+//        for (index, cha) in s.enumerated() {
+//            let last = dic[cha] ?? -1
+//            if  last >= start {
+//                start = last + 1
+//            }
+//            result = max(result, index - start + 1)
+//            dic[cha] = index
+//        }
+//        return result
         
         
         
@@ -426,40 +447,81 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         print("第5题 longestPalindrome =",self.longestPalindrome("aaba"))
     }
     
+    func huiwen(s:[String], left: Int, right: Int) -> Int {
+        var rightIndex = right
+        var leftIndex = left
+        
+        while leftIndex >= 0 && rightIndex < s.count  && s[leftIndex] == s[rightIndex] {
+            rightIndex += 1
+            leftIndex -= 1
+        }
+        
+        return rightIndex - leftIndex - 1
+    }
+    
     //    第五题最长回文字符串
     func longestPalindrome(_ s: String) -> String {
+        
+        var strArr = s.map({String($0)})
+        var start = 0
+        var end = 0
+        var maxLength = 0
+        for i in 0 ..< strArr.count {
+            var  length = max(self.huiwen(s: strArr, left: i, right: i), self.huiwen(s: strArr, left: i, right: i + 1))
+            
+            if maxLength < length {
+                maxLength = length
+                if length % 2 == 0 {
+                    start = i + 1 - length / 2
+                } else {
+                    start = i  - length / 2
+                }
+                end = length / 2 + i
+            }
+
+
+        }
+        return strArr.dropFirst(start).prefix(end - start + 1).joined()
+        
+        
+        
+        
+        
+        
+        
+        
         /************第二次提交，自己复习******************/
 
-        let stringArr:[String] = s.map({String($0)})
-        if stringArr.count <= 0 {
-            return ""
-        }
-        
-        if stringArr.count < 2 {
-            return s
-        }
-        
-        var length = 0
-        var star = 0
-        var end = 0
-        for i in 0 ..< stringArr.count {
-//            从中心扩散法，找到中心的那个\2个字符，然后往两边匀速扩散，
-            length = max(self.findHuiWen(stringArr: stringArr, leftIndex: i, rightIndex: i), self.findHuiWen(stringArr: stringArr, leftIndex: i, rightIndex: i+1))
-            
-//            如果结果比上一次的要长，就更新start和end
-            if(length > end - star) {
-//                算起止下标的，仔细想想就明白了
-                if length % 2 > 0 {
-                    star = i - length/2
-                } else {
-                    star = i + 1 - length/2
-                }
-                end = i + length/2
-            }
-        }
-        
-        //        拿到起止下标 最后再分割字符串
-        return stringArr.dropFirst(star).prefix(end-star+1).joined()
+//        let stringArr:[String] = s.map({String($0)})
+//        if stringArr.count <= 0 {
+//            return ""
+//        }
+//
+//        if stringArr.count < 2 {
+//            return s
+//        }
+//
+//        var length = 0
+//        var star = 0
+//        var end = 0
+//        for i in 0 ..< stringArr.count {
+////            从中心扩散法，找到中心的那个\2个字符，然后往两边匀速扩散，
+//            length = max(self.findHuiWen(stringArr: stringArr, leftIndex: i, rightIndex: i), self.findHuiWen(stringArr: stringArr, leftIndex: i, rightIndex: i+1))
+//
+////            如果结果比上一次的要长，就更新start和end
+//            if(length > end - star) {
+////                算起止下标的，仔细想想就明白了
+//                if length % 2 > 0 {
+//                    star = i - length/2
+//                } else {
+//                    star = i + 1 - length/2
+//                }
+//                end = i + length/2
+//            }
+//        }
+//
+//        //        拿到起止下标 最后再分割字符串
+//        return stringArr.dropFirst(star).prefix(end-star+1).joined()
 
         /************第一次提交，记录下超过百分百用户✌🏻******************/
 //        if s.count < 2 {
@@ -469,8 +531,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        var end = 0
 //        var array = s.map({ String.init($0)})
 //        for i in 0 ..< s.count {
-//            let len1 = expandCenter(array: array, left: i, right: i)
-//            let len2 = expandCenter(array: array, left: i, right: i + 1)
+//            let len1 = expandCenter(stringArr: array, leftIndex: i, rightIndex: i)
+//            let len2 = expandCenter(stringArr: array, leftIndex: i, rightIndex: i + 1)
 //            let len = max(len1, len2)
 //            if(len > end - start) {
 //
@@ -496,33 +558,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             l -= 1
             r += 1
         }
+        
+//        结束后 r 与 之间的字符长度就是回文的长度，但是要注意，因为已经扩散了（ l -= 1 和  r += 1 所以 不包括l 和 r   就是  j - i + 1 - 2）
         return r - l - 1
     }
     
     func findHuiWen(stringArr:[String], leftIndex:Int, rightIndex:Int) -> Int {
         var left = leftIndex
         var right = rightIndex
-        while left > 0 && right < stringArr.count && stringArr[left] == stringArr[right] {
+        while left >= 0 && right < stringArr.count && stringArr[left] == stringArr[right] {
             //            开始往两边扩散，条件为两边到头，或者两边值不相等
             left = left - 1
             right = right + 1
         }
         return right - left - 1
-    }
-    
-    // 冒泡排序 自己练习
-    func paix(arr:[Int]) -> [Int] {
-        var arr1 = arr
-        for i in 0 ..< arr1.count {
-            for j in 0 ..< arr1.count - i - 1 {
-                if arr1[j] > arr1[j+1] {
-                    let tmp = arr1[j+1]
-                    arr1[j+1] = arr1[j]
-                    arr1[j] = tmp
-                }
-            }
-        }
-        return arr1
     }
     
     // 第2095题删除链表中间节点
@@ -642,7 +691,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         for i in 0 ..< arr.count {
             for j in 0 ..< arr.count - i - 1 {
                 if arr[j] > arr[j+1] {
-                    var tmp = arr[j]
+                    let tmp = arr[j]
                     arr[j] = arr[j+1]
                     arr[j+1] = tmp
                 }
@@ -661,7 +710,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         for i in 0 ..< arr.count {
-            var current = arr[i]
+            let current = arr[i]
             
             var index = 0
             while index < i && arr[index] <= current {
@@ -774,7 +823,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func quickSort(arr:inout [Int], left:Int, right:Int) -> Void {
         if left >= right{return}
-        var standard = self.findStandardIndex(arr: &arr, left: left, right: right)
+        let standard = self.findStandardIndex(arr: &arr, left: left, right: right)
         self.quickSort(arr: &arr, left: left, right: standard - 1)
         self.quickSort(arr: &arr, left: standard + 1, right: right)
     }
@@ -838,7 +887,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         for num in arr {
-            var index = tmpArr[num] - 1
+            let index = tmpArr[num] - 1
             //            不需要判断大于0  能取到一定是有值的
 //            if index >= 0 {
                 resultArr[index] = num
@@ -867,5 +916,271 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.showAlert(title: "Quicksort_me", message: String(describing: resultArr))
     }
 
+    // 二分查找
+    @objc func BinarySearch_me() ->(){
+        
+        var arr:Array = [1,3,4,6,8,8,8,12,67,90]
+        let target = 8
+
+        let a = self.binary(arr: &arr, left: 0, right: arr.count-1, target:target)
+        let b = self.binary1(arr: &arr, target:target)
+        print(b)
+        
+        
+    }
+
+    // 递归二分查找
+    func binary(arr:inout [Int], left:Int, right:Int, target:Int) -> Int {
+
+        if left == right {
+            if arr[left] == target {
+                return left
+            }
+            print("没有")
+            return -1
+        }
+
+        let middle = left + (right - left) / 2
+        if arr[middle] == target {
+            return left + (right - left) / 2
+        }
+
+        if arr[middle] >  target {
+           return self.binary(arr: &arr, left: left, right:middle, target: target)
+        } else {
+            return self.binary(arr: &arr, left: middle + 1, right: right, target: target)
+        }
+    }
+    
+    // 遍历二分查找
+    func binary1(arr:inout [Int], target:Int) -> Int {
+        var start = 0
+        var end = arr.count - 1
+        while start <= end {
+            let middle = start + ((end - start) >> 1)
+//            if arr[middle] == target {
+//                return middle
+//            }
+            
+            if arr[middle] > target {
+                end = middle - 1
+            } else if arr[middle] < target {
+                start = middle + 1
+            } else {
+                if middle == arr.count - 1 || arr[middle + 1] != target {
+                    return middle
+                } else {
+                    start = middle + 1
+                }
+            }
+        }
+        
+        return -1
+    }
+     
+    // 合并两个有序数组
+    @objc func merge_88() -> () {
+        
+        var nums1:[Int] = [1,2,3,0,0,0]
+        let m = 3
+        let nums2 = [2,5,6]
+        let n = 3
+        self.merge(&nums1, m, nums2, n)
+        self.showAlert(title: "merge_88", message: "\(nums1)")
+    }
+    
+    func merge(_ nums1: inout [Int], _ m: Int, _ nums2: [Int], _ n: Int) {
+        
+        let total = m + n
+        var index1 = 0
+        var index2 = 0
+        var tmpArr = [Int]()
+
+        while index1 < m && index2 < n  {
+            if nums1[index1] <= nums2[index2] {
+                tmpArr.append(nums1[index1])
+                index1 += 1
+            } else {
+                tmpArr.append(nums2[index2])
+                index2 += 1
+            }
+        }
+        if index1 >= m {
+            while index2 < n {
+                tmpArr.append(nums2[index2])
+                index2 += 1
+            }
+        } else if index2 >= n {
+            while index1 < m {
+                tmpArr.append(nums1[index1])
+                index1 += 1
+            }
+        }
+        nums1 = tmpArr
+//
+//
+//
+//
+//
+//
+//
+////        for i in 0 ..< total {
+////            var num1
+////            var num2
+////            if i < nums1.count {
+////                num1 = nums1[i]
+////            }
+////            if i < nums2.count {
+////                num2 = nums2[i]
+////            }
+////
+////
+////            if num1<= num2 {
+////                nums1[i] = num1
+////            } else {
+////                nums1[i] = num2
+////            }
+////        }
+//
+        
+    }
+    
+    //    接雨水
+    @objc func collectionRain_42() -> () {
+        let height = [0,1,0,2,1,0,1,3,2,1,2,1]
+        let a = self.trap(height)
+        self.showAlert(title: "collectionRain_42", message: "\(a)")
+    }
+//
+//    func findeRain(arr:[Int], currentIndex: Int) -> Int {
+//        var res = 0
+//        if currentIndex >= arr.count { return  findeRain(arr: arr, currentIndex: currentIndex) }
+//
+//        return (res += findeRain(arr: arr, currentIndex: 1))
+//    }
+    
+    func trap(_ height: [Int]) -> Int {
+        
+        
+        
+        
+        
+        
+        var index = 0
+        var left = 0
+        var right = 0
+        var result = 0
+        
+        while index < height.count {
+            var maxLeft = 0
+            while left >= 0 {
+                maxLeft = max(maxLeft, height[left])
+                left -= 1
+            }
+            
+            var maxRight = 0
+            while right < height.count {
+                maxRight = max(maxRight, height[right])
+                right += 1
+            }
+            
+            let short = min(maxRight, maxLeft)
+            if short > height[index] {
+                let number = (short - height[index])
+                print("列为\(index)  雨水数为\(number)" )
+                result += number
+            }
+            
+            index += 1
+            left = index
+            right = index
+        }
+        return result
+    }
+    
+    
+    //    岛屿的数量
+    @objc func numIslands_200() -> Void {
+        
+//        let grid = [
+//          ["1","1","1","1","0"],
+//          ["1","1","0","1","0"],
+//          ["1","1","0","0","0"],
+//          ["0","0","0","0","0"]
+//        ]
+        
+        var grid = [
+          ["1","1","0","0","0"],
+          ["1","1","0","0","0"],
+          ["0","0","1","0","0"],
+          ["0","0","0","1","1"]
+        ]
+//
+//        var grid = [
+//            ["1","0","1","1","0","1","1"]
+//        ]
+        
+        self.showAlert(title: "numIslands_200", message: "\(self.numIslands(grid))")
+
+    }
+
+    func numIslands(_ grid: [[String]]) -> Int {
+        var landsCount = 0
+        var grid1 = grid
+        for i in 0 ..< grid1.count {
+            let arr:[String] = grid1[i]
+            for j in 0 ..<  arr.count  {
+                let string = grid1[i][j]
+                if string == "1" {
+                    landsCount += 1
+                    self.findIand(grid: &grid1, v: j, h: i)
+                    print(grid1)
+                }
+            }
+        }
+        return landsCount
+    }
+    
+    func findIand(grid: inout [[String]], v:Int, h:Int) -> Void {
+        if v < 0 || v >= grid[0].count {
+            return
+        }
+        
+        if h < 0 || h >= grid.count {
+            return
+        }
+        
+        if grid[h][v] == "0" {
+            return
+        }
+        
+        grid[h][v] = "0"
+        self.findIand(grid: &grid, v: v, h: h - 1)
+        self.findIand(grid: &grid, v: v, h: h + 1)
+        self.findIand(grid: &grid, v: v - 1, h: h)
+        self.findIand(grid: &grid, v: v + 1, h: h)
+    }
+
+    
+    //买卖股票
+    @objc func maxProfit_121() -> Void {
+        var arr = [7,1,5,3,6,4]
+        self.showAlert(title: "maxProfit_121", message: "\(self.maxProfit(arr))")
+    }
+    
+    func maxProfit(_ prices: [Int]) -> Int {
+        
+//        思路在于循环遍历当前的股票价格， 收益为：用当前价格减去过去曾经的最小值即可
+//        然后在收益中取最大的
+        if prices.count < 2 { return -1 }
+        var minPri = prices[0]
+        var res = 0
+        for i in 0 ..< prices.count {
+            minPri = min(minPri, prices[i])
+            res = max(res, prices[i] - minPri)
+        }
+        return res
+    }
+        
     
 }
