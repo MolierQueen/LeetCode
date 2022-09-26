@@ -34,7 +34,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "merge_88",
                             "collectionRain_42",
                             "numIslands_200",
-                            "maxProfit_121"];
+                            "maxProfit_121",
+                            "LRUCache_146"];
     
     
     
@@ -1181,6 +1182,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         return res
     }
-        
     
+    //LRU
+    @objc func LRUCache_146() -> Void {
+//        ["LRUCache","get","put","get","put","put","get","get"]
+//        [[2],[2],[2,6],[1],[1,5],[1,2],[1],[2]]
+        let LRUCache = LRUObj(2)
+        LRUCache.get(2); // 缓存是 {1=1}
+        LRUCache.put(2, 6); // 缓存是 {1=1, 2=2}
+        LRUCache.get(1);    // 返回 1
+        LRUCache.put(1, 5); // 该操作会使得关键字 2 作废，缓存是 {1=1, 3=3}
+        LRUCache.put(1,2);    // 返回 -1 (未找到)
+        LRUCache.get(1);    // 返回 -1 (未找到)
+        LRUCache.get(2);    // 返回 3
+
+//        self.showAlert(title: "LRUCache_146", message: "\(self.maxProfit(arr))")
+    }
 }

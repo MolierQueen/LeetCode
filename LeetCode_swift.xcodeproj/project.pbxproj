@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		875497BA28E18A4D00B39D55 /* LRUObj.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875497B928E18A4D00B39D55 /* LRUObj.swift */; };
 		A99373D6289583C1000E6C5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99373D5289583C1000E6C5D /* AppDelegate.swift */; };
 		A99373D8289583C1000E6C5D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99373D7289583C1000E6C5D /* SceneDelegate.swift */; };
 		A99373DA289583C1000E6C5D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99373D9289583C1000E6C5D /* ViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		875497B928E18A4D00B39D55 /* LRUObj.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LRUObj.swift; sourceTree = "<group>"; };
 		A99373D2289583C1000E6C5D /* LeetCode_swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LeetCode_swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A99373D5289583C1000E6C5D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A99373D7289583C1000E6C5D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 				A99373D5289583C1000E6C5D /* AppDelegate.swift */,
 				A99373D7289583C1000E6C5D /* SceneDelegate.swift */,
 				A99373D9289583C1000E6C5D /* ViewController.swift */,
+				875497B928E18A4D00B39D55 /* LRUObj.swift */,
 				A99373DB289583C1000E6C5D /* Main.storyboard */,
 				A99373DE289583C2000E6C5D /* Assets.xcassets */,
 				A99373E0289583C2000E6C5D /* LaunchScreen.storyboard */,
@@ -139,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A99373DA289583C1000E6C5D /* ViewController.swift in Sources */,
+				875497BA28E18A4D00B39D55 /* LRUObj.swift in Sources */,
 				A99373D6289583C1000E6C5D /* AppDelegate.swift in Sources */,
 				A99373D8289583C1000E6C5D /* SceneDelegate.swift in Sources */,
 			);
