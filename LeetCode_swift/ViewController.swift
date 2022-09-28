@@ -43,7 +43,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "myAtoi_8",
                             "firstMissingPositive_41",
                             "threeSum_15",
-                            "goodNodes_1448"];
+                            "goodNodes_1448",
+                            "topKFrequent_347",
+                            "rightSideView_199",
+                            "ImplementQueueWithStack_232",
+                            "rob_198",
+                            "mySqrt_69",
+                            "sumZero_1304",
+                            "arraySign_1822",
+                            "findKthLargest_215",
+                            "maxNumberOfFamilies_1386"];
     
     
     
@@ -872,7 +881,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 max = arr[i]
             }
         }
-        
         var tmpArr:[Int] = [Int]()
         for _ in 0 ..< max+1 {
             tmpArr.append(0)
@@ -1677,7 +1685,387 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func topKFrequent(_ nums: [Int], _ k: Int) -> [Int] {
-        return[1]
+        
+        if nums.count == 0 {
+            return []
+        }
+        
+//        方法1 暴力破解  数组加字典[元素：出现次数]
+//        var numDic = [Int:Int]()
+//        var res = [Int]()
+//        for i in 0 ..< nums.count {
+//            let tmpNum = nums[i]
+//            if numDic[tmpNum] != nil {
+//                numDic[tmpNum]! += 1
+//            } else {
+//                numDic[tmpNum] = 1
+//            }
+//        }
+//
+//        var count = 0
+//        if k < numDic.count {
+//            count = numDic.count - k
+//        }
+//        while numDic.count > count {
+//            var maxNum = 0
+//            var needRemove = 0
+//            for i in 0 ..< nums.count {
+//                let count = numDic[nums[i]] ?? 0
+//                if count >= maxNum {
+//                    maxNum = count
+//                    needRemove = nums[i]
+//                }
+//            }
+//            numDic.removeValue(forKey: needRemove)
+//            res.append(needRemove)
+//        }
+//
+//        return res
+        
+        
+        //        方法2
+        // 创建一个字典 key：出现的次数   value：该次数所对应的元素们   即都有哪些元素出现了 key次
+        var countDic = [Int:[Int]]()
+        
+        // 创建一个字典 key：数组中的数   value：该数出现的次数
+        var numDic = [Int:Int]()
+        
+        // 保存最后的结果
+        var res = [Int]()
+        // 开始遍历 把数组转为  numDic
+        for i in 0 ..< nums.count {
+            let tmpNum = nums[i]
+            if numDic[tmpNum] != nil {
+                numDic[tmpNum]! += 1
+            } else {
+                numDic[tmpNum] = 1
+            }
+        }
+        
+        //        在进行遍历把numDic 转为 countDic
+        for (num, count) in numDic{
+            var numsArr = countDic[count]
+            if numsArr == nil {
+                countDic[count] = [num]
+            } else {
+                countDic[count]?.append(num)
+            }
+        }
+        
+        //        逆序从countDic中取出元素 拼接到res上，直到res的长度为k
+        for i in (0 ... nums.count).reversed() {
+            let numsArr = countDic[i]
+            //            如果该次数下没有 对应的数字就continue
+            if numsArr == nil {
+                continue
+            }
+            
+            //            如果大于K个 就直接中断并返回
+            if res.count >= k {
+                break
+            }
+            res = res + numsArr!
+        }
+        return res
+    }
+
+    //  二叉树的右视图 直接用广度优先遍历
+    @objc func rightSideView_199() -> Void {
+        let tree:TreeNode = TreeNode(100)
+
+        self.showAlert(title: "rightSideView_199", message: "\(self.rightSideView(tree))")
     }
     
+    func rightSideView(_ root: TreeNode?) -> [Int] {
+        guard let root = root else { return [] }
+        var res = [Int]()
+        self.readNode(resArr: &res, nodeArr: [root])
+        return res
+    }
+    
+    func readNode(resArr:inout [Int], nodeArr:[TreeNode]) -> Void {
+        if nodeArr.count == 0 {
+            return
+        }
+        var tmpArr:[TreeNode] = Array()
+        let lastNode = nodeArr.last!
+        resArr.append(lastNode.val)
+        for i in (0 ..< nodeArr.count) {
+            let tmpNode = nodeArr[i]
+            if tmpNode.left != nil {
+                tmpArr.append(tmpNode.left!)
+            }
+            if tmpNode.right != nil {
+                tmpArr.append(tmpNode.right!)
+            }
+        }
+        self.readNode(resArr: &resArr, nodeArr: tmpArr)
+    }
+                            
+    
+    @objc func ImplementQueueWithStack_232() -> Void {
+        self.showAlert(title: "ImplementQueueWithStack_232", message: "考点为：如何使用栈（先进后出的结构）来模拟队列（先进先出的结构）。这道题我就不写了，方法为 创建两个数组，要注意的是因为是要用栈来模拟队列，所以这两个数组必须是栈，只能先进后出，不能直接firstObj那样取值，遍历也要逆序遍历，创建两个数组，A 和 B ，把A遍历放到B的过程就是颠倒先后顺序的过程，也是此题的考点")
+    }
+    
+    // 打家劫舍  动态规划
+    @objc func rob_198() -> Void {
+        let nums = [1,2,3,1]
+        self.showAlert(title: "rob_198", message: "\(self.rob(nums))")
+    }
+    
+    func rob(_ nums:[Int]) -> Int {
+        
+//        如果是0个 直接返回0 一个都偷不了
+        if nums.count == 0 {
+            return 0
+        }
+        
+//        如果只有一个  那就偷这一个了
+        if nums.count == 1 {
+            return nums[0]
+        }
+        
+//        如果 有两个及其以上就有两种情况
+//        1：我偷第N个 + 我偷第0~n-2个，因为不能连着偷
+//        2：我直接偷 n-1个
+//        所以上面两种情况取最大值就是我能偷的最多的钱 max(情况1, 情况2)
+//        因为第N个我能通过遍历直接拿到，所以我还缺两个指针
+        
+//        1：0~n-2的钱，我们称为first
+        var first = nums[0]
+        
+//        2：0~n-1的钱我们称为second
+        var second = max(nums[0], nums[1])
+        
+//        开始遍历数组，因为只含一个的元素的情况被我们之前排除了；只含有两个元素的情况就是second初始化的值。所以这里从2开始遍历
+        for i in 2 ..< nums.count {
+            
+//            先把second的值保存下，因为后面要更新他的值 且他的值还会给别人 所以要先保存下
+            let tmp = second
+            
+//            将0~i的钱存到second里面
+            second = max(second, nums[i] + first)
+            
+//            将tmp的值赋给first，注意这个tmp取得是second进行本次循环前的值，所以他是不包含本次循环的，也就是0~i-1的钱，在下一次循环中i+1后就满足了
+//            second为0~i-1  first为0~i-2  所以这次再回去看上一行代码是不是就懂了
+            first = tmp
+        }
+        
+//        最后因为要求的就是0 ~ i 的钱，所以返回second
+        return second
+   }
+    
+//    求平方根 使用二分查找
+    @objc func mySqrt_69() -> Void {
+        self.showAlert(title: "mySqrt_69", message: "\(self.mySqrt(8))")
+    }
+    
+    func mySqrt(_ x: Int) -> Int {
+        
+//        明确几点
+//        1：要知道遍历的起止位置  起点肯定是0 终点就是x
+//        2：要知道本身已经是一个有序的数组了，需要在有序数组中查找元素 效率最高的就是二分查找（两个指针一头一尾 再加个中间节点）
+//        3：一看到这种开平方的 指数级别的，基本都跑不了二分查找
+//        4：知道 a^2 <= x 其中所有a 的最大值就是答案
+        
+        var left = 0
+        var right = x
+        var res = 0
+        while left <= right {
+            var middle = left + (right - left) / 2
+            if middle * middle <= x {
+//                这里主要满足条件后先赋值不要着急返回，因为可能后面还有更大的
+                res = middle
+                left = middle + 1
+            } else {
+                right = middle - 1
+            }
+        }
+        return res
+    }
+    
+    //  返回和为0 的数
+    @objc func sumZero_1304() -> Void {
+        self.showAlert(title: "sumZero_1304", message: "\(self.sumZero(2))")
+    }
+    
+    func sumZero(_ n: Int) -> [Int] {
+        //        题不难，但是要注意边界情况
+        if n == 0  {
+            return []
+        }
+        
+        if n == 1 {
+            return [0]
+        }
+        
+        var currentSum = 0
+        var res = [Int]()
+        for i in 0 ... n - 1  {
+            if i != n - 1 {
+                currentSum += (i + 1)
+                res.append(i + 1)
+            } else {
+                res.append(currentSum * -1)
+            }
+        }
+        return res
+    }
+    
+    // 数组元素乘积的符号
+    @objc func arraySign_1822() -> Void {
+        let nums = [-1,-2,-3,-4,3,2,1]
+        self.showAlert(title: "arraySign_1822", message: "\(self.arraySign(nums))")
+    }
+    
+    func arraySign(_ nums: [Int]) -> Int {
+        
+        //        方法一 ：算负数的个数
+//        var numberCount = 0
+//        for i in 0 ..< nums.count {
+//            if nums[i] == 0 {
+//                return 0
+//            }
+//            if nums[i] < 0 {
+//                numberCount += 1
+//            }
+//        }
+//
+//        if numberCount % 2 == 0 {
+//            return 1
+//        }
+//        return -1
+        
+//        方法二 ：用一个标记位来表示zheng'fu's
+        var mark = 1
+        for i in 0 ..< nums.count {
+            if nums[i] == 0 {
+                return 0
+            }
+            if nums[i] < 0 {
+                mark *= -1
+            }
+        }
+        return mark
+    }
+    
+    var k = 0
+    var kth = 0
+    // 数组第K大元素  经典的Top K问题！！！！！！
+//    使用快速排序 但是要注意 可以通过判断 middle和 k的位置再决定是对左侧排序还是对右侧排序。不要一上来无脑左右来一次
+    @objc func findKthLargest_215() -> Void {
+        let nums = [3,2,1,5,6,4]
+        let k = 2
+        self.showAlert(title: "findKthLargest_215", message: "\(self.findKthLargest(nums, k))")
+    }
+    
+    func findKthLargest(_ nums: [Int], _ k: Int) -> Int {
+        var nums = nums
+        self.k = k
+        self.quickSort(nums: &nums, left: 0, right: nums.count - 1)
+        return self.kth
+    }
+    
+    func quickSort(nums:inout [Int], left:Int, right:Int) -> Void {
+        if left >= right {
+            self.kth = nums[left]
+            return
+        }
+        let middle = self.partition(nums: &nums, left: left, right: right)
+        if middle == nums.count - self.k {
+            self.kth = nums[middle]
+            return
+        }
+        
+        if middle < nums.count - self.k {
+            self.quickSort(nums: &nums, left: middle + 1, right: right)
+        } else if middle > nums.count - self.k {
+            self.quickSort(nums: &nums, left: left, right: (middle - 1))
+        }
+    }
+    
+    func partition(nums:inout [Int], left: Int, right: Int) -> Int {
+        let standard = nums[right]
+        var currentIndex = left
+        for i in left ..< right {
+            let tmp = nums[i]
+            if tmp <= standard {
+                nums.swapAt(currentIndex, i)
+                currentIndex += 1
+            }
+        }
+        nums.swapAt(currentIndex, right)
+        return currentIndex
+    }
+    
+    //    安排电影院座位
+    @objc func maxNumberOfFamilies_1386() -> Void {
+        let reservedSeats = [[4,3],[1,4],[4,6],[1,7]]
+        let n = 4
+       
+        self.showAlert(title: "maxNumberOfFamilies_1386", message: "\(self.maxNumberOfFamilies(n, reservedSeats))")
+    }
+    
+    func maxNumberOfFamilies(_ n: Int, _ reservedSeats: [[Int]]) -> Int {
+        
+
+//        座位和关系放到字典里 key就是行  value 就是一个数组 包含该行的座位
+        var res = 0
+        var dict: Dictionary<Int, [Int]> = Dictionary<Int,[Int]>()
+        for element in reservedSeats {
+            var list = dict[element[0]]
+            if (list == nil){
+                list = [Int]()
+            }
+            list!.append(element[1])
+            dict[element[0]] = list
+        }
+        res = 2*n
+//        把座位数组变成 11111111的形式
+        for (_, seatList) in dict {
+            var rowSeats: [Int] = [Int](repeating: 1, count: 10)
+            for element in seatList {
+                rowSeats[element-1] = 0
+            }
+            //计算这一行实际的数量
+            res = res - 2 + calculateCount(rowSeats)
+        }
+        return res
+    }
+    
+    func calculateCount(_ list: [Int]) -> Int {
+        var count = 0
+//        判断1 到 4 能做不
+        if (isTrue(1, 4, list)){
+            count = count + 1
+            
+//            如果1 到4 可以做，再看看5到8能做不
+            if (isTrue(5, 8, list)){
+                count = count + 1
+            }
+        }else{
+            
+//            如果1到4都不能做就看3到6能做不 因为有可能之所以1到4不能做是因为1 2 有人，所以这时候3到6是可以做的
+            if (isTrue(3, 6, list)){
+                count = count + 1
+//                如果3到6 可以做 那么5到8肯定做不了了
+            }else{
+                //反之判断5到8 能否做人
+                if (isTrue(5, 8, list)){
+                    count = count + 1
+                }
+            }
+        }
+        return count
+    }
+    
+    //用来判断在[start, end]之间,是否全部为1
+    func isTrue(_ start: Int, _ end: Int, _ list: [Int]) -> Bool {
+        for index in start..<end+1 {
+            if (list[index] == 0){
+                return false
+            }
+        }
+        return true
+    }
 }
