@@ -17,6 +17,7 @@ public class ListNode {
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    
     //    datasource
     var dataSource:Array = ["twoSum_1",
                             "addTwoNumbers_2",
@@ -52,7 +53,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "sumZero_1304",
                             "arraySign_1822",
                             "findKthLargest_215",
-                            "maxNumberOfFamilies_1386"];
+                            "maxNumberOfFamilies_1386",
+                            "searchRange_34",
+                            "romanToInt_13",
+                            "reverseBetween_92",
+                            "longestDiverseString_1405",
+                            "maximalNetworkRank_1615",
+                            "letterCombinations_17"];
     
     
     
@@ -64,6 +71,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let title = self.dataSource[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = title
+        cell.textLabel?.textColor = UIColor.white
+        cell.backgroundColor = UIColor.black
         return cell
     }
     
@@ -84,9 +93,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     //        链表
+    let l15 = ListNode(5)
+    let l14 = ListNode(4)
     let l13 = ListNode(3)
-    let l12 = ListNode(4)
-    let l11 = ListNode(2)
+    let l12 = ListNode(2)
+    let l11 = ListNode(1)
     
     let l23 = ListNode(4)
     let l22 = ListNode(6)
@@ -94,23 +105,41 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.view.backgroundColor = UIColor.black
         
         self.l11.next = self.l12
         self.l12.next = self.l13
+        self.l13.next = self.l14
+        self.l14.next = self.l15
         
         self.l21.next = self.l22
         self.l22.next = self.l23
         
         //        创建tableview
         let mainTable = UITableView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        mainTable.backgroundColor = UIColor.black
         mainTable.delegate = self
         mainTable.dataSource = self
         mainTable.register(UITableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
         mainTable.scrollToRow(at: IndexPath(row: self.dataSource.count - 1, section: 0), at: UITableView.ScrollPosition.top, animated: true)
         self.view.addSubview(mainTable)
+        
+        let button = UIButton(type: UIButton.ButtonType.custom)
+        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 100, y: 100, width: 50, height: 50)
+        button .setTitle("✅", for: UIControl.State.normal)
+        button.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        button.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
+        button.addTarget(self, action: #selector(buttonAction), for: UIControl.Event.touchUpInside)
+        self.view.addSubview(button)
     }
     
+    @objc func buttonAction() -> Void {
+        let selectorName = self.dataSource.last
+        let method:Selector = NSSelectorFromString(selectorName!)
+        if self.responds(to: method) {
+            self.perform(method)
+        }
+    }
     
     
     @objc func twoSum_1() {
@@ -1690,37 +1719,37 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             return []
         }
         
-//        方法1 暴力破解  数组加字典[元素：出现次数]
-//        var numDic = [Int:Int]()
-//        var res = [Int]()
-//        for i in 0 ..< nums.count {
-//            let tmpNum = nums[i]
-//            if numDic[tmpNum] != nil {
-//                numDic[tmpNum]! += 1
-//            } else {
-//                numDic[tmpNum] = 1
-//            }
-//        }
-//
-//        var count = 0
-//        if k < numDic.count {
-//            count = numDic.count - k
-//        }
-//        while numDic.count > count {
-//            var maxNum = 0
-//            var needRemove = 0
-//            for i in 0 ..< nums.count {
-//                let count = numDic[nums[i]] ?? 0
-//                if count >= maxNum {
-//                    maxNum = count
-//                    needRemove = nums[i]
-//                }
-//            }
-//            numDic.removeValue(forKey: needRemove)
-//            res.append(needRemove)
-//        }
-//
-//        return res
+        //        方法1 暴力破解  数组加字典[元素：出现次数]
+        //        var numDic = [Int:Int]()
+        //        var res = [Int]()
+        //        for i in 0 ..< nums.count {
+        //            let tmpNum = nums[i]
+        //            if numDic[tmpNum] != nil {
+        //                numDic[tmpNum]! += 1
+        //            } else {
+        //                numDic[tmpNum] = 1
+        //            }
+        //        }
+        //
+        //        var count = 0
+        //        if k < numDic.count {
+        //            count = numDic.count - k
+        //        }
+        //        while numDic.count > count {
+        //            var maxNum = 0
+        //            var needRemove = 0
+        //            for i in 0 ..< nums.count {
+        //                let count = numDic[nums[i]] ?? 0
+        //                if count >= maxNum {
+        //                    maxNum = count
+        //                    needRemove = nums[i]
+        //                }
+        //            }
+        //            numDic.removeValue(forKey: needRemove)
+        //            res.append(needRemove)
+        //        }
+        //
+        //        return res
         
         
         //        方法2
@@ -1768,11 +1797,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         return res
     }
-
+    
     //  二叉树的右视图 直接用广度优先遍历
     @objc func rightSideView_199() -> Void {
         let tree:TreeNode = TreeNode(100)
-
+        
         self.showAlert(title: "rightSideView_199", message: "\(self.rightSideView(tree))")
     }
     
@@ -1801,7 +1830,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         self.readNode(resArr: &resArr, nodeArr: tmpArr)
     }
-                            
+    
     
     @objc func ImplementQueueWithStack_232() -> Void {
         self.showAlert(title: "ImplementQueueWithStack_232", message: "考点为：如何使用栈（先进后出的结构）来模拟队列（先进先出的结构）。这道题我就不写了，方法为 创建两个数组，要注意的是因为是要用栈来模拟队列，所以这两个数组必须是栈，只能先进后出，不能直接firstObj那样取值，遍历也要逆序遍历，创建两个数组，A 和 B ，把A遍历放到B的过程就是颠倒先后顺序的过程，也是此题的考点")
@@ -1815,58 +1844,58 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func rob(_ nums:[Int]) -> Int {
         
-//        如果是0个 直接返回0 一个都偷不了
+        //        如果是0个 直接返回0 一个都偷不了
         if nums.count == 0 {
             return 0
         }
         
-//        如果只有一个  那就偷这一个了
+        //        如果只有一个  那就偷这一个了
         if nums.count == 1 {
             return nums[0]
         }
         
-//        如果 有两个及其以上就有两种情况
-//        1：我偷第N个 + 我偷第0~n-2个，因为不能连着偷
-//        2：我直接偷 n-1个
-//        所以上面两种情况取最大值就是我能偷的最多的钱 max(情况1, 情况2)
-//        因为第N个我能通过遍历直接拿到，所以我还缺两个指针
+        //        如果 有两个及其以上就有两种情况
+        //        1：我偷第N个 + 我偷第0~n-2个，因为不能连着偷
+        //        2：我直接偷 n-1个
+        //        所以上面两种情况取最大值就是我能偷的最多的钱 max(情况1, 情况2)
+        //        因为第N个我能通过遍历直接拿到，所以我还缺两个指针
         
-//        1：0~n-2的钱，我们称为first
+        //        1：0~n-2的钱，我们称为first
         var first = nums[0]
         
-//        2：0~n-1的钱我们称为second
+        //        2：0~n-1的钱我们称为second
         var second = max(nums[0], nums[1])
         
-//        开始遍历数组，因为只含一个的元素的情况被我们之前排除了；只含有两个元素的情况就是second初始化的值。所以这里从2开始遍历
+        //        开始遍历数组，因为只含一个的元素的情况被我们之前排除了；只含有两个元素的情况就是second初始化的值。所以这里从2开始遍历
         for i in 2 ..< nums.count {
             
-//            先把second的值保存下，因为后面要更新他的值 且他的值还会给别人 所以要先保存下
+            //            先把second的值保存下，因为后面要更新他的值 且他的值还会给别人 所以要先保存下
             let tmp = second
             
-//            将0~i的钱存到second里面
+            //            将0~i的钱存到second里面
             second = max(second, nums[i] + first)
             
-//            将tmp的值赋给first，注意这个tmp取得是second进行本次循环前的值，所以他是不包含本次循环的，也就是0~i-1的钱，在下一次循环中i+1后就满足了
-//            second为0~i-1  first为0~i-2  所以这次再回去看上一行代码是不是就懂了
+            //            将tmp的值赋给first，注意这个tmp取得是second进行本次循环前的值，所以他是不包含本次循环的，也就是0~i-1的钱，在下一次循环中i+1后就满足了
+            //            second为0~i-1  first为0~i-2  所以这次再回去看上一行代码是不是就懂了
             first = tmp
         }
         
-//        最后因为要求的就是0 ~ i 的钱，所以返回second
+        //        最后因为要求的就是0 ~ i 的钱，所以返回second
         return second
-   }
+    }
     
-//    求平方根 使用二分查找
+    //    求平方根 使用二分查找
     @objc func mySqrt_69() -> Void {
         self.showAlert(title: "mySqrt_69", message: "\(self.mySqrt(8))")
     }
     
     func mySqrt(_ x: Int) -> Int {
         
-//        明确几点
-//        1：要知道遍历的起止位置  起点肯定是0 终点就是x
-//        2：要知道本身已经是一个有序的数组了，需要在有序数组中查找元素 效率最高的就是二分查找（两个指针一头一尾 再加个中间节点）
-//        3：一看到这种开平方的 指数级别的，基本都跑不了二分查找
-//        4：知道 a^2 <= x 其中所有a 的最大值就是答案
+        //        明确几点
+        //        1：要知道遍历的起止位置  起点肯定是0 终点就是x
+        //        2：要知道本身已经是一个有序的数组了，需要在有序数组中查找元素 效率最高的就是二分查找（两个指针一头一尾 再加个中间节点）
+        //        3：一看到这种开平方的 指数级别的，基本都跑不了二分查找
+        //        4：知道 a^2 <= x 其中所有a 的最大值就是答案
         
         var left = 0
         var right = x
@@ -1874,7 +1903,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         while left <= right {
             var middle = left + (right - left) / 2
             if middle * middle <= x {
-//                这里主要满足条件后先赋值不要着急返回，因为可能后面还有更大的
+                //                这里主要满足条件后先赋值不要着急返回，因为可能后面还有更大的
                 res = middle
                 left = middle + 1
             } else {
@@ -1921,22 +1950,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func arraySign(_ nums: [Int]) -> Int {
         
         //        方法一 ：算负数的个数
-//        var numberCount = 0
-//        for i in 0 ..< nums.count {
-//            if nums[i] == 0 {
-//                return 0
-//            }
-//            if nums[i] < 0 {
-//                numberCount += 1
-//            }
-//        }
-//
-//        if numberCount % 2 == 0 {
-//            return 1
-//        }
-//        return -1
+        //        var numberCount = 0
+        //        for i in 0 ..< nums.count {
+        //            if nums[i] == 0 {
+        //                return 0
+        //            }
+        //            if nums[i] < 0 {
+        //                numberCount += 1
+        //            }
+        //        }
+        //
+        //        if numberCount % 2 == 0 {
+        //            return 1
+        //        }
+        //        return -1
         
-//        方法二 ：用一个标记位来表示zheng'fu's
+        //        方法二 ：用一个标记位来表示zheng'fu's
         var mark = 1
         for i in 0 ..< nums.count {
             if nums[i] == 0 {
@@ -1952,7 +1981,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var k = 0
     var kth = 0
     // 数组第K大元素  经典的Top K问题！！！！！！
-//    使用快速排序 但是要注意 可以通过判断 middle和 k的位置再决定是对左侧排序还是对右侧排序。不要一上来无脑左右来一次
+    //    使用快速排序 但是要注意 可以通过判断 middle和 k的位置再决定是对左侧排序还是对右侧排序。不要一上来无脑左右来一次
     @objc func findKthLargest_215() -> Void {
         let nums = [3,2,1,5,6,4]
         let k = 2
@@ -2002,14 +2031,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @objc func maxNumberOfFamilies_1386() -> Void {
         let reservedSeats = [[4,3],[1,4],[4,6],[1,7]]
         let n = 4
-       
+        
         self.showAlert(title: "maxNumberOfFamilies_1386", message: "\(self.maxNumberOfFamilies(n, reservedSeats))")
     }
     
     func maxNumberOfFamilies(_ n: Int, _ reservedSeats: [[Int]]) -> Int {
         
-
-//        座位和关系放到字典里 key就是行  value 就是一个数组 包含该行的座位
+        
+        //        座位和关系放到字典里 key就是行  value 就是一个数组 包含该行的座位
         var res = 0
         var dict: Dictionary<Int, [Int]> = Dictionary<Int,[Int]>()
         for element in reservedSeats {
@@ -2021,7 +2050,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             dict[element[0]] = list
         }
         res = 2*n
-//        把座位数组变成 11111111的形式
+        //        把座位数组变成 11111111的形式
         for (_, seatList) in dict {
             var rowSeats: [Int] = [Int](repeating: 1, count: 10)
             for element in seatList {
@@ -2035,20 +2064,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func calculateCount(_ list: [Int]) -> Int {
         var count = 0
-//        判断1 到 4 能做不
+        //        判断1 到 4 能做不
         if (isTrue(1, 4, list)){
             count = count + 1
             
-//            如果1 到4 可以做，再看看5到8能做不
+            //            如果1 到4 可以做，再看看5到8能做不
             if (isTrue(5, 8, list)){
                 count = count + 1
             }
         }else{
             
-//            如果1到4都不能做就看3到6能做不 因为有可能之所以1到4不能做是因为1 2 有人，所以这时候3到6是可以做的
+            //            如果1到4都不能做就看3到6能做不 因为有可能之所以1到4不能做是因为1 2 有人，所以这时候3到6是可以做的
             if (isTrue(3, 6, list)){
                 count = count + 1
-//                如果3到6 可以做 那么5到8肯定做不了了
+                //                如果3到6 可以做 那么5到8肯定做不了了
             }else{
                 //反之判断5到8 能否做人
                 if (isTrue(5, 8, list)){
@@ -2068,4 +2097,406 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         return true
     }
+    
+    @objc func searchRange_34() -> Void {
+        let nums = [5,7,7,8,8,10]
+        let target = 8
+        self.showAlert(title: "searchRange_34", message: "\(self.searchRange(nums, target))")
+    }
+    
+    // 找出给定元素 在数组中 第一次出现和最后一次出现的位置 要求时间复杂度<=O(logN)
+    func searchRange(_ nums: [Int], _ target: Int) -> [Int] {
+        if nums.count == 0 {
+            return[-1, -1]
+        }
+        
+        //        一说时间复杂度<=O(logN)  而且又是有序数组 那肯定就是二分查找了没跑了
+        let first = self.findIndex(nums: nums, left: 0, right: nums.count - 1, target: target, isFindFirst: true)
+        let last = self.findIndex(nums: nums, left: 0, right: nums.count - 1, target: target, isFindFirst: false)
+        return [first, last]
+    }
+    
+    //    极客时间算法之美讲过二分查找  很有用
+    func findIndex(nums: [Int], left:Int, right:Int, target:Int, isFindFirst:Bool) -> Int {
+        //        注意点1：退出条件是left>right 而不是left>=right  如果是后者的话 只有一个原始的时候就直接返回了
+        if left > right { return -1 }
+        var left = left
+        var right = right
+        let middle = left + (right - left) / 2
+        let middleValue = nums[middle]
+        if middleValue == target {
+            if isFindFirst {
+                //                注意点2：先判断是否越界，再判断是他的上一个/下一个是否还是等于target，不然也凉了
+                if middle >= 1 && nums[middle - 1] == target {
+                    //                    注意点3：如果他的当上一个/ 下一个仍然等于target，为了让下一次的middle落在上一个/下一个所以要移动对应的左右边界left 和 right，并不是直接移动middle本身，middle必须要通过算出来的，不能移动它。如果让他往下移动就left+1 反正 right-1
+                    right -= 1
+                } else {
+                    return middle
+                }
+            } else {
+                if middle < nums.count - 1 && nums[middle + 1] == target {
+                    left += 1
+                } else {
+                    return middle
+                }
+            }
+        } else if middleValue > target  {
+            right = middle - 1
+        } else {
+            left = middle + 1
+        }
+        //        注意点4：记得最后return 递归函数出去
+        return self.findIndex(nums: nums, left: left, right: right, target: target, isFindFirst: isFindFirst)
+    }
+    
+    // 罗马数字转整数
+    @objc func romanToInt_13() -> Void {
+        
+        //        I             1
+        //        V             5
+        //        X             10
+        //        L             50
+        //        C             100
+        //        D             500
+        //        M             1000
+        
+        self.showAlert(title: "romanToInt_13", message: "\(self.romanToInt("DCXXI"))")
+    }
+    
+    func romanToInt(_ s: String) -> Int {
+        var dic = [String:Int]()
+        dic["I"] = 1
+        dic["V"] = 5
+        dic["X"] = 10
+        dic["L"] = 50
+        dic["C"] = 100
+        dic["D"] = 500
+        dic["M"] = 1000
+        dic["IV"] = 4
+        dic["IX"] = 9
+        dic["XL"] = 40
+        dic["XC"] = 90
+        dic["CD"] = 400
+        dic["CM"] = 900
+        if s.count <= 0 {
+            return 0
+        }
+        if s.count == 1 {
+            return dic[s]!
+        }
+        //        I 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。
+        //        X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。
+        //        C 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。
+        var res = 0
+        let arr = s.map({String($0)})
+        var index = arr.count - 1
+        
+        while index >= 0 {
+            let chara = arr[index]
+            let leftChara = index >= 1 ?  arr[index - 1] : "Error"
+            if ((chara == "V" || chara == "X") && leftChara == "I") ||
+                ((chara == "L" || chara == "C") && leftChara == "X") ||
+                (chara == "D" || chara == "M") && leftChara == "C" {
+                var tmpStr = leftChara + chara
+                res += dic[tmpStr]!
+                index -= 2
+            } else {
+                res += dic[chara]!
+                index -= 1
+            }
+        }
+        return res
+        
+        //        来一个秀儿的写法  用 abcdef来替换原来的双位数，这样后面判断就简单多了 吊  不是swift 主要看思想
+        //        s = s.replace("IV","a");
+        //               s = s.replace("IX","b");
+        //               s = s.replace("XL","c");
+        //               s = s.replace("XC","d");
+        //               s = s.replace("CD","e");
+        //               s = s.replace("CM","f");
+        //
+        //               int res = 0;
+        //               for (int i = 0; i < s.length(); i++) {
+        //                   res += getValue(s.charAt(i));
+        //               }
+        //               return res;
+    }
+    
+    //    public int getValue(char c) {
+    //        switch(c) {
+    //            case 'I': return 1;
+    //            case 'V': return 5;
+    //            case 'X': return 10;
+    //            case 'L': return 50;
+    //            case 'C': return 100;
+    //            case 'D': return 500;
+    //            case 'M': return 1000;
+    //            case 'a': return 4;
+    //            case 'b': return 9;
+    //            case 'c': return 40;
+    //            case 'd': return 90;
+    //            case 'e': return 400;
+    //            case 'f': return 900;
+    //        }
+    //        return 0;
+    //    }
+    
+    
+    //    反转指定范围的链表
+    @objc func reverseBetween_92() -> Void {
+        self.showAlert(title: "reverseBetween_92", message: "\(self.printListNode(node: self.reverseBetween(self.l11, 2, 4)))")
+    }
+    
+    func reverseBetween(_ head: ListNode?, _ left: Int, _ right: Int) -> ListNode? {
+        var resultHead = ListNode(0)
+        
+//        用一个循环去反转
+        resultHead.next = head
+        var pre = resultHead
+//        pre指针稳定在范围前 为了后续链接链表
+        for _ in 0 ..< left - 1 {
+            pre = pre.next!
+        }
+//        设置开始时候的cur指针，其实就是初始化cur指针 因为cur是每次都会往后移动的，所以不能放到循环里
+        var cur = pre.next
+        for _ in 0 ..< right - left {
+//            在范围内循环，因为cur是不断往后移动的，所以，每次都要更新cur的next
+            let curNext = cur!.next
+            
+//            把下一个移到pre的后面
+            cur!.next = curNext!.next
+            
+//            主要这必须要用pre.next，不能用cur因为cur是会动的
+            curNext?.next = pre.next
+            
+//            链接链表
+            pre.next = curNext
+        }
+        
+        
+        return resultHead.next
+        
+        //                自己写的 按照反转单链表的方式 分然后再拼起来
+        //         var resultHead = ListNode(0)
+        //        resultHead.next = head
+        //        let left = left - 1
+        //        let right = right - 1
+        //
+        //        var per = resultHead
+        //        var current = resultHead.next
+        //        var currentIndex = 0
+        //
+        //        var tmpPer:ListNode?
+        //        while current != nil {
+        //            var currentNext = current!.next
+        //            var perNext = per.next!
+        //
+        //            if currentIndex >= left {
+        //                if currentIndex <= right {
+        //                    current!.next = tmpPer
+        //                    tmpPer = current!
+        //                    current = currentNext
+        //                } else {
+        //                    break
+        //                }
+        //            } else {
+        //                current = currentNext
+        //                per = perNext
+        //            }
+        //            currentIndex += 1
+        //        }
+        //
+        //        var tmpNode = tmpPer
+        //        while tmpNode?.next != nil {
+        //            tmpNode = tmpNode!.next
+        //        }
+        //        tmpNode!.next = current
+        //        per.next = tmpPer
+        //
+        //        return resultHead.next
+        
+    }
+    
+    
+    func printListNode(node:ListNode?) -> String {
+        var node1 = node
+        var str = ""
+        while node1 != nil {
+            str += (String(node1!.val) + ",")
+            print("\(node1!.val),")
+            node1 = node1!.next
+        }
+        return str
+    }
+    
+//     快乐字符串  贪心算法
+    @objc func longestDiverseString_1405() -> Void {
+        let a = 1
+        let b = 3
+        let c = 5
+        self.showAlert(title: "longestDiverseString_1405", message: "\(self.longestDiverseString(a, b, c))")
+    }
+    
+    func longestDiverseString(_ a: Int, _ b: Int, _ c: Int) -> String {
+        var dic = [String:Int]()
+        dic["a"] = a
+        dic["b"] = b
+        dic["c"] = c
+        
+        var arr = [(String, Int)]()
+        arr.append(("a",a))
+        arr.append(("b",b))
+        arr.append(("c",c))
+        arr.sort(by: {$0.1 > $1.1})
+        
+        //        先将abc排序，找出出现最多的字符
+        var result = [String]()
+
+//        循环条件之所以用第二大的 是因为后面涉及到的排序其实是没有最小的那个参与的，而且每次循环完一次都会重新排序，第二大并不是固定的，用第二大的好处是如果第二大的完了 那就一定只剩下最大的那个了，肯定有人会说，用第二大的排序如果小的那个已经排完了，还会继续跟着大的往里加？其实还是那句话每次循环完都会重新排序数组
+        
+//        注意：这里使用第二大的来循环还有一个重要的作用就是为了把最大的那个剩下，单独处理
+        while arr[1].1 > 0 {
+            if result.count <= 1 ||
+                result.last != arr[0].0 ||
+                result.last != result[result.count - 2] {
+//                先处理最多的，不然到时候剩下就不好办了，字符串长度小于等于1和将要插入的和上一个不同时候都可以无脑往进拼接，当大于1的时候就要看前两个是否一样
+                result.append(arr[0].0)
+                arr[0].1 -= 1
+            } else {
+//                如果最大的排不了，就排第二大的，因为上面那个循环过后字符串末尾一定是最大的，所以能进到这个else里面，说明最大的已经不能再往进放了
+                result.append(arr[1].0)
+                arr[1].1 -= 1
+            }
+            
+//            排完一趟后要重新排序数组
+            arr.sort(by: {$0.1 > $1.1})
+        }
+        
+//        第二大的已经拍完了，接下来就剩最大的那个还有剩余，开始处理，因为只能拼接两个，超过两个就不是快乐字符串了，所以两次循环往后面拼接两个最大值就行。
+        for i in 0...1 {
+            if arr[0].1 > 0 {
+                result.append(arr[0].0)
+                arr[0].1 -= 1
+            }
+        }
+        
+//        返回数组
+        return result.joined()
+    }
+    
+    @objc func maximalNetworkRank_1615() -> Void {
+        let n = 8
+        let roads = [[0,1],[1,2],[2,3],[2,4],[5,6],[5,7]]
+        self.showAlert(title: "maximalNetworkRank_1615", message: "\(self.maximalNetworkRank(n, roads))")
+    }
+    
+    func maximalNetworkRank(_ n: Int, _ roads: [[Int]]) -> Int {
+        if roads.count == 0 {
+            return 0
+        }
+        var dic = [Int:Int]()
+        for i in 0 ..< roads.count {
+            var citys = roads[i]
+            for j in 0 ..< citys.count {
+                let city = citys[j]
+                if  dic[city] == nil {
+                    dic[city] = 1
+                } else {
+                    dic[city]! += 1
+                }
+            }
+        }
+        
+        var cityArr = dic.map({$0})
+        cityArr.sort(by: {$0.value > $1.value})
+        var res = 0
+//        let laseValue = cityArr[0]
+        for i in 0 ..< cityArr.count {
+            let laseValue = cityArr[i]
+            for j in 0 ..<  cityArr.count {
+                if j != i {
+                    let currentValue = cityArr[j]
+                    if roads.contains([laseValue.key, currentValue.key]) || roads.contains([currentValue.key, laseValue.key]) {
+                        res = max(laseValue.value + currentValue.value - 1, res)
+                    } else {
+                        res = max(laseValue.value + currentValue.value, res)
+                    }
+                }
+            }
+            
+            
+            
+            
+            
+            
+//            if i >= 1 {
+//                let currentValue = cityArr[i]
+//                if roads.contains([laseValue.key, currentValue.key]) || roads.contains([currentValue.key, laseValue.key]) {
+//                    res = max(laseValue.value + currentValue.value - 1, res)
+//                } else {
+//                    res = max(laseValue.value + currentValue.value, res)
+//                }
+//            }
+        }
+        return res
+    }
+
+//    电话号码数字字母组合
+    @objc func letterCombinations_17() -> Void {
+        self.showAlert(title: "letterCombinations_17", message: "\(self.letterCombinations("235"))")
+    }
+    
+    func letterCombinations(_ digits: String) -> [String] {
+        // 一说某个数字对应哪几个字母这种，肯定是字典了
+        var dic = [Int:[String]]()
+        dic[2] = ["a","b","c"]
+        dic[3] = ["d","e","f"]
+        dic[4] = ["g","h","i"]
+        dic[5] = ["j","k","l"]
+        dic[6] = ["m","n","o"]
+        dic[7] = ["p","q","r","s"]
+        dic[8] = ["t","u","v"]
+        dic[9] = ["w","x","y","z"]
+        let numsArr = digits.map({String($0)})
+        if numsArr.count == 0 {
+            return []
+        }
+        
+        if numsArr.count == 1 {
+            return dic[Int(numsArr[0])!]!
+        }
+        var charaArr = [[String]]()
+        for i in numsArr {
+            charaArr.append(dic[Int(i)!]!)
+        }
+        
+//        因为你不确定是几个数字几组字母组合 而且又要穷举，那肯定是递归了，用当前已拼好的跟下一个去比较
+        return self.appendStr(totalStrArr: charaArr, last: charaArr[0], nextIndex: 1)
+    }
+    
+    
+    func appendStr(totalStrArr:[[String]], last:[String], nextIndex:Int) -> [String] {
+        if nextIndex > totalStrArr.count - 1 { return last }
+        var nextIndex = nextIndex
+        var currentArr = totalStrArr[nextIndex]
+        var last = last
+        var tmpArr = [String]()
+        for i in 0 ..< currentArr.count {
+            let str1 = currentArr[i]
+            for j in 0 ..< last.count {
+                let str2 = last[j]
+                tmpArr.append(str2 + str1)
+            }
+        }
+        last = tmpArr
+        nextIndex += 1
+        return self.appendStr(totalStrArr: totalStrArr, last: last, nextIndex: nextIndex)
+    }
+    
+//    @objc func multiply_43() -> Void {
+//        self.showAlert(title: "multiply_43", message: "\(<#变量#>)")
+//}
+//    func multiply(_ num1: String, _ num2: String) -> String {
+//
+//    }
 }
