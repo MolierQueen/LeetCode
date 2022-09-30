@@ -59,7 +59,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "reverseBetween_92",
                             "longestDiverseString_1405",
                             "maximalNetworkRank_1615",
-                            "letterCombinations_17"];
+                            "letterCombinations_17",
+                            "multiply_43",
+                            "addStrings_415",
+                            "reverseKGroup_25"];
     
     
     
@@ -1543,7 +1546,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             if result > Int(Int32.max / 10) || (result == Int(Int32.max / 10) && Int(strArr[index])! > lastNum) {
                 return flage > 0 ? Int(Int32.max) : Int(Int32.min)
             }
-            //            在数字中移动指针，比较巧妙
+            //            在数字中移动指针，比较巧妙 9 99 999 9999
             result = result * 10 + Int(strArr[index])!
             index += 1
         }
@@ -2322,8 +2325,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         var node1 = node
         var str = ""
         while node1 != nil {
-            str += (String(node1!.val) + ",")
-            print("\(node1!.val),")
+            str += (String(node1!.val) + "->")
+            print("\(node1!.val)")
             node1 = node1!.next
         }
         return str
@@ -2493,10 +2496,130 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return self.appendStr(totalStrArr: totalStrArr, last: last, nextIndex: nextIndex)
     }
     
-//    @objc func multiply_43() -> Void {
-//        self.showAlert(title: "multiply_43", message: "\(<#变量#>)")
-//}
-//    func multiply(_ num1: String, _ num2: String) -> String {
-//
-//    }
+//    字符串相乘
+    @objc func multiply_43() -> Void {
+        let num1 = "498828660196345345234563"
+        let num2 = "84047762953352345342532"
+
+        self.showAlert(title: "multiply_43", message: "\(self.multiply(num1, num2))")
+    }
+    func multiply(_ num1: String, _ num2: String) -> String {
+//        这道题需要注意两点
+//        注意点1：两数相乘 m位数和n位数的两个数 结果的位数就是在m+n和m+n+1之间，但是结果数组要用最大的来创建
+//        注意点2：两数相乘，第一个数的i位乘以第二个数的j位，那么他俩的结果在总结果中的j+i+1位置
+        if num2 == "0" || num1 == "0" {
+            return "0"
+        }
+        let num1Arr = num1.map({Int(String($0))})
+        let num2Arr = num2.map({Int(String($0))})
+        
+        var resultArr = Array(repeating: "X", count: num1.count + num2.count)
+//        先无脑加，吧结果按照注意点2的样子存在数组
+        for i in (0 ..< num1Arr.count).reversed() {
+            for j in (0 ..< num2Arr.count).reversed() {
+                let tmpNum1 = num1Arr[i]
+                let tmpNum2 = num2Arr[j]
+                var last = Int(resultArr[i + j + 1]) ?? 0
+                let current = last + tmpNum1! * tmpNum2!
+                resultArr[i + j + 1] = String(current)
+            }
+        }
+        
+//        然后处理进位
+        for i in (0 ..< resultArr.count).reversed() {
+            if i > 0 {
+                var lastInt = Int(resultArr[i - 1]) ?? 0
+                var currentInt = Int(resultArr[i]) ?? 0
+                lastInt += currentInt / 10
+                currentInt = currentInt % 10
+                if lastInt != 0 {
+                    resultArr[i - 1] = String(lastInt)
+                }
+                resultArr[i] = String(currentInt)
+            }
+        }
+        
+//        最后处理字符串
+        var resStr = resultArr.joined()
+        return resStr.replacingOccurrences(of: "X", with: "")
+    }
+    
+//    字符串相加
+    @objc func addStrings_415() -> Void {
+        self.showAlert(title: "addStrings_415", message: "\(self.addStrings("11", "123"))")
+    }
+    
+    func addStrings(_ num1: String, _ num2: String) -> String {
+        
+//        双指针法
+        var num1Arr = num1.map({Int(String($0))})
+        var num2Arr = num2.map({Int(String($0))})
+        var ptr1 = num1.count - 1
+        var ptr2 = num2.count - 1
+        var add = 0
+        var resArr = [Int]()
+        while ptr1 >= 0 || ptr2 >= 0 {
+            var myNum1 = 0
+//            需要注意的一点是位数不同的话 指针为负值 该位置位零
+            if ptr1 >= 0 {
+                myNum1 = num1Arr[ptr1]!
+            }
+            
+            var myNum2 = 0
+            if ptr2 >= 0 {
+                myNum2 = num2Arr[ptr2]!
+            }
+            
+            let sum = myNum1 + myNum2 + add
+            resArr.insert(sum % 10, at: 0)
+            add = sum / 10
+            
+            if ptr1 <= 0 && ptr2 <= 0 && sum / 10 != 0 {
+                resArr.insert(sum / 10, at: 0)
+            }
+            ptr1 -= 1
+            ptr2 -= 1
+        }
+        return resArr.map({String($0)}).joined()
+        
+//        我自己的想法，使用数组
+//        var num1Arr = num1.map({Int(String($0))})
+//        var num2Arr = num2.map({Int(String($0))})
+//        var count = max(num2.count, num1.count)
+//        if num2.count != num1.count {
+//            num1Arr = num1Arr.reversed()
+//            num2Arr = num2Arr.reversed()
+//            for i in 0 ..< count {
+//                if i >= num1Arr.count {
+//                    num1Arr.append(0)
+//                }
+//                if i >= num2Arr.count {
+//                    num2Arr.append(0)
+//                }
+//            }
+//            num1Arr = num1Arr.reversed()
+//            num2Arr = num2Arr.reversed()
+//        }
+//        var resArr:[Int] = [Int]()
+//        var mark = 0
+//        for i in (0 ..< count).reversed() {
+//            let myNum1 = num1Arr[i] ?? 0
+//            let myNum2 = num2Arr[i] ?? 0
+//            let sum = myNum1 + myNum2 + mark
+//            mark = sum / 10
+//            resArr.insert(sum % 10, at: 0)
+//            if i == 0 && mark != 0 {
+//                resArr.insert(mark, at: 0)
+//            }
+//        }
+//        return resArr.map({String($0)}).joined()
+    }
+    
+    @objc func reverseKGroup_25() -> Void {
+        self.showAlert(title: "reverseKGroup_25", message: "\(self.printListNode(node: self.reverseKGroup(self.l11, 2)))")
+    }
+    
+    func reverseKGroup(_ head: ListNode?, _ k: Int) -> ListNode? {
+        return head
+    }
 }
