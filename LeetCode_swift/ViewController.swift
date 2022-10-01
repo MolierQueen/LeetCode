@@ -2326,7 +2326,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         var str = ""
         while node1 != nil {
             str += (String(node1!.val) + "->")
-            print("\(node1!.val)")
             node1 = node1!.next
         }
         return str
@@ -2616,10 +2615,120 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @objc func reverseKGroup_25() -> Void {
-        self.showAlert(title: "reverseKGroup_25", message: "\(self.printListNode(node: self.reverseKGroup(self.l11, 2)))")
+        self.showAlert(title: "reverseKGroup_25", message: "\(self.printListNode(node: self.reverseKGroup(self.l11, 3)))")
     }
     
     func reverseKGroup(_ head: ListNode?, _ k: Int) -> ListNode? {
-        return head
+        //        1-> 2 -> 3 -> 4 -> 5
+        if head == nil {
+            return nil
+        }
+        
+        if head!.next == nil {
+            return head
+        }
+////        使用递归的方式***********************************
+//
+////        标记第一组的起始位置，并通过循环吧终止位置放到他该去的位置
+//        var start = head
+//        var end = head
+//        for _ in 0 ..< k - 1 {
+//            end = end!.next
+////            这里要注意，有可能最后一组没有到K 就结束了，所以这种情况要直接返回了
+//            if end == nil {
+//                return start
+//            }
+//        }
+//
+////        因为要递归，所以要找到下一组的开头，方便传到递归函数里，有点类似与head.next
+//        let next = end!.next
+//
+////        然后吧每一组隔开，打断，方便用另一个反转函数去反转
+//        end!.next = nil
+//
+////        开始把这一组反转，反转完成后返回反转后的头结点
+//        let revresedList = self.reverseListWithKGroup(head: start!)
+//
+////        用上一组的尾部（因为是反转后的，头尾调换位置了，所以这里尾部是start）连下一组的头部（上一行返回的）
+//        start!.next = self.reverseKGroup(next, k)
+//
+////        把第一组的头部返回
+//        return end
+        
+        
+                //使用循环遍历的方式***********************************
+
+//        先计算一共有个多少个节点
+        var tmpHead = head
+        var count = 0
+        while tmpHead != nil {
+            tmpHead = tmpHead!.next
+            count += 1
+        }
+        
+//        弄个烧饼节点
+        let myHead = ListNode(0)
+        myHead.next = head
+        var prev = myHead
+        var curr = head
+//        开始双重循环，第一重是按组循环，第二重是组内循环
+        for _ in 0 ..< count / k {
+            for _ in 0 ..< k - 1 {
+                
+//                开始交换节点位置，纸上画画就明白了
+                //                我的
+                let next2 = curr!.next?.next
+                let next = curr!.next;
+                curr?.next?.next = curr
+                curr?.next = next2
+                next?.next = prev.next
+                prev.next = next
+                //                他人的
+                //                let next = curr!.next;
+                //                curr!.next = next!.next;
+                //                next!.next = prev.next;
+                //                prev.next = next;
+            }
+//            更新prev 和current节点
+            prev = curr!;
+            curr = prev.next;
+        }
+        
+//        返回最终的head节点 因为有哨兵节点所以返回next
+        return myHead.next;
+    }
+    
+    
+    func reverseListWithKGroup(head: ListNode) -> ListNode {
+        
+        //        var perNode:ListNode?
+        //        var currentNode = head
+        //
+        //        while currentNode != nil {
+        //            let nextNode = currentNode?.next
+        //            currentNode!.next = perNode
+        //            perNode = currentNode!
+        //            currentNode = nextNode
+        //        }
+        //
+        //        return perNode
+        var current:ListNode? = head
+        var prev :ListNode?
+        while current != nil {
+            let next = current!.next
+            current!.next = prev
+            prev = current!
+            current = next
+        }
+        return prev!
+        
+//        var head = head
+//        if head.next == nil {
+//            return head
+//        }
+//        let currrent = self.reverseListWithKGroup(head: head.next!)
+//        head.next?.next = head
+//        head.next = nil
+//        return currrent
     }
 }
