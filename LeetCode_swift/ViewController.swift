@@ -62,7 +62,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "letterCombinations_17",
                             "multiply_43",
                             "addStrings_415",
-                            "reverseKGroup_25"];
+                            "reverseKGroup_25",
+                            "exist_79",
+                            "eightQueen",
+                            "jiecheng",
+                            "numberToWords_273",
+                            "findOrder_210",
+                            "minDeletions_1647",];
     
     
     
@@ -1509,7 +1515,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     //  字符串转换为整数
     @objc func myAtoi_8() -> Void {
         
-        let s = " "
+        let s = "-91283472332"
         self.showAlert(title: "myAtoi_8", message: "\(self.myAtoi(s))")
     }
     
@@ -1537,19 +1543,35 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         //        处理数字
+//        while index < strArr.count && Int(strArr[index]) ?? -1 >=  0 {
+//            var lastNum = 7
+//            if flage < 0 {
+//                lastNum = Int(Int32.min) % 10 * flage
+//            }
+//
+//            if result > Int(Int32.max / 10) || (result == Int(Int32.max / 10) && Int(strArr[index])! > lastNum) {
+//                return flage > 0 ? Int(Int32.max) : Int(Int32.min)
+//            }
+//            //            在数字中移动指针，比较巧妙 9 99 999 9999
+//            result = result * 10 + Int(strArr[index])!
+//            index += 1
+//        }
         while index < strArr.count && Int(strArr[index]) ?? -1 >=  0 {
-            var lastNum = 7
-            if flage < 0 {
-                lastNum = Int(Int32.min) % 10 * flage
-            }
-            
-            if result > Int(Int32.max / 10) || (result == Int(Int32.max / 10) && Int(strArr[index])! > lastNum) {
-                return flage > 0 ? Int(Int32.max) : Int(Int32.min)
-            }
-            //            在数字中移动指针，比较巧妙 9 99 999 9999
-            result = result * 10 + Int(strArr[index])!
-            index += 1
-        }
+                    var lastNum = 7
+                    if flage < 0 {
+                        lastNum = Int(Int32.min) % 10 * flage
+                    }
+                    result = result * 10 + Int(strArr[index])!
+                    if flage < 0 && -result < Int(Int32.min){
+                        return Int(Int32.min)
+                    }
+
+                    if flage > 0 && result > Int(Int32.max){
+                        return Int(Int32.max)
+                    }
+
+                    index += 1
+                }
         return result * flage
     }
     
@@ -1845,6 +1867,28 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.showAlert(title: "rob_198", message: "\(self.rob(nums))")
     }
     
+//    打家劫舍递归算法
+    func rob1(nums:[Int], res:inout Int, index:Int, last1:inout Int) {
+        if index > nums.count - 1 {
+            return
+        }
+        
+        var index = index
+        let current = nums[index]
+        
+//        先保存res的值
+        let tmp = res
+        
+//        拿到此时的结果即为f(n-1)
+        res = max(current + last1, res)
+        
+//        然后把上一次的循环赋值给last1  即为f(n-2)
+        last1 = tmp
+        
+//        然后进行下一次循环
+        self.rob1(nums: nums, res: &res, index: index + 1, last1: &last1)
+    }
+    
     func rob(_ nums:[Int]) -> Int {
         
         //        如果是0个 直接返回0 一个都偷不了
@@ -1868,6 +1912,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //        2：0~n-1的钱我们称为second
         var second = max(nums[0], nums[1])
+//        用递归方法
+//        self.rob1(nums: nums, res: &second, index: 2, last1: &first)
+//        return second
         
         //        开始遍历数组，因为只含一个的元素的情况被我们之前排除了；只含有两个元素的情况就是second初始化的值。所以这里从2开始遍历
         for i in 2 ..< nums.count {
@@ -2253,26 +2300,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func reverseBetween(_ head: ListNode?, _ left: Int, _ right: Int) -> ListNode? {
         var resultHead = ListNode(0)
         
-//        用一个循环去反转
+        //        用一个循环去反转
         resultHead.next = head
         var pre = resultHead
-//        pre指针稳定在范围前 为了后续链接链表
+        //        pre指针稳定在范围前 为了后续链接链表
         for _ in 0 ..< left - 1 {
             pre = pre.next!
         }
-//        设置开始时候的cur指针，其实就是初始化cur指针 因为cur是每次都会往后移动的，所以不能放到循环里
+        //        设置开始时候的cur指针，其实就是初始化cur指针 因为cur是每次都会往后移动的，所以不能放到循环里
         var cur = pre.next
         for _ in 0 ..< right - left {
-//            在范围内循环，因为cur是不断往后移动的，所以，每次都要更新cur的next
+            //            在范围内循环，因为cur是不断往后移动的，所以，每次都要更新cur的next
             let curNext = cur!.next
             
-//            把下一个移到pre的后面
+            //            把下一个移到pre的后面
             cur!.next = curNext!.next
             
-//            主要这必须要用pre.next，不能用cur因为cur是会动的
+            //            主要这必须要用pre.next，不能用cur因为cur是会动的
             curNext?.next = pre.next
             
-//            链接链表
+            //            链接链表
             pre.next = curNext
         }
         
@@ -2331,7 +2378,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return str
     }
     
-//     快乐字符串  贪心算法
+    //     快乐字符串  贪心算法
     @objc func longestDiverseString_1405() -> Void {
         let a = 1
         let b = 3
@@ -2353,28 +2400,28 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //        先将abc排序，找出出现最多的字符
         var result = [String]()
-
-//        循环条件之所以用第二大的 是因为后面涉及到的排序其实是没有最小的那个参与的，而且每次循环完一次都会重新排序，第二大并不是固定的，用第二大的好处是如果第二大的完了 那就一定只剩下最大的那个了，肯定有人会说，用第二大的排序如果小的那个已经排完了，还会继续跟着大的往里加？其实还是那句话每次循环完都会重新排序数组
         
-//        注意：这里使用第二大的来循环还有一个重要的作用就是为了把最大的那个剩下，单独处理
+        //        循环条件之所以用第二大的 是因为后面涉及到的排序其实是没有最小的那个参与的，而且每次循环完一次都会重新排序，第二大并不是固定的，用第二大的好处是如果第二大的完了 那就一定只剩下最大的那个了，肯定有人会说，用第二大的排序如果小的那个已经排完了，还会继续跟着大的往里加？其实还是那句话每次循环完都会重新排序数组
+        
+        //        注意：这里使用第二大的来循环还有一个重要的作用就是为了把最大的那个剩下，单独处理
         while arr[1].1 > 0 {
             if result.count <= 1 ||
                 result.last != arr[0].0 ||
                 result.last != result[result.count - 2] {
-//                先处理最多的，不然到时候剩下就不好办了，字符串长度小于等于1和将要插入的和上一个不同时候都可以无脑往进拼接，当大于1的时候就要看前两个是否一样
+                //                先处理最多的，不然到时候剩下就不好办了，字符串长度小于等于1和将要插入的和上一个不同时候都可以无脑往进拼接，当大于1的时候就要看前两个是否一样
                 result.append(arr[0].0)
                 arr[0].1 -= 1
             } else {
-//                如果最大的排不了，就排第二大的，因为上面那个循环过后字符串末尾一定是最大的，所以能进到这个else里面，说明最大的已经不能再往进放了
+                //                如果最大的排不了，就排第二大的，因为上面那个循环过后字符串末尾一定是最大的，所以能进到这个else里面，说明最大的已经不能再往进放了
                 result.append(arr[1].0)
                 arr[1].1 -= 1
             }
             
-//            排完一趟后要重新排序数组
+            //            排完一趟后要重新排序数组
             arr.sort(by: {$0.1 > $1.1})
         }
         
-//        第二大的已经拍完了，接下来就剩最大的那个还有剩余，开始处理，因为只能拼接两个，超过两个就不是快乐字符串了，所以两次循环往后面拼接两个最大值就行。
+        //        第二大的已经拍完了，接下来就剩最大的那个还有剩余，开始处理，因为只能拼接两个，超过两个就不是快乐字符串了，所以两次循环往后面拼接两个最大值就行。
         for i in 0...1 {
             if arr[0].1 > 0 {
                 result.append(arr[0].0)
@@ -2382,7 +2429,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         
-//        返回数组
+        //        返回数组
         return result.joined()
     }
     
@@ -2412,7 +2459,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         var cityArr = dic.map({$0})
         cityArr.sort(by: {$0.value > $1.value})
         var res = 0
-//        let laseValue = cityArr[0]
+        //        let laseValue = cityArr[0]
         for i in 0 ..< cityArr.count {
             let laseValue = cityArr[i]
             for j in 0 ..<  cityArr.count {
@@ -2431,19 +2478,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             
             
-//            if i >= 1 {
-//                let currentValue = cityArr[i]
-//                if roads.contains([laseValue.key, currentValue.key]) || roads.contains([currentValue.key, laseValue.key]) {
-//                    res = max(laseValue.value + currentValue.value - 1, res)
-//                } else {
-//                    res = max(laseValue.value + currentValue.value, res)
-//                }
-//            }
+            //            if i >= 1 {
+            //                let currentValue = cityArr[i]
+            //                if roads.contains([laseValue.key, currentValue.key]) || roads.contains([currentValue.key, laseValue.key]) {
+            //                    res = max(laseValue.value + currentValue.value - 1, res)
+            //                } else {
+            //                    res = max(laseValue.value + currentValue.value, res)
+            //                }
+            //            }
         }
         return res
     }
-
-//    电话号码数字字母组合
+    
+    //    电话号码数字字母组合
     @objc func letterCombinations_17() -> Void {
         self.showAlert(title: "letterCombinations_17", message: "\(self.letterCombinations("235"))")
     }
@@ -2472,7 +2519,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             charaArr.append(dic[Int(i)!]!)
         }
         
-//        因为你不确定是几个数字几组字母组合 而且又要穷举，那肯定是递归了，用当前已拼好的跟下一个去比较
+        //        因为你不确定是几个数字几组字母组合 而且又要穷举，那肯定是递归了，用当前已拼好的跟下一个去比较
         return self.appendStr(totalStrArr: charaArr, last: charaArr[0], nextIndex: 1)
     }
     
@@ -2495,17 +2542,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return self.appendStr(totalStrArr: totalStrArr, last: last, nextIndex: nextIndex)
     }
     
-//    字符串相乘
+    //    字符串相乘
     @objc func multiply_43() -> Void {
         let num1 = "498828660196345345234563"
         let num2 = "84047762953352345342532"
-
+        
         self.showAlert(title: "multiply_43", message: "\(self.multiply(num1, num2))")
     }
     func multiply(_ num1: String, _ num2: String) -> String {
-//        这道题需要注意两点
-//        注意点1：两数相乘 m位数和n位数的两个数 结果的位数就是在m+n和m+n+1之间，但是结果数组要用最大的来创建
-//        注意点2：两数相乘，第一个数的i位乘以第二个数的j位，那么他俩的结果在总结果中的j+i+1位置
+        //        这道题需要注意两点
+        //        注意点1：两数相乘 m位数和n位数的两个数 结果的位数就是在m+n和m+n+1之间，但是结果数组要用最大的来创建
+        //        注意点2：两数相乘，第一个数的i位乘以第二个数的j位，那么他俩的结果在总结果中的j+i+1位置
         if num2 == "0" || num1 == "0" {
             return "0"
         }
@@ -2513,7 +2560,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let num2Arr = num2.map({Int(String($0))})
         
         var resultArr = Array(repeating: "X", count: num1.count + num2.count)
-//        先无脑加，吧结果按照注意点2的样子存在数组
+        //        先无脑加，吧结果按照注意点2的样子存在数组
         for i in (0 ..< num1Arr.count).reversed() {
             for j in (0 ..< num2Arr.count).reversed() {
                 let tmpNum1 = num1Arr[i]
@@ -2524,7 +2571,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         
-//        然后处理进位
+        //        然后处理进位
         for i in (0 ..< resultArr.count).reversed() {
             if i > 0 {
                 var lastInt = Int(resultArr[i - 1]) ?? 0
@@ -2538,19 +2585,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         
-//        最后处理字符串
+        //        最后处理字符串
         var resStr = resultArr.joined()
         return resStr.replacingOccurrences(of: "X", with: "")
     }
     
-//    字符串相加
+    //    字符串相加
     @objc func addStrings_415() -> Void {
         self.showAlert(title: "addStrings_415", message: "\(self.addStrings("11", "123"))")
     }
     
     func addStrings(_ num1: String, _ num2: String) -> String {
         
-//        双指针法
+        //        双指针法
         var num1Arr = num1.map({Int(String($0))})
         var num2Arr = num2.map({Int(String($0))})
         var ptr1 = num1.count - 1
@@ -2559,7 +2606,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         var resArr = [Int]()
         while ptr1 >= 0 || ptr2 >= 0 {
             var myNum1 = 0
-//            需要注意的一点是位数不同的话 指针为负值 该位置位零
+            //            需要注意的一点是位数不同的话 指针为负值 该位置位零
             if ptr1 >= 0 {
                 myNum1 = num1Arr[ptr1]!
             }
@@ -2581,37 +2628,37 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         return resArr.map({String($0)}).joined()
         
-//        我自己的想法，使用数组
-//        var num1Arr = num1.map({Int(String($0))})
-//        var num2Arr = num2.map({Int(String($0))})
-//        var count = max(num2.count, num1.count)
-//        if num2.count != num1.count {
-//            num1Arr = num1Arr.reversed()
-//            num2Arr = num2Arr.reversed()
-//            for i in 0 ..< count {
-//                if i >= num1Arr.count {
-//                    num1Arr.append(0)
-//                }
-//                if i >= num2Arr.count {
-//                    num2Arr.append(0)
-//                }
-//            }
-//            num1Arr = num1Arr.reversed()
-//            num2Arr = num2Arr.reversed()
-//        }
-//        var resArr:[Int] = [Int]()
-//        var mark = 0
-//        for i in (0 ..< count).reversed() {
-//            let myNum1 = num1Arr[i] ?? 0
-//            let myNum2 = num2Arr[i] ?? 0
-//            let sum = myNum1 + myNum2 + mark
-//            mark = sum / 10
-//            resArr.insert(sum % 10, at: 0)
-//            if i == 0 && mark != 0 {
-//                resArr.insert(mark, at: 0)
-//            }
-//        }
-//        return resArr.map({String($0)}).joined()
+        //        我自己的想法，使用数组
+        //        var num1Arr = num1.map({Int(String($0))})
+        //        var num2Arr = num2.map({Int(String($0))})
+        //        var count = max(num2.count, num1.count)
+        //        if num2.count != num1.count {
+        //            num1Arr = num1Arr.reversed()
+        //            num2Arr = num2Arr.reversed()
+        //            for i in 0 ..< count {
+        //                if i >= num1Arr.count {
+        //                    num1Arr.append(0)
+        //                }
+        //                if i >= num2Arr.count {
+        //                    num2Arr.append(0)
+        //                }
+        //            }
+        //            num1Arr = num1Arr.reversed()
+        //            num2Arr = num2Arr.reversed()
+        //        }
+        //        var resArr:[Int] = [Int]()
+        //        var mark = 0
+        //        for i in (0 ..< count).reversed() {
+        //            let myNum1 = num1Arr[i] ?? 0
+        //            let myNum2 = num2Arr[i] ?? 0
+        //            let sum = myNum1 + myNum2 + mark
+        //            mark = sum / 10
+        //            resArr.insert(sum % 10, at: 0)
+        //            if i == 0 && mark != 0 {
+        //                resArr.insert(mark, at: 0)
+        //            }
+        //        }
+        //        return resArr.map({String($0)}).joined()
     }
     
     @objc func reverseKGroup_25() -> Void {
@@ -2627,38 +2674,38 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if head!.next == nil {
             return head
         }
-////        使用递归的方式***********************************
-//
-////        标记第一组的起始位置，并通过循环吧终止位置放到他该去的位置
-//        var start = head
-//        var end = head
-//        for _ in 0 ..< k - 1 {
-//            end = end!.next
-////            这里要注意，有可能最后一组没有到K 就结束了，所以这种情况要直接返回了
-//            if end == nil {
-//                return start
-//            }
-//        }
-//
-////        因为要递归，所以要找到下一组的开头，方便传到递归函数里，有点类似与head.next
-//        let next = end!.next
-//
-////        然后吧每一组隔开，打断，方便用另一个反转函数去反转
-//        end!.next = nil
-//
-////        开始把这一组反转，反转完成后返回反转后的头结点
-//        let revresedList = self.reverseListWithKGroup(head: start!)
-//
-////        用上一组的尾部（因为是反转后的，头尾调换位置了，所以这里尾部是start）连下一组的头部（上一行返回的）
-//        start!.next = self.reverseKGroup(next, k)
-//
-////        把第一组的头部返回
-//        return end
+        ////        使用递归的方式***********************************
+        //
+        ////        标记第一组的起始位置，并通过循环吧终止位置放到他该去的位置
+        //        var start = head
+        //        var end = head
+        //        for _ in 0 ..< k - 1 {
+        //            end = end!.next
+        ////            这里要注意，有可能最后一组没有到K 就结束了，所以这种情况要直接返回了
+        //            if end == nil {
+        //                return start
+        //            }
+        //        }
+        //
+        ////        因为要递归，所以要找到下一组的开头，方便传到递归函数里，有点类似与head.next
+        //        let next = end!.next
+        //
+        ////        然后吧每一组隔开，打断，方便用另一个反转函数去反转
+        //        end!.next = nil
+        //
+        ////        开始把这一组反转，反转完成后返回反转后的头结点
+        //        let revresedList = self.reverseListWithKGroup(head: start!)
+        //
+        ////        用上一组的尾部（因为是反转后的，头尾调换位置了，所以这里尾部是start）连下一组的头部（上一行返回的）
+        //        start!.next = self.reverseKGroup(next, k)
+        //
+        ////        把第一组的头部返回
+        //        return end
         
         
-                //使用循环遍历的方式***********************************
-
-//        先计算一共有个多少个节点
+        //使用循环遍历的方式***********************************
+        
+        //        先计算一共有个多少个节点
         var tmpHead = head
         var count = 0
         while tmpHead != nil {
@@ -2666,16 +2713,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             count += 1
         }
         
-//        弄个烧饼节点
+        //        弄个烧饼节点
         let myHead = ListNode(0)
         myHead.next = head
         var prev = myHead
         var curr = head
-//        开始双重循环，第一重是按组循环，第二重是组内循环
+        //        开始双重循环，第一重是按组循环，第二重是组内循环
         for _ in 0 ..< count / k {
             for _ in 0 ..< k - 1 {
                 
-//                开始交换节点位置，纸上画画就明白了
+                //                开始交换节点位置，纸上画画就明白了
                 //                我的
                 let next2 = curr!.next?.next
                 let next = curr!.next;
@@ -2689,12 +2736,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 //                next!.next = prev.next;
                 //                prev.next = next;
             }
-//            更新prev 和current节点
+            //            更新prev 和current节点
             prev = curr!;
             curr = prev.next;
         }
         
-//        返回最终的head节点 因为有哨兵节点所以返回next
+        //        返回最终的head节点 因为有哨兵节点所以返回next
         return myHead.next;
     }
     
@@ -2722,13 +2769,404 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         return prev!
         
-//        var head = head
-//        if head.next == nil {
-//            return head
-//        }
-//        let currrent = self.reverseListWithKGroup(head: head.next!)
-//        head.next?.next = head
-//        head.next = nil
-//        return currrent
+        //        var head = head
+        //        if head.next == nil {
+        //            return head
+        //        }
+        //        let currrent = self.reverseListWithKGroup(head: head.next!)
+        //        head.next?.next = head
+        //        head.next = nil
+        //        return currrent
     }
+    
+    //  79单词搜索  回溯
+    @objc func exist_79() -> Void {
+        //        let board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
+        //        let board = [["A"]]
+        let board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
+        var myBoard:[[Character]] = Array(repeating: [], count: board.count)
+        for i in 0 ..< board.count {
+            var tmpArr:[Character] = [Character]()
+            for j in 0 ..< board[i].count {
+                let myStr:String = board[i][j]
+                tmpArr.append(Character(myStr))
+            }
+            myBoard[i] = tmpArr
+        }
+        
+        //        let word = "ABCCED"
+        let word = "ABCB"
+        //        let word = "A"
+        self.showAlert(title: "exist_79", message: "\(self.exist(myBoard, word))")
+    }
+    
+    func exist(_ board: [[Character]], _ word: String) -> Bool {
+        let boardArr = board.map({$0.map({String($0)})})
+        let wordArr = word.map({String($0)})
+        var wordIndex = 0
+        var boardSignlArr = [String]()
+        var markArr:[[Bool]] = Array(repeating: Array(repeating: false, count: boardArr[0].count), count: boardArr.count)
+        for i in 0 ..< boardArr.count {
+            for j in 0 ..< boardArr[i].count {
+                let str = boardArr[i][j]
+                boardSignlArr.append(str)
+            }
+        }
+        
+        var res = false
+        
+        for i in 0 ..< boardArr.count {
+            for j in 0 ..< boardArr[i].count {
+                res = self.findResult(markArr: &markArr, boardArr: boardArr, row:i, col:j, wordArr: wordArr, wordIndex: wordIndex)
+                if res {
+                    return res
+                }
+            }
+        }
+        return res
+    }
+    
+    func findResult(markArr:inout [[Bool]], boardArr:[[String]], row:Int, col:Int, wordArr:[String], wordIndex:Int) -> Bool {
+        
+        //        退出条件1：如果字符串已经遍历完了，那就直接返回true。因为如果都走到这一步了就会说明前面都是符合条件的，没有中途退出的
+        if wordIndex > wordArr.count - 1 {
+            return true
+        }
+        
+        //        退出条件2：行，列 不能超过边界，如果超过了就直接返回false，说明此方向路不通，也就是没有匹配的，要“回溯”到上一个节点重新看
+        if row < 0 ||
+            row > boardArr.count - 1 ||
+            col < 0 ||
+            col > boardArr[0].count - 1 {
+            return false
+        }
+        
+        //        退出条件3：该节点是之前已经遍历过的，不再重复遍历，此路不通所以返回false，要“回溯”到上一个节点重新看
+        if markArr[row][col] == true {
+            return false
+        }
+        
+        //        退出条件4：当前取到的字符和字符串里面的字符不相等，后面的就直接不用做了，要“回溯”到上一个节点重新看
+        if boardArr[row][col] != wordArr[wordIndex] {
+            return false
+        }
+        
+        //        定义一个变量
+        var res = false
+        
+        //        开始遍历该节点，将该节点的标记位记为true证明已经被使用
+        markArr[row][col] = true
+        
+        //        创建上下左右的坐标
+        var tmpArr = [[row - 1, col], [row + 1, col], [row, col - 1], [row, col + 1]]
+        for mark in tmpArr {
+            //            向上下左右循环依次去寻找合适的
+            res = self.findResult(markArr: &markArr, boardArr: boardArr, row:mark[0], col:mark[1], wordArr: wordArr, wordIndex: wordIndex + 1)
+            if res {
+                //                如果找到了就直接返回了，不再继续寻找了，这个就是剪枝
+                return res
+            }
+        }
+        
+        //        如果上下左右找了一圈都没有找到那就说明以这个节点往上下左右走都走不通那就把这个节点的标记位置为false，然后返回false
+        //        之所以把这个节点的标记位从新置为false，是因为虽然从他往上下左右找没找到，但是不代表从他的上下左右往他找也找不到。所以还要置为false
+        markArr[row][col] = false
+        return res
+    }
+    
+    //    八皇后
+    @objc func eightQueen() -> Void {
+        
+        var markArr = Array(repeating: 9, count: 8)
+        var row = 0
+        var col = 0
+        
+        self.findQueen(row: row, markArr: &markArr)
+    }
+    
+    func findQueen(row: Int, markArr: inout[Int]){
+        if row >= 8 {
+            //        遍历完成，输出所有的 可能的结果
+            for i in 0 ..< 8 {
+                for j in 0 ..< 8 {
+                    if markArr[i] == j {
+                        print("*")
+                    } else {
+                        print("0")
+                    }
+                }
+                print("\n")
+            }
+            return
+        }
+        
+        for i in 0 ..< 8 {
+            //            每一次递归处理一行，而其中每一行都有8种可能，所以这里会循环8次
+            if self.isOk(row: row, col:i, markArr: markArr) {
+                //                如果这该行的这一列可以插入，那就放进去 并且开始遍历下一行
+                markArr[row] = i
+                self.findQueen(row: row + 1, markArr: &markArr)
+            }
+        }
+    }
+    
+    func isOk(row:Int, col:Int, markArr:[Int]) -> Bool {
+        var row = row - 1
+        var left = col - 1
+        var right = col + 1
+        while row >= 0 {
+            if markArr[row] == col {
+                return false
+            }
+            if markArr[row] == left{
+                return false
+            }
+            if markArr[row] == right {
+                return false
+            }
+            row -= 1
+            left -= 1
+            right += 1
+        }
+        return true
+    }
+    
+    //    阶乘
+    @objc func jiecheng() -> Void {
+        self.showAlert(title: "自己练习阶乘", message: "\(self.jiecheng(num: 10))")
+    }
+    func jiecheng(num:Int) ->Int {
+        if num <= 0 {
+            return 1
+        }
+        var num = num
+        num = num * jiecheng(num: num - 1)
+        return num
+    }
+    
+    // 整数转换成英文表示
+    @objc func numberToWords_273() -> Void {
+        self.showAlert(title: "numberToWords_273", message: "\(self.numberToWords(1123))")
+    }
+    
+    //    这个题考虑两点
+    //    1：要先构建 单词数组，因为单词是不同的，比如20以内是可以单独表示的，超过20要用组合表示
+    //    2：把给定的数字每三个分成一位，然后用递归去寻找命名，最高位的三个为 "Thousand", "Million", "Billion"
+    let words0_19 = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
+    let wordsTens = ["", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
+    let thousands = ["", "Thousand", "Million", "Billion"]
+    func numberToWords(_ num: Int) -> String {
+        guard num != 0 else { return "Zero" }
+        var num = num
+        var answer = ""
+        var i = 0
+        
+        while num > 0 {
+            //            每三个循环一次，也就是一次传3位数进去处理，然后往高位走
+            if num % 1000 != 0 {
+                //                因为先走地位再走高位，所以要每次出的结果要拼装在之前的结果的前面。
+                answer = helper(num % 1000) + thousands[i] + " " + answer
+            }
+            //            开始取下一个三位
+            num /= 1000
+            
+            //            找了几个高位了 第一次不用管，因为第一次就是不不确定千位是否有值，只有第二次进来 说明千位有值，第三次进来说明百万位有值，第四次进来说明十亿为有值
+            i += 1
+        }
+        return answer.trimmingCharacters(in: .whitespaces)
+    }
+    
+    // helper takes care of cases less than 1000
+    func helper(_ num: Int) -> String {
+        if num == 0 {
+            return ""
+        } else if num < 20 {
+            //            小于20 直接在原数组返回
+            return words0_19[num] + " "
+        } else if num < 100 {
+            //            大于等于20  小于100 就要拼接
+            if num % 10 > 0 {
+                return wordsTens[num / 10] + " " + self.helper(num % 10)
+            }
+            return wordsTens[num / 10]
+        } else {
+            //            100 到 999 也需要拼接
+            if num % 100 > 0 {
+                return self.words0_19[num / 100] + " Hundred" + " " + self.helper(num % 100)
+            }
+            return self.words0_19[num / 100] + " Hundred"
+        }
+    }
+    
+    // 课程表
+    @objc func findOrder_210() -> Void {
+        let numCourses = 4
+        let prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+        self.showAlert(title: "findOrder_210", message: "\(self.findOrder(numCourses, prerequisites))")
+    }
+    
+    func findOrder(_ numCourses: Int, _ prerequisites: [[Int]]) -> [Int] {
+        //        a课程依赖于b课程， 我们就用b指向a b -> a  a的入度+1，我们先上的课一定是入度为0 的课程
+        
+        //        准备一个数组去存放每个课程的入度，也就是有多少个箭头指向他，也就是他依赖了多少门课程
+        var degree = Array(repeating: 0, count: numCourses)
+        
+        //        准备一个二维数组存放有向图，下标代表课程，元素为他指向的哪些课程数组
+        var devpency:[[Int]] = Array(repeating: [], count: numCourses)
+        
+        //        准备一个队列，我们待会要对这个队列处理，这个队列里存放的就是入度为0的课程
+        var queue = [Int]()
+        
+        //        准备一个结果数组
+        var resultArr = [Int]()
+        for i in 0 ..< prerequisites.count {
+            //            准备数据
+            let tmpArr = prerequisites[i]
+            degree[tmpArr.first!] += 1
+            devpency[tmpArr.last!].append(tmpArr.first!)
+        }
+        
+        for i in 0 ..< degree.count {
+            //            把入度为0的课程存入队列
+            if degree[i] == 0 {
+                queue.append(i)
+            }
+        }
+        
+        //        如果一开始没有入度为0的课程那没法上了
+        if queue.count == 0 {
+            return []
+        }
+        
+        //        开始循环遍历处理queue里面的数据
+        while queue.count > 0 {
+            
+            //            从队列里拿出最后一个数据
+            let course = queue.popLast()
+            
+            //            添加到结果数组
+            resultArr.append(course!)
+            
+            //            然后去有向图里面找到哪些依赖了该数据的
+            let courseArr = devpency[course!]
+            for tmpCourse in courseArr {
+                //                因为这个数据被移出队列了，所以他们的入度都要-1
+                degree[tmpCourse] -= 1
+                //                如果-1后入度为0那就要加入队列去处理
+                if degree[tmpCourse] == 0 {
+                    queue.append(tmpCourse)
+                }
+            }
+        }
+        
+        //        如果都处理完了 还有人入度不为0 说明就是有环了，循环依赖，那就直接返回空数组
+        if resultArr.count != numCourses {
+            return []
+        }
+        
+        //        都没问题的话返回最终结果
+        return resultArr
+    }
+    
+//    这里要用到  集合  https://www.jianshu.com/p/a0452bd0f060 频次相同的字符串最小删除数
+    @objc func minDeletions_1647() -> Void {
+        self.showAlert(title: "minDeletions_1647", message: "\(self.minDeletions("bbcebab"))")
+    }
+    
+    func minDeletions(_ s: String) -> Int {
+//        先搞一个字典key是字母 value是出现的次数，
+        var dic = [String : Int]()
+        
+//        创建结果存放的变量
+        var res = 0
+        
+//        将字符串转为数组
+        var stringArr = s.map({String($0)})
+        
+//        给一开始的字典赋值
+        for i in 0 ..< stringArr.count {
+            let count = dic[stringArr[i]]
+            dic[stringArr[i]] =  (count == nil) ? 1 : count! + 1
+        }
+        
+//        创建一个哈希集合用来去重操作
+        var hashSet:Set<Int> = Set()
+        
+//        遍历字典将每个字母的频率存到哈希集合里面
+        for tmpDic in dic {
+            var count = tmpDic.value
+            
+//            如果某个频率存不进去，说明已经存在该频率了，这个时候就要剪掉一个字母(频率-1) 然后操作数+1，直到能存到哈希集合里，证明之前没有出现这个频率
+//            还有要注意，0 不算数
+            while count != 0 && !hashSet.insert(count).inserted {
+                count -= 1
+                res += 1
+            }
+        }
+//        返回结果
+        return res
+    }
+    
+    @objc func serialize_297() -> Void {
+        var left = TreeNode(2)
+        var right = TreeNode(3)
+        var root = TreeNode(1)
+        root.left = nil
+        root.right = right
+        
+        
+        
+        
+        self.showAlert(title: "serialize_297", message: "\(self.serialize(root))")
+}
+    
+    //  297二叉树的序列化与反序列化
+    func serialize(_ root: TreeNode?) -> String {
+        if root == nil {
+            return ""
+        }
+        var resultArr = [Int]()
+        resultArr.append(root!.val)
+        var queue = [TreeNode]()
+        queue.append(root!)
+        self.printNode(queue: queue, resArr: &resultArr)
+        return resultArr.map({String($0)}).joined()
+    }
+    
+    
+    func printNode(queue:[TreeNode], resArr:inout [Int]) -> Void {
+        if queue.count <= 0 {
+            return
+        }
+        var queue = queue
+        for i in 0 ..< queue.count {
+            let node = queue[i]
+            resArr.append(node.val)
+            queue.append(node)
+            if node.left == nil {
+                resArr.append(0)
+            } else {
+                resArr.append(node.left!.val)
+                queue.append(node.left!)
+            }
+            if node.right == nil {
+                resArr.append(0)
+            } else {
+                resArr.append(node.right!.val)
+                queue.append(node.right!)
+            }
+        }
+        self.printNode(queue: queue, resArr: &resArr)
+    }
+    
+    func isEnd(resArr:[TreeNode]) -> Bool {
+        for node in resArr {
+            if node.val != 0 {
+                return false
+            }
+            
+        }
+        return true
+    }
+    
 }
