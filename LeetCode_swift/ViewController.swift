@@ -19,7 +19,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     //    datasource
-    var dataSource:Array = ["twoSum_1",
+    var dataSource:[String] = ["twoSum_1",
                             "addTwoNumbers_2",
                             "reverseList_206",
                             "lengthOfLongestSubstring_3",
@@ -68,7 +68,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "jiecheng",
                             "numberToWords_273",
                             "findOrder_210",
-                            "minDeletions_1647",];
+                            "minDeletions_1647",
+                            "serialize_297",
+                            "isReflected_356",
+                            "postorder_590",
+                            "preorder_589",
+                            "levelOrder_429",
+                            "inorderTraversal_94",
+                            "removeCoveredIntervals_1288",
+                            "mostCompetitive_1673",
+                            "lowestCommonAncestor_236",
+                            "zhanzhuanxiangchufa",
+                            "minimumDeletions_1653",
+                            "characterReplacement_424"];
     
     
     
@@ -95,7 +107,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func showAlert(title:String, message:String) -> Void {
-        let alert:UIAlertController = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        var strIndex = "0"
+        for (index, str) in self.dataSource.enumerated() {
+            if str == title {
+                strIndex = String(index + 1)
+                break
+            }
+        }
+        let alert:UIAlertController = UIAlertController.init(title: strIndex + "_" + title, message: message, preferredStyle: UIAlertController.Style.alert)
         let alertOK:UIAlertAction = UIAlertAction.init(title: "知道了", style: UIAlertAction.Style.destructive)
         alert.addAction(alertOK)
         self.present(alert, animated: true)
@@ -746,6 +765,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @objc func bubbleSort_me() ->(){
         //        需要遍历i （数组个数）次，每一次遍历都会将自己与自己下一个数进行比较根据题意来进行是否交换（正序，逆序），当一次遍历完成后（j < arr.count-i-1 因为遍历过后就已经有序，所以便利了i次就是已经有倒数i个数字是有序的，减一是因为不包含自己），最后的那个数已经到了他自己该在的位置上。
         var arr:Array = [3, 5, 2, 9, 4, 10, 7, 8 ,1]
+        
+        for i in 0 ..< arr.count {
+            for j in 0 ..< arr.count - i - 1 {
+                if arr[j] > arr[j + 1] {
+                    let tmp = arr[j + 1]
+                    arr[j + 1] = arr[j]
+                    arr[j] = tmp
+                }
+            }
+        }
+        print(arr)
+        /******************第二次****************/
+        
+        
+        
+        
         for i in 0 ..< arr.count {
             for j in 0 ..< arr.count - i - 1 {
                 if arr[j] > arr[j+1] {
@@ -766,6 +801,30 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if arr.count <= 1 {
             return
         }
+        
+        var start = 0
+        for i in 0 ..< arr.count {
+            var current = arr[i]
+            start = i - 1
+            while start >= 0 && arr[start] >= current {
+                arr[start + 1] = arr[start]
+                start -= 1
+            }
+            arr[start + 1] = current
+            
+            
+//            for j in 0 ..< i {
+//                var standard = arr[j]
+//                if standard > current {
+//                    arr.swapAt(j, i)
+//                }
+//            }
+
+        }
+        print(arr)
+        
+        /******************第二次****************/
+
         
         for i in 0 ..< arr.count {
             let current = arr[i]
@@ -820,7 +879,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func processing(arr:inout [Int], left:Int , right:Int) -> Void {
         if left == right {return}
-        let middle = left + (right - left) / 2
+//        let middle = left + (right - left) / 2
+        let middle = (left + right) / 2
         self.processing(arr: &arr, left: left, right: middle)
         self.processing(arr: &arr, left: middle + 1, right: right)
         self.mergeArr(arr: &arr, left: left, middle: middle, right: right)
@@ -981,8 +1041,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let a = self.binary(arr: &arr, left: 0, right: arr.count-1, target:target)
         let b = self.binary1(arr: &arr, target:target)
-        print(b)
-        
+        self.showAlert(title: "BinarySearch_me", message: String(b))
+
         
     }
     
@@ -997,9 +1057,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             return -1
         }
         
-        let middle = left + (right - left) / 2
+        let middle = (left + right) / 2
         if arr[middle] == target {
-            return left + (right - left) / 2
+            return middle
         }
         
         if arr[middle] >  target {
@@ -3108,14 +3168,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @objc func serialize_297() -> Void {
-        var left = TreeNode(2)
-        var right = TreeNode(3)
-        var root = TreeNode(1)
+        let left = TreeNode(2)
+        let right = TreeNode(3)
+        let root = TreeNode(1)
         root.left = nil
         root.right = right
         
         
-        
+        let node = self.deserialize(self.serialize(root))
         
         self.showAlert(title: "serialize_297", message: "\(self.serialize(root))")
 }
@@ -3126,47 +3186,476 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             return ""
         }
         var resultArr = [Int]()
-        resultArr.append(root!.val)
         var queue = [TreeNode]()
+        var count = 0
+        var resultStr = ""
+        resultArr.append(root!.val)
+        resultStr += String(root!.val)
         queue.append(root!)
-        self.printNode(queue: queue, resArr: &resultArr)
-        return resultArr.map({String($0)}).joined()
+        self.changeNodeToArr(queue: queue, resArr: &resultArr,count: &count, resStr: &resultStr)
+        resultStr.append("123")
+//        count = Int(powl(2, Float80(count)))
+//        resultArr = resultArr.dropLast(count)
+//        let resStr = resultArr.map({String($0)}).joined(separator: ",")
+        return resultStr
     }
     
-    
-    func printNode(queue:[TreeNode], resArr:inout [Int]) -> Void {
-        if queue.count <= 0 {
+    func changeNodeToArr(queue:[TreeNode], resArr:inout [Int], count:inout Int, resStr:inout String) -> Void {
+        if self.isEnd(resArr: queue) {
             return
         }
-        var queue = queue
+        var nodeArr:[TreeNode] = [TreeNode]()
         for i in 0 ..< queue.count {
             let node = queue[i]
-            resArr.append(node.val)
-            queue.append(node)
             if node.left == nil {
-                resArr.append(0)
+                resArr.append(9999)
+                resStr += ",9999"
+                nodeArr.append(TreeNode(9999))
             } else {
                 resArr.append(node.left!.val)
-                queue.append(node.left!)
+                resStr += ",\(String(node.left!.val))"
+                nodeArr.append(node.left!)
             }
             if node.right == nil {
-                resArr.append(0)
+                resArr.append(9999)
+                resStr += ",9999"
+                nodeArr.append(TreeNode(9999))
             } else {
                 resArr.append(node.right!.val)
-                queue.append(node.right!)
+                resStr += ",\(String(node.right!.val))"
+                nodeArr.append(node.right!)
             }
         }
-        self.printNode(queue: queue, resArr: &resArr)
+        count += 1
+        self.changeNodeToArr(queue: nodeArr, resArr: &resArr, count: &count, resStr:&resStr)
     }
     
     func isEnd(resArr:[TreeNode]) -> Bool {
         for node in resArr {
-            if node.val != 0 {
+            if node.left != nil || node.right != nil {
                 return false
             }
-            
         }
         return true
     }
     
+    func deserialize(_ data: String) -> TreeNode? {
+        if data.count == 0 {
+            return nil
+        }
+        let nodeArr = data.components(separatedBy: ",")
+        var finalArr = [Int]()
+        for i in 0 ..< nodeArr.count {
+            let num = nodeArr[i]
+            finalArr.append(Int(num)!)
+        }
+        let node = self.genTree(currentIndex: 0, nodeArr: finalArr)
+        return node
+    }
+    
+    func genTree(currentIndex:Int, nodeArr:[Int]) -> TreeNode? {
+        if currentIndex > nodeArr.count - 1 {
+            return nil
+        }
+        let num = nodeArr[currentIndex]
+        if num == 9999 {
+            return nil
+        }
+        let node = TreeNode(num)
+        let leftNode = currentIndex * 2 + 1
+        let rightNode = currentIndex * 2 + 2
+        let tmpResNode = node
+        node.left = genTree(currentIndex: leftNode, nodeArr: nodeArr)
+        node.right = genTree(currentIndex: rightNode, nodeArr: nodeArr)
+        return node
+    }
+    
+    @objc func isReflected_356() -> Void {
+        self.showAlert(title: "isReflected_356", message: "\(self.isReflected([[1,1],[-1,1]]))")
+    }
+    
+    func isReflected(_ points: [[Int]]) -> Bool {
+        var leftArr:[[Int]] = [[Int]]()
+        var rightArr:[[Int]] = [[Int]]()
+        var x_arr:[[Int]] = [[Int]]()
+        var hashSet:Set<[Int]> = Set<[Int]>()
+        for arr in points {
+            hashSet.insert(arr)
+        }
+        var points = hashSet
+        if points.count == 1 {
+            return true
+        }
+        var xPoints = [Int]()
+        for point in hashSet {
+            xPoints.append(point.first!)
+        }
+        xPoints = xPoints.sorted(by: {$0 < $1})
+        var center = Double(xPoints.first!) + (Double(xPoints.last!) - Double(xPoints.first!)) / 2.0
+        for point in points {
+            if Double(point.first!) < center {
+                leftArr.append(point)
+            } else if Double(point.first!) > center {
+                rightArr.append(point)
+            }
+        }
+        
+        if leftArr.count != rightArr.count {
+            return false
+        }
+        for larr in leftArr {
+            for rarr in rightArr {
+                var tmp = abs(Double(larr.first!) - center)
+                if Double(rarr.first!) - center == tmp && larr.last! == rarr.last! {
+                    x_arr.append([larr.first!, rarr.first!])
+                }
+            }
+        }
+        
+        if x_arr.count != leftArr.count {
+            return false
+        }
+        
+        return true
+    }
+    
+    //    后续遍历N叉树
+    public class NodeTree {
+        public var val: Int
+        public var children: [NodeTree]
+        public init(_ val: Int) {
+            self.val = val
+            self.children = []
+        }
+    }
+    
+    @objc func postorder_590() -> Void {
+        self.showAlert(title: "postorder_590", message: "\(self.postorder(nil))")
+    }
+    
+    func postorder(_ root: NodeTree?) -> [Int] {
+//          1
+//        2  3
+//        后遍历后结果为2 3 1 ，但是考虑到要从根节点才能找到左右子节点，所以先按照1 3 2 的顺序来遍历，然后反过来即可，
+//        用广度优先，每次取数组最后一个就行
+        
+        guard let root = root else {
+            return []
+        }
+        if root.children.count == 0 {
+            return [root.val]
+        }
+        var resArr:[Int] = Array()
+        var finalArr = [Int]()
+        self.bfs(queue: [root], resArr: &resArr)
+        for i in (0 ..< resArr.count).reversed() {
+            finalArr.append(resArr[i])
+        }
+        return finalArr
+    }
+    
+    func bfs(queue:[NodeTree], resArr:inout [Int]){
+        if queue.count == 0 {
+            return
+        }
+        for i in (0 ..< queue.count).reversed() {
+            let node = queue[i]
+            resArr.append(node.val)
+            self.bfs(queue: node.children, resArr: &resArr)
+        }
+    }
+    
+//    二叉树前序遍历
+    @objc func preorder_589() -> Void {
+        self.showAlert(title: "postorder_590", message: "\(self.postorder(nil))")
+    }
+    func preorder(_ root: NodeTree?) -> [Int] {
+        guard let root = root else {
+            return []
+        }
+        if root.children.count == 0 {
+            return [root.val]
+        }
+        var resArr = [Int]()
+        self.bfs1(queue: [root], resArr: &resArr)
+        return resArr
+    }
+
+    func bfs1(queue:[NodeTree], resArr:inout [Int]) {
+        if queue.count == 0 {
+            return
+        }
+        for node in queue {
+            resArr.append(node.val)
+            self.bfs1(queue: node.children, resArr: &resArr)
+        }
+    }
+    
+    // 层序遍历
+    @objc func levelOrder_429() -> Void {
+        self.showAlert(title: "levelOrder_429", message: "\(self.levelOrder(nil))")
+    }
+    func levelOrder(_ root: NodeTree?) -> [[Int]] {
+        guard let root = root else {
+            return []
+        }
+        if root.children.count == 0 {
+            return [[root.val]]
+        }
+        // 返回的结果
+        var resArr = [[Int]]()
+        
+        // 开始广度优先遍历
+        self.bfs2(queue: [root], resArr: &resArr)
+        return resArr
+    }
+    
+    func bfs2(queue:[NodeTree], resArr:inout [[Int]]) {
+        if queue.count == 0 {
+            return
+        }
+        var tmpNodeArr = [NodeTree]()
+        var tmpArr = [Int]()
+        for i in 0 ..< queue.count {
+            let node = queue[i]
+            tmpArr.append(node.val)
+            if i == queue.count - 1 {
+                // 当前层级都遍历完了，就加到这一层的数组里
+                resArr.append(tmpArr)
+            }
+            // 保存下一层的所有节点
+            tmpNodeArr.append(contentsOf: node.children)
+        }
+        // 开始遍历下一层
+        self.bfs2(queue: tmpNodeArr, resArr: &resArr)
+    }
+    
+    
+    // 二叉树中序遍历
+    @objc func inorderTraversal_94() -> Void {
+        self.showAlert(title: "inorderTraversal_94", message: "\(self.inorderTraversal(nil))")
+    }
+    func inorderTraversal(_ root: TreeNode?) -> [Int] {
+        
+        guard let root = root else {
+            return []
+        }
+        if root.left == nil && root.right == nil {
+            return [root.val]
+        }
+        var resArr = [Int]()
+
+        self.dfsCenter(node: root, resArr: &resArr)
+        return resArr
+    }
+
+    func dfsCenter(node:TreeNode?, resArr:inout [Int]) -> Void {
+         guard let node = node else {
+            return
+        }
+        // 先左
+        self.dfsCenter(node: node.left, resArr: &resArr)
+
+        // 再根
+        resArr.append(node.val)
+
+        // 再右
+        self.dfsCenter(node: node.right, resArr: &resArr)
+    }
+
+    
+    //  删除被覆盖的区间
+    @objc func removeCoveredIntervals_1288() -> Void {
+        self.showAlert(title: "removeCoveredIntervals_1288", message: "\(self.removeCoveredIntervals([[1,4],[3,6],[2,8]]))")
+    }
+    
+    func removeCoveredIntervals(_ intervals: [[Int]]) -> Int {
+        
+        if intervals.count <= 1 {
+            return intervals.count
+        }
+        
+        var myArr = intervals
+        var removedDic = [[Int]:Int]()
+        for i in 0 ..< myArr.count {
+            let tmpArr1 = myArr[i]
+            for j in 0 ..< myArr.count {
+                let tmpArr2 = myArr[j]
+                if tmpArr1 != tmpArr2 &&
+                    removedDic[tmpArr1] == nil &&
+                    removedDic[tmpArr2] == nil {
+                    if tmpArr1.first! - tmpArr2.first! <= 0 && tmpArr1.last! - tmpArr2.last! >= 0 {
+                        removedDic[tmpArr2] = 1
+                    } else if tmpArr1.first! - tmpArr2.first! >= 0 && tmpArr1.last! - tmpArr2.last! <= 0 {
+                        removedDic[tmpArr1] = 1
+                    }
+                }
+            }
+        }
+        return myArr.count - removedDic.keys.count
+    }
+    
+    
+    @objc func mostCompetitive_1673() -> Void {
+        self.showAlert(title: "mostCompetitive_1673", message: "\(self.mostCompetitive([2,4,3,3,5,4,9,6], 4))")
+    }
+    
+    func mostCompetitive(_ nums: [Int], _ k: Int) -> [Int] {
+        var resArr = [Int]()
+        var stack = [Int]()
+        for i in 0 ..< nums.count {
+            while stack.count == 0 &&
+                    (nums[stack.first ?? 0]) > nums[i] &&
+                    stack.count + nums.count - i > k {
+                stack.popLast()
+                stack.append(i)
+            }
+        }
+        while(stack.count > k) {
+            stack.popLast()
+        }
+        
+        for i in (0 ... k - 1).reversed() {
+            resArr[i] = nums[stack.first!]
+            stack.popLast()
+        }
+        return resArr
+    }
+    
+    //    二叉树最近的公共祖先
+    @objc func lowestCommonAncestor_236() -> Void {
+        self.showAlert(title: "lowestCommonAncestor_236", message: "\(self.lowestCommonAncestor(nil, nil, nil))")
+    }
+    
+    func lowestCommonAncestor(_ root: TreeNode?, _ p: TreeNode?, _ q: TreeNode?) -> TreeNode? {
+        // 排除一些边界情况
+        guard let root = root else {
+            return nil
+        }
+        guard let p = p else {
+            return nil
+        }
+        guard let q = q else {
+            return nil
+        }
+        var res:TreeNode? = TreeNode()
+        
+        // 开始递归找root
+        res = self.findRoot(root: root, q: q, p: p)
+        return res
+    }
+    
+    func findRoot(root:TreeNode?, q:TreeNode, p:TreeNode) -> TreeNode? {
+        // 如果走到这一步全都遍历完了，还没有找到，那就说明就是没有
+        if root == nil {
+            return nil
+        }
+        
+        if root!.val == q.val ||    // 如果root为p那就返回p就是公共祖先
+            root!.val == p.val {     // 如果root为q那就返回q就是公共祖先
+            return root
+        }
+        // 开始去左节点里面看能不能找到p 或 q
+        let leftNode:TreeNode? = self.findRoot(root:root!.left, q:q, p:p)
+        
+        // 开始去右节点里面看能不能找到p 或 q
+        let rightNode:TreeNode? = self.findRoot(root:root!.right, q:q, p:p)
+        
+        // 如果全都没有找到，那就是说明没有
+        if leftNode == nil && rightNode == nil {
+            return nil
+        }
+        // 如果左子树没有找到，但是在右子树里面找到了，那就直接返回右子树，说明当前节点就是公共祖先(在他的右子树里)
+        if leftNode == nil && rightNode != nil {
+            return rightNode
+        }
+        
+        // 如果右子树没有找到，但是在左子树里面找到了，那就直接返回左子树，说明当前节点就是公共祖先(在他的左子树里)
+        if leftNode != nil && rightNode == nil {
+            return leftNode
+        }
+        
+        // 就剩下最后一种情况，那就是左右子树都找到了，那就说明p 和 q分别在他的左右子树里，这个时候直接返回root
+        return root
+    }
+
+//    辗转相除法
+    @objc func zhanzhuanxiangchufa() -> Void {
+        var int1 = 695
+        var int2 = 1112
+        self.showAlert(title: "zhanzhuanxiangchufa", message: "\(self.zhanzhuan(int1: int1, int2: int2))")
+
+    }
+
+    func zhanzhuan(int1 : Int, int2: Int) -> Int {
+        let mod = int1 % int2
+        if mod == 0 {
+            return int2
+        }
+        return self.zhanzhuan(int1: int2, int2: mod)
+    }
+    
+//    1653. 使字符串平衡的最少删除次数
+    @objc func minimumDeletions_1653() -> Void {
+        self.showAlert(title: "minimumDeletions_1653", message: "\(self.minDeletions("aababbab"))")
+    }
+    func minimumDeletions(_ s: String) -> Int {
+        var arr = s.map({String($0)})
+        print(arr.description)
+        var bCount = 0
+        var res = 0
+
+        // 开始遍历字符串
+        // 根据题意因为最终的平衡字符串，a一定在b的前面，所以都是以b结尾
+        for i in 0 ..< arr.count {
+            let ch = arr[i]
+            // 那么遍历到b的时候证明字符串平衡，我们对b的count+1，不做其他操作
+            if  ch == "b" {
+                bCount += 1
+            } else {
+                // 但是如果遍历到a的话，就有个两种可能
+                // 1：删掉前面所有的b 也就是要删bCount次
+                // 2：删掉前面所有的a 也就是res + 1 次
+                // 两次取最小即为结果
+                res = min(res + 1, bCount)
+            }
+        }
+
+        // 遍历完后将结果返回
+        return res
+    }
+    
+    // 替换后的最长重复字符
+    @objc func characterReplacement_424() -> Void {
+        self.showAlert(title: "characterReplacement_424", message: "\(self.characterReplacement("ABAB", 2))")
+    }
+    func characterReplacement(_ s: String, _ k: Int) -> Int {
+        var charaCountArr = [Int].init(repeating: 0, count: 26), left = 0, right = 0, tmpArr = Array(s), maxCount = 0
+        
+        while right < tmpArr.count {
+//            用一个数组存储字母出现的频率
+            let index = (Int(tmpArr[right].asciiValue!) - Int(Character.init("A").asciiValue!))
+//            频率+1
+            charaCountArr[index] += 1
+            
+//            取最大的值
+            maxCount = max(maxCount, charaCountArr[index])
+            
+//            窗口右侧移动1
+            right += 1
+            
+//            如果窗口中的字符串 - 评率出现最高的字符串 > 可替换的次数，那就说明目前窗口已经不可能满足了 左侧要往右移动
+//            其实就是我这个窗口内 除了频率最高的字符串外的其他字符的个数已经超过K个了，不管你怎么替换都没有用
+            if right - left - maxCount > k {
+//                左侧移动完了，左侧那个字符的频率要 -1
+                let index = (Int(tmpArr[left].asciiValue!) - Int(Character.init("A").asciiValue!))
+                charaCountArr[index] -= 1
+                
+//                左侧++
+                left += 1
+            }
+        }
+//        返回右侧 - 左侧
+        return right - left
+    }
 }
