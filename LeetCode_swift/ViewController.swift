@@ -150,7 +150,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         mainTable.delegate = self
         mainTable.dataSource = self
         mainTable.register(UITableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
-        mainTable.scrollToRow(at: IndexPath(row: self.dataSource.count - 1, section: 0), at: UITableView.ScrollPosition.top, animated: true)
+//        mainTable.scrollToRow(at: IndexPath(row: self.dataSource.count - 1, section: 0), at: UITableView.ScrollPosition.top, animated: true)
         self.view.addSubview(mainTable)
         
         let button = UIButton(type: UIButton.ButtonType.custom)
@@ -176,18 +176,94 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         print("第1题twoSum =",self.twoSum([3,2,4], 6))
     }
     
+    func mySort(nums:[Int], left:Int, right:Int) -> [Int] {
+        if left >= right {
+            return []
+        }
+        var nums = nums
+        let middle = (right + left) / 2
+        let target = nums[middle]
+        let leftArr = self.mySort(nums: nums, left: left, right: middle)
+        let rightArr = self.mySort(nums: nums, left: middle + 1, right: right)
+        let resArr = self.combineArr(leftArr: leftArr, rightArr: rightArr)
+        return resArr
+    }
+    
+    func combineArr(leftArr:[Int], rightArr:[Int]) -> [Int] {
+        var count = max(leftArr.count, rightArr.count)
+        var resArr = [Int]()
+        for i in 0 ..< count - 1 {
+            if leftArr[i] != nil && rightArr[i] != nil {
+                let max = max(leftArr[i], rightArr[i])
+                resArr.append(max)
+            }
+            
+            if leftArr[i] == nil {
+                for j in i ..< rightArr.count - 1 {
+                    resArr.append(rightArr[j])
+                }
+                break
+            }
+            
+            if rightArr[i] == nil {
+                for j in i ..< leftArr.count - 1 {
+                    resArr.append(leftArr[j])
+                }
+                break
+            }
+        }
+        return resArr
+    }
+    
     func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+        var nums = [8,9,7,5,7,1,3,1,4]
+//        for i in 0 ..< nums.count {
+//            for j in 0 ..< nums.count - i - 1 {
+//                if nums[j] >= nums[j + 1] {
+//                    var tmp = nums[j + 1]
+//                    nums[j + 1] = nums[j]
+//                    nums[j] = tmp
+//                }
+//            }
+//        }
+       
+        let middle = nums.count / 2
+        let resArr = self.mySort(nums: nums, left: 0, right: nums.count - 1)
+        
+        print(resArr)
+        return []
+        
+        
+        
+        
+        
+        
+        
+//        var dic = [Int:Int]()
+//        for i in 0 ..< nums.count {
+//            let num = nums[i]
+//            let tmp = target - num
+//            if dic[tmp] != nil {
+//                return [i, dic[tmp]!]
+//            }
+//            dic[num] = i
+//        }
+//
+//        return []
+        
+        
+        
         
         //        休想在这道题使用双指针，双指针用在有序数组上的
         
-        var dic:[Int:Int] = [:]
-        for (index, number) in nums.enumerated() {
-            if let cha = dic[target - number] {
-                return [cha, index]
-            }
-            dic[number] = index
-        }
-        fatalError("No valid outputs")
+//        var dic:[Int:Int] = [:]
+//        for (index, number) in nums.enumerated() {
+//            if let cha = dic[target - number] {
+//                return [cha, index]
+//            }
+//            dic[number] = index
+//        }
+//        fatalError("No valid outputs")
         
         
         
@@ -222,6 +298,36 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //        输入：l1 = [2,4,3], l2 = [5,6,4]
         //        输出：[7,0,8]
         //        解释：342 + 465 = 807.
+//        var firstPtr = l1
+//        var secondPtr = l2
+//        var preNode = ListNode(0)
+//        var resultNode = preNode
+//        var crrentNode = ListNode(0)
+//        var flag = 0
+//        while firstPtr != nil || secondPtr != nil {
+//            var firstNum = firstPtr?.val
+//            if firstNum == nil {
+//                firstNum = 0
+//            }
+//            var secondNum = secondPtr?.val
+//            if secondNum == nil {
+//                secondNum = 0
+//            }
+//            var currentSum = (firstNum! + secondNum!)
+//            if currentSum >= 10 {
+//                currentSum = currentSum % 10
+//                flag = currentSum / 10
+//            }
+//            var sum = currentSum + flag
+//
+//            preNode.next = ListNode(sum)
+//            preNode = preNode.next!
+//
+//            firstPtr = firstPtr?.next
+//            secondPtr = secondPtr?.next
+//        }
+//        return resultNode.next
+        
         
         var list1 = l1
         var list2 = l2
@@ -233,22 +339,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 sum += list1!.val
                 list1 = list1!.next
             }
-            
+
             if list2 != nil {
                 sum += list2!.val
                 list2 = list2!.next
             }
-            
+
             moveNode.next = ListNode(sum % 10)
             moveNode = moveNode.next!
             sum /= 10
         }
-        
+
         if sum > 0 {
             moveNode.next = ListNode(sum/10)
             moveNode.next?.next = nil
         }
-        
+
         return finalResult.next
         
         
@@ -3720,7 +3826,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //                }
 //            }
 //        }
-        let resStr = resArr.joined()
-        return resStr
+//        let resStr = resArr.joined()
+//        return resStr
     }
 }
