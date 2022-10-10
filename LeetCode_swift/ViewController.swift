@@ -80,7 +80,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "lowestCommonAncestor_236",
                             "zhanzhuanxiangchufa",
                             "minimumDeletions_1653",
-                            "characterReplacement_424"];
+                            "characterReplacement_424",
+                               "convert_6"];
     
     
     
@@ -3657,5 +3658,69 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
 //        返回右侧 - 左侧
         return right - left
+    }
+    
+//    字符串z字形变化
+    @objc func convert_6() -> Void {
+    
+        self.showAlert(title: "convert_6", message: "\(self.convert("PAYPALISHIRING", 4))")
+    }
+    
+    func convert(_ s: String, _ numRows: Int) -> String {
+        if s.count <= 1 || numRows <= 1 || numRows > s.count {
+            return s
+        }
+//        要明确两点 尽量使用时间复杂度O（n）
+//        Z字形就是总上到下从下到上
+
+        let strArr = s.map({String($0)})
+        
+        var tmpArr = [String](repeating: "", count: numRows)
+        var flag = 1
+        var tmpIndex = 0
+        
+        
+        for str in strArr {
+            print(tmpIndex)
+            tmpArr[tmpIndex] += str
+            if tmpIndex == 0 {
+                flag  = 1
+            } else if tmpIndex == numRows - 1 {
+                flag = -1
+            }
+            tmpIndex += flag
+        }
+        
+        var resString = ""
+        for str in tmpArr {
+            resString += str
+        }
+        return resString
+        
+//        let strArr = s.map({String($0)})
+//
+//        var resArr = [String]()
+//        for i in 0 ..< numRows {
+//            var index = i
+//            var count = 0
+//            resArr.append(strArr[index])
+//            while index < s.count {
+//                if i == 0 || i == numRows - 1 {
+//                    index +=  (2 * numRows - 2)
+//                } else {
+//                    if count % 2 == 0 {
+//                        index += (2 * numRows - (2 + i * 2))
+//                    } else {
+//                        index += 2 * numRows - ((numRows - i) * 2)
+//                    }
+//                }
+//                count += 1
+//                if index < s.count {
+//                    resArr.append(strArr[index])
+//                }
+//            }
+//        }
+        let resStr = resArr.joined()
+        return resStr
     }
 }
