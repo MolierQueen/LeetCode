@@ -81,7 +81,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "zhanzhuanxiangchufa",
                             "minimumDeletions_1653",
                             "characterReplacement_424",
-                               "convert_6"];
+                               "convert_6",
+                               "intToRoman_12"];
     
     
     
@@ -3658,8 +3659,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             return nil
         }
         
-        if root!.val == q.val ||    // 如果root为p那就返回p就是公共祖先
-            root!.val == p.val {     // 如果root为q那就返回q就是公共祖先
+        if root!.val == q.val ||    // 如果root为p那就返回P，不能再往下找了，因为公共祖先不可能在下面了
+            root!.val == p.val {     // 如果root为q那就返回q，不能再往下找了，因为公共祖先不可能在下面了
             return root
         }
         // 开始去左节点里面看能不能找到p 或 q
@@ -3828,5 +3829,77 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        }
 //        let resStr = resArr.joined()
 //        return resStr
+    }
+    
+    @objc func intToRoman_12() -> Void {
+        self.showAlert(title: "intToRoman_12", message: "\(self.intToRoman(12))")
+    }
+    
+    func intToRoman(_ num: Int) -> String {
+        if num <= 0 {
+            return ""
+        }
+        var num = num
+        var resArr = [String]()
+        
+        // 官方推荐解法
+        let nums = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+        let romans = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"]
+        for i in 0 ..< nums.count {
+            while num >= nums[i] {
+                num -= nums[i]
+                resArr.append(romans[i])
+            }
+        }
+        return resArr.joined()
+        
+        // 以下是我个人的暴力解法
+        var count = 1
+        while num > 0 {
+            let laseNum = num % 10
+            print("数字是= \(laseNum * count)")
+            resArr.insert(self.getRoman(laseNum * count), at: 0)
+            count *= 10
+            num /= 10
+        }
+        return resArr.joined()
+    }
+    
+    func getRoman(_ num:Int) -> String {
+        if num <= 0 {
+            return ""
+        }
+        var dic:[Int:String] = [Int:String]()
+        dic[1] = "I"
+        dic[2] = "II"
+        dic[3] = "III"
+        dic[4] = "IV"
+        dic[5] = "V"
+        dic[6] = "VI"
+        dic[7] = "VII"
+        dic[8] = "VIII"
+        dic[9] = "IX"
+        dic[10] = "X"
+        dic[20] = "XX"
+        dic[30] = "XXX"
+        dic[40] = "XL"
+        dic[50] = "L"
+        dic[60] = "LX"
+        dic[70] = "LXX"
+        dic[80] = "LXXX"
+        dic[90] = "XC"
+        dic[100] = "C"
+        dic[200] = "CC"
+        dic[300] = "CCC"
+        dic[400] = "CD"
+        dic[500] = "D"
+        dic[600] = "DC"
+        dic[700] = "DCC"
+        dic[800] = "DCCC"
+        dic[900] = "CM"
+        dic[1000] = "M"
+        dic[2000] = "MM"
+        dic[3000] = "MMM"
+        return dic[num]!
     }
 }
