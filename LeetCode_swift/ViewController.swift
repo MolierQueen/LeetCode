@@ -15,6 +15,12 @@ public class ListNode {
     public init(_ val: Int, _ next: ListNode?) { self.val = val; self.next = next; }
 }
 
+
+//typealias  myBlock = (Int,Int)->void
+typealias myBlock = (_ a:Int,_ b:Int) -> ()
+
+
+
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
@@ -82,7 +88,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             "minimumDeletions_1653",
                             "characterReplacement_424",
                                "convert_6",
-                               "intToRoman_12"];
+                               "intToRoman_12",
+                               "testBlock"];
     
     
     
@@ -3901,5 +3908,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         dic[2000] = "MM"
         dic[3000] = "MMM"
         return dic[num]!
+    }
+    
+    
+    
+    @objc func testBlock() -> Void {
+        self .thisIsBlock(num1: 1, num2: 2, blockaa: { a, b in
+            print("block a = \(a), block b = \(b)")
+        }, num3: 3)
+        self.showAlert(title: "intToRoman_12", message: "\(self.intToRoman(12))")
+    }
+    
+    func thisIsBlock(num1:Int, num2:Int,blockaa:myBlock, num3:Int) -> Void {
+        blockaa(10, 20)
+        print("参数 a = \(num1), b = \(num2), c = \(num3)")
     }
 }
