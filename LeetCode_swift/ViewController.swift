@@ -20,76 +20,76 @@ public class ListNode {
 typealias myBlock = (_ a:Int,_ b:Int) -> ()
 
 
-
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
     //    datasource
     var dataSource:[String] = ["twoSum_1",
-                            "addTwoNumbers_2",
-                            "reverseList_206",
-                            "lengthOfLongestSubstring_3",
-                            "longestPalindrome_5",
-                            "deleteMiddle_2095",
-                            "findMedianSortedArrays_4",
-                            "bubbleSort_me",
-                            "InsertionSort_me",
-                            "MergeSort_me",
-                            "Quicksort_me",
-                            "CountingSort_me",
-                            "BinarySearch_me",
-                            "merge_88",
-                            "collectionRain_42",
-                            "numIslands_200",
-                            "maxProfit_121",
-                            "LRUCache_146",
-                            "copyRandomList_138",
-                            "spiralOrder_54",
-                            "mergeTwoLists_21",
-                            "reverseWords_151",
-                            "myAtoi_8",
-                            "firstMissingPositive_41",
-                            "threeSum_15",
-                            "goodNodes_1448",
-                            "topKFrequent_347",
-                            "rightSideView_199",
-                            "ImplementQueueWithStack_232",
-                            "rob_198",
-                            "mySqrt_69",
-                            "sumZero_1304",
-                            "arraySign_1822",
-                            "findKthLargest_215",
-                            "maxNumberOfFamilies_1386",
-                            "searchRange_34",
-                            "romanToInt_13",
-                            "reverseBetween_92",
-                            "longestDiverseString_1405",
-                            "maximalNetworkRank_1615",
-                            "letterCombinations_17",
-                            "multiply_43",
-                            "addStrings_415",
-                            "reverseKGroup_25",
-                            "exist_79",
-                            "eightQueen",
-                            "jiecheng",
-                            "numberToWords_273",
-                            "findOrder_210",
-                            "minDeletions_1647",
-                            "serialize_297",
-                            "isReflected_356",
-                            "postorder_590",
-                            "preorder_589",
-                            "levelOrder_429",
-                            "inorderTraversal_94",
-                            "removeCoveredIntervals_1288",
-                            "mostCompetitive_1673",
-                            "lowestCommonAncestor_236",
-                            "zhanzhuanxiangchufa",
-                            "minimumDeletions_1653",
-                            "characterReplacement_424",
+                               "addTwoNumbers_2",
+                               "reverseList_206",
+                               "lengthOfLongestSubstring_3",
+                               "longestPalindrome_5",
+                               "deleteMiddle_2095",
+                               "findMedianSortedArrays_4",
+                               "bubbleSort_me",
+                               "InsertionSort_me",
+                               "MergeSort_me",
+                               "Quicksort_me",
+                               "CountingSort_me",
+                               "BinarySearch_me",
+                               "merge_88",
+                               "collectionRain_42",
+                               "numIslands_200",
+                               "maxProfit_121",
+                               "LRUCache_146",
+                               "copyRandomList_138",
+                               "spiralOrder_54",
+                               "mergeTwoLists_21",
+                               "reverseWords_151",
+                               "myAtoi_8",
+                               "firstMissingPositive_41",
+                               "threeSum_15",
+                               "goodNodes_1448",
+                               "topKFrequent_347",
+                               "rightSideView_199",
+                               "ImplementQueueWithStack_232",
+                               "rob_198",
+                               "mySqrt_69",
+                               "sumZero_1304",
+                               "arraySign_1822",
+                               "findKthLargest_215",
+                               "maxNumberOfFamilies_1386",
+                               "searchRange_34",
+                               "romanToInt_13",
+                               "reverseBetween_92",
+                               "longestDiverseString_1405",
+                               "maximalNetworkRank_1615",
+                               "letterCombinations_17",
+                               "multiply_43",
+                               "addStrings_415",
+                               "reverseKGroup_25",
+                               "exist_79",
+                               "eightQueen",
+                               "jiecheng",
+                               "numberToWords_273",
+                               "findOrder_210",
+                               "minDeletions_1647",
+                               "serialize_297",
+                               "isReflected_356",
+                               "postorder_590",
+                               "preorder_589",
+                               "levelOrder_429",
+                               "inorderTraversal_94",
+                               "removeCoveredIntervals_1288",
+                               "mostCompetitive_1673",
+                               "lowestCommonAncestor_236",
+                               "zhanzhuanxiangchufa",
+                               "minimumDeletions_1653",
+                               "characterReplacement_424",
                                "convert_6",
                                "intToRoman_12",
-                               "testBlock"];
+                               "testBlock",
+                               "maxArea_11"];
     
     
     
@@ -158,7 +158,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         mainTable.delegate = self
         mainTable.dataSource = self
         mainTable.register(UITableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
-//        mainTable.scrollToRow(at: IndexPath(row: self.dataSource.count - 1, section: 0), at: UITableView.ScrollPosition.top, animated: true)
+        //        mainTable.scrollToRow(at: IndexPath(row: self.dataSource.count - 1, section: 0), at: UITableView.ScrollPosition.top, animated: true)
         self.view.addSubview(mainTable)
         
         let button = UIButton(type: UIButton.ButtonType.custom)
@@ -225,16 +225,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
         var nums = [8,9,7,5,7,1,3,1,4]
-//        for i in 0 ..< nums.count {
-//            for j in 0 ..< nums.count - i - 1 {
-//                if nums[j] >= nums[j + 1] {
-//                    var tmp = nums[j + 1]
-//                    nums[j + 1] = nums[j]
-//                    nums[j] = tmp
-//                }
-//            }
-//        }
-       
+        //        for i in 0 ..< nums.count {
+        //            for j in 0 ..< nums.count - i - 1 {
+        //                if nums[j] >= nums[j + 1] {
+        //                    var tmp = nums[j + 1]
+        //                    nums[j + 1] = nums[j]
+        //                    nums[j] = tmp
+        //                }
+        //            }
+        //        }
+        
         let middle = nums.count / 2
         let resArr = self.mySort(nums: nums, left: 0, right: nums.count - 1)
         
@@ -247,31 +247,31 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         
         
-//        var dic = [Int:Int]()
-//        for i in 0 ..< nums.count {
-//            let num = nums[i]
-//            let tmp = target - num
-//            if dic[tmp] != nil {
-//                return [i, dic[tmp]!]
-//            }
-//            dic[num] = i
-//        }
-//
-//        return []
+        //        var dic = [Int:Int]()
+        //        for i in 0 ..< nums.count {
+        //            let num = nums[i]
+        //            let tmp = target - num
+        //            if dic[tmp] != nil {
+        //                return [i, dic[tmp]!]
+        //            }
+        //            dic[num] = i
+        //        }
+        //
+        //        return []
         
         
         
         
         //        休想在这道题使用双指针，双指针用在有序数组上的
         
-//        var dic:[Int:Int] = [:]
-//        for (index, number) in nums.enumerated() {
-//            if let cha = dic[target - number] {
-//                return [cha, index]
-//            }
-//            dic[number] = index
-//        }
-//        fatalError("No valid outputs")
+        //        var dic:[Int:Int] = [:]
+        //        for (index, number) in nums.enumerated() {
+        //            if let cha = dic[target - number] {
+        //                return [cha, index]
+        //            }
+        //            dic[number] = index
+        //        }
+        //        fatalError("No valid outputs")
         
         
         
@@ -306,35 +306,35 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //        输入：l1 = [2,4,3], l2 = [5,6,4]
         //        输出：[7,0,8]
         //        解释：342 + 465 = 807.
-//        var firstPtr = l1
-//        var secondPtr = l2
-//        var preNode = ListNode(0)
-//        var resultNode = preNode
-//        var crrentNode = ListNode(0)
-//        var flag = 0
-//        while firstPtr != nil || secondPtr != nil {
-//            var firstNum = firstPtr?.val
-//            if firstNum == nil {
-//                firstNum = 0
-//            }
-//            var secondNum = secondPtr?.val
-//            if secondNum == nil {
-//                secondNum = 0
-//            }
-//            var currentSum = (firstNum! + secondNum!)
-//            if currentSum >= 10 {
-//                currentSum = currentSum % 10
-//                flag = currentSum / 10
-//            }
-//            var sum = currentSum + flag
-//
-//            preNode.next = ListNode(sum)
-//            preNode = preNode.next!
-//
-//            firstPtr = firstPtr?.next
-//            secondPtr = secondPtr?.next
-//        }
-//        return resultNode.next
+        //        var firstPtr = l1
+        //        var secondPtr = l2
+        //        var preNode = ListNode(0)
+        //        var resultNode = preNode
+        //        var crrentNode = ListNode(0)
+        //        var flag = 0
+        //        while firstPtr != nil || secondPtr != nil {
+        //            var firstNum = firstPtr?.val
+        //            if firstNum == nil {
+        //                firstNum = 0
+        //            }
+        //            var secondNum = secondPtr?.val
+        //            if secondNum == nil {
+        //                secondNum = 0
+        //            }
+        //            var currentSum = (firstNum! + secondNum!)
+        //            if currentSum >= 10 {
+        //                currentSum = currentSum % 10
+        //                flag = currentSum / 10
+        //            }
+        //            var sum = currentSum + flag
+        //
+        //            preNode.next = ListNode(sum)
+        //            preNode = preNode.next!
+        //
+        //            firstPtr = firstPtr?.next
+        //            secondPtr = secondPtr?.next
+        //        }
+        //        return resultNode.next
         
         
         var list1 = l1
@@ -347,22 +347,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 sum += list1!.val
                 list1 = list1!.next
             }
-
+            
             if list2 != nil {
                 sum += list2!.val
                 list2 = list2!.next
             }
-
+            
             moveNode.next = ListNode(sum % 10)
             moveNode = moveNode.next!
             sum /= 10
         }
-
+        
         if sum > 0 {
             moveNode.next = ListNode(sum/10)
             moveNode.next?.next = nil
         }
-
+        
         return finalResult.next
         
         
@@ -928,18 +928,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             arr[start + 1] = current
             
             
-//            for j in 0 ..< i {
-//                var standard = arr[j]
-//                if standard > current {
-//                    arr.swapAt(j, i)
-//                }
-//            }
-
+            //            for j in 0 ..< i {
+            //                var standard = arr[j]
+            //                if standard > current {
+            //                    arr.swapAt(j, i)
+            //                }
+            //            }
+            
         }
         print(arr)
         
         /******************第二次****************/
-
+        
         
         for i in 0 ..< arr.count {
             let current = arr[i]
@@ -994,7 +994,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func processing(arr:inout [Int], left:Int , right:Int) -> Void {
         if left == right {return}
-//        let middle = left + (right - left) / 2
+        //        let middle = left + (right - left) / 2
         let middle = (left + right) / 2
         self.processing(arr: &arr, left: left, right: middle)
         self.processing(arr: &arr, left: middle + 1, right: right)
@@ -1157,7 +1157,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let a = self.binary(arr: &arr, left: 0, right: arr.count-1, target:target)
         let b = self.binary1(arr: &arr, target:target)
         self.showAlert(title: "BinarySearch_me", message: String(b))
-
+        
         
     }
     
@@ -1718,35 +1718,35 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         //        处理数字
-//        while index < strArr.count && Int(strArr[index]) ?? -1 >=  0 {
-//            var lastNum = 7
-//            if flage < 0 {
-//                lastNum = Int(Int32.min) % 10 * flage
-//            }
-//
-//            if result > Int(Int32.max / 10) || (result == Int(Int32.max / 10) && Int(strArr[index])! > lastNum) {
-//                return flage > 0 ? Int(Int32.max) : Int(Int32.min)
-//            }
-//            //            在数字中移动指针，比较巧妙 9 99 999 9999
-//            result = result * 10 + Int(strArr[index])!
-//            index += 1
-//        }
+        //        while index < strArr.count && Int(strArr[index]) ?? -1 >=  0 {
+        //            var lastNum = 7
+        //            if flage < 0 {
+        //                lastNum = Int(Int32.min) % 10 * flage
+        //            }
+        //
+        //            if result > Int(Int32.max / 10) || (result == Int(Int32.max / 10) && Int(strArr[index])! > lastNum) {
+        //                return flage > 0 ? Int(Int32.max) : Int(Int32.min)
+        //            }
+        //            //            在数字中移动指针，比较巧妙 9 99 999 9999
+        //            result = result * 10 + Int(strArr[index])!
+        //            index += 1
+        //        }
         while index < strArr.count && Int(strArr[index]) ?? -1 >=  0 {
-                    var lastNum = 7
-                    if flage < 0 {
-                        lastNum = Int(Int32.min) % 10 * flage
-                    }
-                    result = result * 10 + Int(strArr[index])!
-                    if flage < 0 && -result < Int(Int32.min){
-                        return Int(Int32.min)
-                    }
-
-                    if flage > 0 && result > Int(Int32.max){
-                        return Int(Int32.max)
-                    }
-
-                    index += 1
-                }
+            var lastNum = 7
+            if flage < 0 {
+                lastNum = Int(Int32.min) % 10 * flage
+            }
+            result = result * 10 + Int(strArr[index])!
+            if flage < 0 && -result < Int(Int32.min){
+                return Int(Int32.min)
+            }
+            
+            if flage > 0 && result > Int(Int32.max){
+                return Int(Int32.max)
+            }
+            
+            index += 1
+        }
         return result * flage
     }
     
@@ -2042,7 +2042,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.showAlert(title: "rob_198", message: "\(self.rob(nums))")
     }
     
-//    打家劫舍递归算法
+    //    打家劫舍递归算法
     func rob1(nums:[Int], res:inout Int, index:Int, last1:inout Int) {
         if index > nums.count - 1 {
             return
@@ -2051,16 +2051,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         var index = index
         let current = nums[index]
         
-//        先保存res的值
+        //        先保存res的值
         let tmp = res
         
-//        拿到此时的结果即为f(n-1)
+        //        拿到此时的结果即为f(n-1)
         res = max(current + last1, res)
         
-//        然后把上一次的循环赋值给last1  即为f(n-2)
+        //        然后把上一次的循环赋值给last1  即为f(n-2)
         last1 = tmp
         
-//        然后进行下一次循环
+        //        然后进行下一次循环
         self.rob1(nums: nums, res: &res, index: index + 1, last1: &last1)
     }
     
@@ -2087,9 +2087,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //        2：0~n-1的钱我们称为second
         var second = max(nums[0], nums[1])
-//        用递归方法
-//        self.rob1(nums: nums, res: &second, index: 2, last1: &first)
-//        return second
+        //        用递归方法
+        //        self.rob1(nums: nums, res: &second, index: 2, last1: &first)
+        //        return second
         
         //        开始遍历数组，因为只含一个的元素的情况被我们之前排除了；只含有两个元素的情况就是second初始化的值。所以这里从2开始遍历
         for i in 2 ..< nums.count {
@@ -3243,42 +3243,42 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return resultArr
     }
     
-//    这里要用到  集合  https://www.jianshu.com/p/a0452bd0f060 频次相同的字符串最小删除数
+    //    这里要用到  集合  https://www.jianshu.com/p/a0452bd0f060 频次相同的字符串最小删除数
     @objc func minDeletions_1647() -> Void {
         self.showAlert(title: "minDeletions_1647", message: "\(self.minDeletions("bbcebab"))")
     }
     
     func minDeletions(_ s: String) -> Int {
-//        先搞一个字典key是字母 value是出现的次数，
+        //        先搞一个字典key是字母 value是出现的次数，
         var dic = [String : Int]()
         
-//        创建结果存放的变量
+        //        创建结果存放的变量
         var res = 0
         
-//        将字符串转为数组
+        //        将字符串转为数组
         var stringArr = s.map({String($0)})
         
-//        给一开始的字典赋值
+        //        给一开始的字典赋值
         for i in 0 ..< stringArr.count {
             let count = dic[stringArr[i]]
             dic[stringArr[i]] =  (count == nil) ? 1 : count! + 1
         }
         
-//        创建一个哈希集合用来去重操作
+        //        创建一个哈希集合用来去重操作
         var hashSet:Set<Int> = Set()
         
-//        遍历字典将每个字母的频率存到哈希集合里面
+        //        遍历字典将每个字母的频率存到哈希集合里面
         for tmpDic in dic {
             var count = tmpDic.value
             
-//            如果某个频率存不进去，说明已经存在该频率了，这个时候就要剪掉一个字母(频率-1) 然后操作数+1，直到能存到哈希集合里，证明之前没有出现这个频率
-//            还有要注意，0 不算数
+            //            如果某个频率存不进去，说明已经存在该频率了，这个时候就要剪掉一个字母(频率-1) 然后操作数+1，直到能存到哈希集合里，证明之前没有出现这个频率
+            //            还有要注意，0 不算数
             while count != 0 && !hashSet.insert(count).inserted {
                 count -= 1
                 res += 1
             }
         }
-//        返回结果
+        //        返回结果
         return res
     }
     
@@ -3293,7 +3293,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let node = self.deserialize(self.serialize(root))
         
         self.showAlert(title: "serialize_297", message: "\(self.serialize(root))")
-}
+    }
     
     //  297二叉树的序列化与反序列化
     func serialize(_ root: TreeNode?) -> String {
@@ -3309,9 +3309,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         queue.append(root!)
         self.changeNodeToArr(queue: queue, resArr: &resultArr,count: &count, resStr: &resultStr)
         resultStr.append("123")
-//        count = Int(powl(2, Float80(count)))
-//        resultArr = resultArr.dropLast(count)
-//        let resStr = resultArr.map({String($0)}).joined(separator: ",")
+        //        count = Int(powl(2, Float80(count)))
+        //        resultArr = resultArr.dropLast(count)
+        //        let resStr = resultArr.map({String($0)}).joined(separator: ",")
         return resultStr
     }
     
@@ -3449,10 +3449,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func postorder(_ root: NodeTree?) -> [Int] {
-//          1
-//        2  3
-//        后遍历后结果为2 3 1 ，但是考虑到要从根节点才能找到左右子节点，所以先按照1 3 2 的顺序来遍历，然后反过来即可，
-//        用广度优先，每次取数组最后一个就行
+        //          1
+        //        2  3
+        //        后遍历后结果为2 3 1 ，但是考虑到要从根节点才能找到左右子节点，所以先按照1 3 2 的顺序来遍历，然后反过来即可，
+        //        用广度优先，每次取数组最后一个就行
         
         guard let root = root else {
             return []
@@ -3480,7 +3480,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-//    二叉树前序遍历
+    //    二叉树前序遍历
     @objc func preorder_589() -> Void {
         self.showAlert(title: "postorder_590", message: "\(self.postorder(nil))")
     }
@@ -3495,7 +3495,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.bfs1(queue: [root], resArr: &resArr)
         return resArr
     }
-
+    
     func bfs1(queue:[NodeTree], resArr:inout [Int]) {
         if queue.count == 0 {
             return
@@ -3559,25 +3559,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             return [root.val]
         }
         var resArr = [Int]()
-
+        
         self.dfsCenter(node: root, resArr: &resArr)
         return resArr
     }
-
+    
     func dfsCenter(node:TreeNode?, resArr:inout [Int]) -> Void {
-         guard let node = node else {
+        guard let node = node else {
             return
         }
         // 先左
         self.dfsCenter(node: node.left, resArr: &resArr)
-
+        
         // 再根
         resArr.append(node.val)
-
+        
         // 再右
         self.dfsCenter(node: node.right, resArr: &resArr)
     }
-
+    
     
     //  删除被覆盖的区间
     @objc func removeCoveredIntervals_1288() -> Void {
@@ -3693,15 +3693,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // 就剩下最后一种情况，那就是左右子树都找到了，那就说明p 和 q分别在他的左右子树里，这个时候直接返回root
         return root
     }
-
-//    辗转相除法
+    
+    //    辗转相除法
     @objc func zhanzhuanxiangchufa() -> Void {
-        var int1 = 695
-        var int2 = 1112
+        let int1 = 695
+        let int2 = 1112
         self.showAlert(title: "zhanzhuanxiangchufa", message: "\(self.zhanzhuan(int1: int1, int2: int2))")
-
+        
     }
-
+    
     func zhanzhuan(int1 : Int, int2: Int) -> Int {
         let mod = int1 % int2
         if mod == 0 {
@@ -3710,7 +3710,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return self.zhanzhuan(int1: int2, int2: mod)
     }
     
-//    1653. 使字符串平衡的最少删除次数
+    //    1653. 使字符串平衡的最少删除次数
     @objc func minimumDeletions_1653() -> Void {
         self.showAlert(title: "minimumDeletions_1653", message: "\(self.minDeletions("aababbab"))")
     }
@@ -3719,7 +3719,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         print(arr.description)
         var bCount = 0
         var res = 0
-
+        
         // 开始遍历字符串
         // 根据题意因为最终的平衡字符串，a一定在b的前面，所以都是以b结尾
         for i in 0 ..< arr.count {
@@ -3735,7 +3735,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 res = min(res + 1, bCount)
             }
         }
-
+        
         // 遍历完后将结果返回
         return res
     }
@@ -3748,35 +3748,35 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         var charaCountArr = [Int].init(repeating: 0, count: 26), left = 0, right = 0, tmpArr = Array(s), maxCount = 0
         
         while right < tmpArr.count {
-//            用一个数组存储字母出现的频率
+            //            用一个数组存储字母出现的频率
             let index = (Int(tmpArr[right].asciiValue!) - Int(Character.init("A").asciiValue!))
-//            频率+1
+            //            频率+1
             charaCountArr[index] += 1
             
-//            取最大的值
+            //            取最大的值
             maxCount = max(maxCount, charaCountArr[index])
             
-//            窗口右侧移动1
+            //            窗口右侧移动1
             right += 1
             
-//            如果窗口中的字符串 - 评率出现最高的字符串 > 可替换的次数，那就说明目前窗口已经不可能满足了 左侧要往右移动
-//            其实就是我这个窗口内 除了频率最高的字符串外的其他字符的个数已经超过K个了，不管你怎么替换都没有用
+            //            如果窗口中的字符串 - 评率出现最高的字符串 > 可替换的次数，那就说明目前窗口已经不可能满足了 左侧要往右移动
+            //            其实就是我这个窗口内 除了频率最高的字符串外的其他字符的个数已经超过K个了，不管你怎么替换都没有用
             if right - left - maxCount > k {
-//                左侧移动完了，左侧那个字符的频率要 -1
+                //                左侧移动完了，左侧那个字符的频率要 -1
                 let index = (Int(tmpArr[left].asciiValue!) - Int(Character.init("A").asciiValue!))
                 charaCountArr[index] -= 1
                 
-//                左侧++
+                //                左侧++
                 left += 1
             }
         }
-//        返回右侧 - 左侧
+        //        返回右侧 - 左侧
         return right - left
     }
     
-//    字符串z字形变化
+    //    字符串z字形变化
     @objc func convert_6() -> Void {
-    
+        
         self.showAlert(title: "convert_6", message: "\(self.convert("PAYPALISHIRING", 4))")
     }
     
@@ -3784,9 +3784,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if s.count <= 1 || numRows <= 1 || numRows > s.count {
             return s
         }
-//        要明确两点 尽量使用时间复杂度O（n）
-//        Z字形就是总上到下从下到上
-
+        //        要明确两点 尽量使用时间复杂度O（n）
+        //        Z字形就是总上到下从下到上
+        
         let strArr = s.map({String($0)})
         
         var tmpArr = [String](repeating: "", count: numRows)
@@ -3811,31 +3811,31 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         return resString
         
-//        let strArr = s.map({String($0)})
-//
-//        var resArr = [String]()
-//        for i in 0 ..< numRows {
-//            var index = i
-//            var count = 0
-//            resArr.append(strArr[index])
-//            while index < s.count {
-//                if i == 0 || i == numRows - 1 {
-//                    index +=  (2 * numRows - 2)
-//                } else {
-//                    if count % 2 == 0 {
-//                        index += (2 * numRows - (2 + i * 2))
-//                    } else {
-//                        index += 2 * numRows - ((numRows - i) * 2)
-//                    }
-//                }
-//                count += 1
-//                if index < s.count {
-//                    resArr.append(strArr[index])
-//                }
-//            }
-//        }
-//        let resStr = resArr.joined()
-//        return resStr
+        //        let strArr = s.map({String($0)})
+        //
+        //        var resArr = [String]()
+        //        for i in 0 ..< numRows {
+        //            var index = i
+        //            var count = 0
+        //            resArr.append(strArr[index])
+        //            while index < s.count {
+        //                if i == 0 || i == numRows - 1 {
+        //                    index +=  (2 * numRows - 2)
+        //                } else {
+        //                    if count % 2 == 0 {
+        //                        index += (2 * numRows - (2 + i * 2))
+        //                    } else {
+        //                        index += 2 * numRows - ((numRows - i) * 2)
+        //                    }
+        //                }
+        //                count += 1
+        //                if index < s.count {
+        //                    resArr.append(strArr[index])
+        //                }
+        //            }
+        //        }
+        //        let resStr = resArr.joined()
+        //        return resStr
     }
     
     @objc func intToRoman_12() -> Void {
@@ -3911,16 +3911,108 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     
-    
+    //    自己练习block************************************************
     @objc func testBlock() -> Void {
         self .thisIsBlock(num1: 1, num2: 2, blockaa: { a, b in
             print("block a = \(a), block b = \(b)")
         }, num3: 3)
         self.showAlert(title: "intToRoman_12", message: "\(self.intToRoman(12))")
+        self.bbbbb(num1: 1) { a, b in
+            print(a,b)
+        }
     }
     
     func thisIsBlock(num1:Int, num2:Int,blockaa:myBlock, num3:Int) -> Void {
         blockaa(10, 20)
         print("参数 a = \(num1), b = \(num2), c = \(num3)")
     }
+    
+    func bbbbb(num1:Int, block:myBlock) -> Void {
+        print("123")
+        block(1111,22222)
+    }
+    //  ************************************************
+    
+    //    11. 盛水最多的容器
+    @objc func maxArea_11() -> Void {
+        //        let arr = [1,8,6,2,5,4,8,3,7]
+        //        let arr = [0,2]
+        let arr = [14,0,12,3,8,3,13,5,14,8]
+        self.showAlert(title: "maxArea_11", message: "\(self.maxArea(arr))")
+    }
+    
+    func maxArea(_ height: [Int]) -> Int {
+        
+        // 暴力解法 双层遍历
+        //        var maxA = 0
+        //        for i in 0 ..< height.count {
+        //            var curMax = 0
+        //            for j in i ..< height.count {
+        //                if height[i] == 0 ||
+        //                    height[j] == 0 {
+        //                    continue
+        //                }
+        //                curMax = max((j - i) * min(height[j], height[i]), curMax)
+        //            }
+        //            maxA = max(maxA, curMax)
+        //        }
+        //        return maxA
+        
+        // 定义一些变量 左右指针，面积 左右木板长度等
+        var left = 0
+        var right = height.count - 1
+        var maxArea = 0
+        var leftLength = 0
+        var rightLength = 0
+        
+        // 开始循环移动指针
+        while right > left {
+            // 优化点1：如果这个木板高度为0 直接不用考虑跳过吧
+            if height[left] <= 0 {
+                left += 1
+            }
+            
+            // 优化点1：如果这个木板高度为0 直接不用考虑跳过吧
+            if height[right] <= 0 {
+                right -= 1
+            }
+            
+            // 上面跳过几个为0 的木板，看下别越界了
+            if right <= left {
+                return maxArea
+            }
+            
+            // 优化点2：如果移动后这个木板还没有上一个长，直接跳过，因为他只会让面积更小
+            if height[left] < leftLength {
+                leftLength = height[left]
+                left += 1
+                continue
+            }
+            
+            // 优化点2：如果移动后这个木板还没有上一个长，直接跳过，因为他只会让面积更小
+            if height[right] < rightLength {
+                rightLength = height[right]
+                right -= 1
+                continue
+            }
+            
+            // 符合条件开始计算长度
+            leftLength = height[left]
+            rightLength = height[right]
+            let currentArea = ((right - left) * min(height[right], height[left]))
+            // 取面积最大值
+            maxArea = max(maxArea, currentArea)
+            
+            // 每次移动短板
+            if leftLength < rightLength {
+                left += 1
+            } else {
+                right -= 1
+            }
+        }
+        
+        // 返回结果
+        return maxArea
+    }
 }
+        
