@@ -89,7 +89,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "convert_6",
                                "intToRoman_12",
                                "testBlock",
-                               "maxArea_11"];
+                               "maxArea_11",
+                               "longestCommonPrefix_14"];
     
     
     
@@ -4013,6 +4014,52 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         // 返回结果
         return maxArea
+    }
+    
+    
+    // 最长的公共前缀
+    @objc func longestCommonPrefix_14() -> Void {
+//        let strs:[String] = ["flower","flow","flight"]
+        let strs:[String] = ["aa","ab"]
+        self.showAlert(title: "第14题longestCommonPrefix", message: self.longestCommonPrefix(strs))
+    }
+    
+    func longestCommonPrefix(_ strs: [String]) -> String {
+        if strs.count == 0 {
+            return ""
+        }
+        if strs.count == 1 {
+            return strs[0]
+        }
+        //        横向遍历
+
+        //        注意这里，初始化时候用第一个元素来填入，后续就变成用上一步的结果来填入了 lcp
+        var lcp = strs[0]
+        for i in 1 ..< strs.count {
+            let tmpStr = strs[i]
+            lcp = self.findLongestCommonPrefix(str1: lcp, str2: tmpStr)
+        }
+        return lcp
+    }
+    
+    func findLongestCommonPrefix(str1:String, str2:String) -> String {
+     
+        var index = 0
+        //        用最小的length来遍历
+        var length = min(str2.count, str1.count)
+        while index < length {
+            var chara1 = str1[str1.index(str1.startIndex, offsetBy: index)]
+            var chara2 = str2[str2.index(str2.startIndex, offsetBy: index)]
+            if chara1 != chara2 {
+                break
+            } else {
+                index += 1
+            }
+        }
+        if index == 0 {
+            return ""
+        }
+        return String(str1.prefix(index))
     }
 }
         
