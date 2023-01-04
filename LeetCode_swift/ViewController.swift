@@ -90,7 +90,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "intToRoman_12",
                                "testBlock",
                                "maxArea_11",
-                               "longestCommonPrefix_14"];
+                               "longestCommonPrefix_14",
+                               "combineSortAndQuickSort"];
     
     
     
@@ -4060,6 +4061,113 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             return ""
         }
         return String(str1.prefix(index))
+    }
+    
+    //  自己练习归并排序和快速排序
+    @objc func combineSortAndQuickSort() -> Void {
+        var arr = [1,3,1,4,8,9,7,5,7]
+        //        归并注意最后合并时候的函数，其中要注意算出真实的下标
+        self.combineSort(left: 0, right: arr.count - 1, array: &arr)
+        self.showAlert(title: "自己练习归并", message: "\(arr)")
+        
+        //        快排注意选择基准数字的函数，其中要注意选择基准数字的位置不同写法也不同。且遍历完后需要把基准数字放到正确的位置上
+        self.quickSortTest(left: 0, right: arr.count - 1, array: &arr)
+        self.showAlert(title: "自己练习快排", message: "\(arr)")
+    }
+    
+    //    归并排序
+    func combineSort(left:Int, right:Int, array:inout [Int]) -> Void {
+        //        递归的的终止条件，两个指针重合
+        if left >= right {
+            return
+        }
+        
+        //        归并排序使用分治思想，分而治之，先找到中点开始分开
+        let middle = (left + right) / 2
+        
+        //        再递归的把左右两部分继续分成两部分
+        self.combineSort(left: left, right: middle, array: &array)
+        self.combineSort(left: middle + 1, right: right, array: &array)
+        
+        //        分完之后开始合并，因为上一步已经分成最小的部分（单个元素）了，所以也是从最小的部分还是已点一点合起来。
+        compareNums(left1:left, right1:right, middle1:middle, arr1: &array)
+    }
+    
+    func compareNums(left1:Int, right1:Int, middle1:Int, arr1:inout [Int]) -> Void {
+        
+        //        找到两个部分的起点，开始将两个最小部分合并成一个数组，其实就是合并两个有序数组
+        var begin1 = left1
+        var begin2 = middle1 + 1
+        
+        //         临时数组
+        var tmpArr = [Int]()
+
+        //        开始循环合并为一个数组
+        while begin1 <= middle1 && begin2 <= right1 {
+            if arr1[begin1] <= arr1[begin2] {
+                tmpArr.append(arr1[begin1])
+                begin1 += 1
+            } else {
+                tmpArr.append(arr1[begin2])
+                begin2 += 1
+            }
+        }
+        
+        //        循环遍历完后 较长的数值剩下了，因为这两部分都是已经排好序的，所以直接把剩下的拼接到总数组的后面就行
+        if begin1 > middle1 {
+            for i in begin2 ... right1 {
+                tmpArr.append(arr1[i])
+            }
+        }
+        
+        if begin2 > right1 {
+            for i in begin1 ... middle1 {
+                tmpArr.append(arr1[i])
+            }
+        }
+        
+        //        这一步要注意，因为这里是将两个小的有序数组拼接为一个大数组，但是某个元素在小数组的下标并不是在最终数组里的下标，需要要加上left的偏移量才是最终结果数组的下标
+        for (index, ele) in tmpArr.enumerated() {
+            let realIndex = index + left1
+            arr1[realIndex] = ele
+        }
+    }
+    
+    //    快速排序
+    func quickSortTest(left:Int, right: Int, array:inout [Int]) -> Void {
+        //        退出递归的标志
+        if left >= right {
+            return
+        }
+        
+        //        寻找中间元素
+        let middleObj = self.findMiddleObject(left: left, right: right, array: &array)
+        
+        //        将上一行拆成两边分别对两边寻找中间元素
+        self.quickSortTest(left: left, right: middleObj - 1, array: &array)
+        self.quickSortTest(left: middleObj + 1, right: right, array: &array)
+    }
+    
+    func findMiddleObject(left:Int, right: Int, array:inout [Int]) -> Int {
+        //        选一个基准数字  注意：这里选第一个还是最后一个 后面的写法是有区别的，这里选了第一个，如果要看最后一个可以参考之前的快排写法。
+        let tmpNum = array[left]
+        //        开始循环除基准数字之外的部分
+        var leftPoint = left+1
+        for i in left+1 ... right {
+            let curNum = array[i]
+            if curNum <= tmpNum {
+                //                如果遇到小于基准数字的，就放到左边，通过交换的方式
+                array.swapAt(leftPoint, i)
+                leftPoint += 1
+            }
+        }
+        
+        //        都便利完后需要把基准数字放到正确的位置，因为上面的循环遍历是不包括基准数字的，所以这里要单独处理下，
+        //        注意：这里选第一个还是最后一个 后面的写法是有区别的，这里选了第一个，如果要看最后一个可以参考之前的快排写法。
+        //        如果选的是第一个 就需要将基准数字和leftpoint-1的位置交换，因为遍历完后游标是停留在大于基准数字的位置，如果直接和游标交换则会把大于基准数字的数字放到基准数字的左边，这就错了。
+        //        如果选的是第最后一个 就需要将基准数字和leftpoint的位置交换，因为遍历完后游标是停留在大于基准数字的位置， 直接交换则可以把游标指向的数放到基准数字的右边。
+        array.swapAt(leftPoint - 1, left)
+        return leftPoint - 1
     }
 }
         
