@@ -91,7 +91,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "testBlock",
                                "maxArea_11",
                                "longestCommonPrefix_14",
-                               "combineSortAndQuickSort"];
+                               "combineSortAndQuickSort",
+                               "threeSumClosest_16"];
     
     
     
@@ -4169,5 +4170,58 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         array.swapAt(leftPoint - 1, left)
         return leftPoint - 1
     }
+    
+    @objc func threeSumClosest_16() ->Void {
+        let arr = [1,1,1,1]
+        let target = -100
+        self.showAlert(title: "第16题：最接近的三数之和", message: "\(self.threeSumClosest(arr, target))")
+    }
+    
+    func threeSumClosest(_ nums: [Int], _ target: Int) -> Int {
+        //        先对数组排序
+        let sortedArr = nums.sorted(by: {$0 < $1})
+        
+        //        定义结果变量，注意：这里的初始化要用真实的数组中的三数之和，不能用0或者其他值代替，不然会干扰后面的判断
+        var result = nums[0] + nums[1] + nums[2]
+        
+        //        开始循环遍历
+        for i in 0..<sortedArr.count {
+            //            找出number1
+            let tmpNum = sortedArr[i]
+            
+            //            确定左右指针 因为是排好序的数组，所以左指针就是number1的下一个，右指针直接用最大值
+            var left = i + 1
+            var right = sortedArr.count - 1
+            //        开始比较准备移动左右指针
+            while left < right {
+                //                获取number2和number3 并求和
+                let tmpNum2 = sortedArr[left]
+                let tmpNum3 = sortedArr[right]
+                let sum = tmpNum3 + tmpNum2 + tmpNum
+                
+                //                如果和直接等于target 那直接返回这个和
+                if sum == target {
+                    return sum
+                }
+                
+                //                如果此次的和距离target比上一次的近，就更新result。因为有可能是负数，所以这里用绝对值
+                if abs(sum-target) < abs(result-target) {
+                    result = sum
+                }
+                
+                //                比较完了，开始移动左右指针，如果当前和大于等于target 那就让他小点，就是右边往左移动，反之就是左边往右移动
+                if sum >= target {
+                    right -= 1
+                } else {
+                    left += 1
+                }
+            }
+        }
+        
+        //        都遍历完了 result就是结果
+        return result
+    }
+    
+    
 }
         
