@@ -92,7 +92,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "maxArea_11",
                                "longestCommonPrefix_14",
                                "combineSortAndQuickSort",
-                               "threeSumClosest_16"];
+                               "threeSumClosest_16",
+                               "isMatch_10",
+                               "isValid_20"];
     
     
     
@@ -119,14 +121,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func showAlert(title:String, message:String) -> Void {
-        var strIndex = "0"
-        for (index, str) in self.dataSource.enumerated() {
-            if str == title {
-                strIndex = String(index + 1)
-                break
-            }
-        }
-        let alert:UIAlertController = UIAlertController.init(title: strIndex + "_" + title, message: message, preferredStyle: UIAlertController.Style.alert)
+        let alert:UIAlertController = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         let alertOK:UIAlertAction = UIAlertAction.init(title: "知道了", style: UIAlertAction.Style.destructive)
         alert.addAction(alertOK)
         self.present(alert, animated: true)
@@ -166,10 +161,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let button = UIButton(type: UIButton.ButtonType.custom)
         button.frame = CGRect(x: UIScreen.main.bounds.size.width - 100, y: 100, width: 50, height: 50)
-        button .setTitle("✅", for: UIControl.State.normal)
+        let buttonTitle = "第"+String(self.dataSource.count)+"题为✅"
+        button .setTitle(buttonTitle, for: UIControl.State.normal)
+        button.sizeToFit()
         button.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        button.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
+        button.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
         button.addTarget(self, action: #selector(buttonAction), for: UIControl.Event.touchUpInside)
+        button.center = CGPointMake(UIScreen.main.bounds.size.width/2, 70)
         self.view.addSubview(button)
     }
     
@@ -203,7 +201,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func combineArr(leftArr:[Int], rightArr:[Int]) -> [Int] {
         var count = max(leftArr.count, rightArr.count)
         var resArr = [Int]()
-        for i in 0 ..< count - 1 {
+        for i in 0 ..< count  {
             if leftArr[i] != nil && rightArr[i] != nil {
                 let max = max(leftArr[i], rightArr[i])
                 resArr.append(max)
@@ -228,21 +226,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
         var nums = [8,9,7,5,7,1,3,1,4]
-        //        for i in 0 ..< nums.count {
-        //            for j in 0 ..< nums.count - i - 1 {
-        //                if nums[j] >= nums[j + 1] {
-        //                    var tmp = nums[j + 1]
-        //                    nums[j + 1] = nums[j]
-        //                    nums[j] = tmp
-        //                }
-        //            }
-        //        }
-        
-        let middle = nums.count / 2
-        let resArr = self.mySort(nums: nums, left: 0, right: nums.count - 1)
-        
-        print(resArr)
-        return []
         
         
         
@@ -250,17 +233,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         
         
-        //        var dic = [Int:Int]()
-        //        for i in 0 ..< nums.count {
-        //            let num = nums[i]
-        //            let tmp = target - num
-        //            if dic[tmp] != nil {
-        //                return [i, dic[tmp]!]
-        //            }
-        //            dic[num] = i
-        //        }
-        //
-        //        return []
+                var dic = [Int:Int]()
+                for i in 0 ..< nums.count {
+                    let num = nums[i]
+                    let tmp = target - num
+                    if dic[tmp] != nil {
+                        return [i, dic[tmp]!]
+                    }
+                    dic[num] = i
+                }
+        
+                return []
         
         
         
@@ -4222,6 +4205,105 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return result
     }
     
+    // 第十题：正则表达式匹配
+    @objc func isMatch_10() {
+        let s = "aa"
+        let p = "abb"
+        showAlert(title: "isMatch_10", message: "\(isMatch(s, p))")
+    }
+    
+    func isMatch(_ s: String, _ p: String) -> Bool {
+        let sArr = Array(s)
+        let pArr = Array(p)
+        var dp = Array(repeating: Array(repeating: false, count: p.count+1), count: s.count+1)
+        dp[0][0] = true
+        for j in 1 ..< dp[0].count {
+            if pArr[j - 1] == "*" {
+                dp[0][j] = dp[0][j - 2]
+            }
+        }
+        
+        
+        for i in 1 ..< dp.count {
+            for j in 1 ..< dp[0].count {
+                
+                if sArr[i - 1] == pArr[j - 1] || pArr[j - 1] == "." {
+                    // condition 1:
+                    dp[i][j] = dp[i - 1][j - 1]
+                } else if pArr[j - 1] == "*" {
+                    // condition 2:
+                    dp[i][j] = dp[i][j - 2]
+                    if sArr[i - 1] == pArr[j - 2] || pArr[j - 2] == "." {
+                        dp[i][j] = dp[i][j] || dp[i - 1][j]
+                    }
+                }
+            }
+        }
+        return dp[sArr.count][pArr.count]
+    }
+
+    // 找出有效括号 第二十题
+    @objc func isValid_20() -> Void {
+        self.showAlert(title: "第二十题：有效括号", message: "\(isValid("([{}])"))")
+    }
+    func isValid(_ s: String) -> Bool {
+            if s.count <= 0 {
+                return false
+            }
+
+            if s.count % 2 != 0 {
+                return false
+            }
+
+            let arr = s.map({String($0)})
+            var leftArr:[Int] = [Int]()
+            for i in 0..<arr.count {
+                let current = arr[i]
+                if current == "{" {
+                    leftArr.append(-1)
+                }
+                if current == "}" {
+                    let last = leftArr.last ?? 0
+                    if last + 1 != 0 {
+                        return false
+                    } else {
+                        if leftArr.count != 0 {
+                            leftArr.removeLast()
+                        }
+                    }
+                }
+                if current == "(" {
+                    leftArr.append(-2)
+                }
+                if current == ")" {
+                    let last = leftArr.last ?? 0
+                    if last + 2 != 0 {
+                        return false
+                    } else {
+                        if leftArr.count != 0 {
+                            leftArr.removeLast()
+                        }
+                    }
+                }
+                if current == "[" {
+                    leftArr.append(-3)
+                }
+                if current == "]" {
+                    let last = leftArr.last ?? 0
+                    if last + 3 != 0 {
+                        return false
+                    } else {
+                        if leftArr.count != 0 {
+                            leftArr.removeLast()
+                        }
+                    }
+                }
+            }
+            if leftArr.count > 0 {
+                return false
+            }
+            return true
+        }
     
 }
         
