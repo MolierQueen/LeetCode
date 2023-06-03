@@ -24,7 +24,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     //    datasource
-    var dataSource:[String] = ["twoSum_1",
+    var dataSource:[String] = [
+                               "twoSum_1",
                                "addTwoNumbers_2",
                                "reverseList_206",
                                "lengthOfLongestSubstring_3",
@@ -94,7 +95,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "combineSortAndQuickSort",
                                "threeSumClosest_16",
                                "isMatch_10",
-                               "isValid_20"];
+                               "isValid_20",
+                               "fourSum_18",
+                               "generateParenthesis_22"
+    ];
     
     
     
@@ -161,7 +165,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let button = UIButton(type: UIButton.ButtonType.custom)
         button.frame = CGRect(x: UIScreen.main.bounds.size.width - 100, y: 100, width: 50, height: 50)
-        let buttonTitle = "第"+String(self.dataSource.count)+"题为✅"
+        let buttonTitle = "刷的第"+String(self.dataSource.count)+"道题为✅"
         button .setTitle(buttonTitle, for: UIControl.State.normal)
         button.sizeToFit()
         button.setTitleColor(UIColor.white, for: UIControl.State.normal)
@@ -4241,69 +4245,140 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         return dp[sArr.count][pArr.count]
     }
-
+    
     // 找出有效括号 第二十题
     @objc func isValid_20() -> Void {
         self.showAlert(title: "第二十题：有效括号", message: "\(isValid("([{}])"))")
     }
     func isValid(_ s: String) -> Bool {
-            if s.count <= 0 {
-                return false
-            }
-
-            if s.count % 2 != 0 {
-                return false
-            }
-
-            let arr = s.map({String($0)})
-            var leftArr:[Int] = [Int]()
-            for i in 0..<arr.count {
-                let current = arr[i]
-                if current == "{" {
-                    leftArr.append(-1)
-                }
-                if current == "}" {
-                    let last = leftArr.last ?? 0
-                    if last + 1 != 0 {
-                        return false
-                    } else {
-                        if leftArr.count != 0 {
-                            leftArr.removeLast()
-                        }
-                    }
-                }
-                if current == "(" {
-                    leftArr.append(-2)
-                }
-                if current == ")" {
-                    let last = leftArr.last ?? 0
-                    if last + 2 != 0 {
-                        return false
-                    } else {
-                        if leftArr.count != 0 {
-                            leftArr.removeLast()
-                        }
-                    }
-                }
-                if current == "[" {
-                    leftArr.append(-3)
-                }
-                if current == "]" {
-                    let last = leftArr.last ?? 0
-                    if last + 3 != 0 {
-                        return false
-                    } else {
-                        if leftArr.count != 0 {
-                            leftArr.removeLast()
-                        }
-                    }
-                }
-            }
-            if leftArr.count > 0 {
-                return false
-            }
-            return true
+        if s.count <= 0 {
+            return false
         }
+        
+        if s.count % 2 != 0 {
+            return false
+        }
+        
+        let arr = s.map({String($0)})
+        var leftArr:[Int] = [Int]()
+        for i in 0..<arr.count {
+            let current = arr[i]
+            if current == "{" {
+                leftArr.append(-1)
+            }
+            if current == "}" {
+                let last = leftArr.last ?? 0
+                if last + 1 != 0 {
+                    return false
+                } else {
+                    if leftArr.count != 0 {
+                        leftArr.removeLast()
+                    }
+                }
+            }
+            if current == "(" {
+                leftArr.append(-2)
+            }
+            if current == ")" {
+                let last = leftArr.last ?? 0
+                if last + 2 != 0 {
+                    return false
+                } else {
+                    if leftArr.count != 0 {
+                        leftArr.removeLast()
+                    }
+                }
+            }
+            if current == "[" {
+                leftArr.append(-3)
+            }
+            if current == "]" {
+                let last = leftArr.last ?? 0
+                if last + 3 != 0 {
+                    return false
+                } else {
+                    if leftArr.count != 0 {
+                        leftArr.removeLast()
+                    }
+                }
+            }
+        }
+        if leftArr.count > 0 {
+            return false
+        }
+        return true
+    }
     
+    // 第十八题 四数之和
+    @objc func fourSum_18() {
+        self.showAlert(title: "fourSum_18", message: self.fourSum([-3,-2,-1,0,0,1,2,3], 0).description)
+    }
+    
+    func fourSum(_ nums: [Int], _ target: Int) -> [[Int]] {
+        
+        if nums.count < 4 {
+            return [[Int]]()
+        }
+        //排序
+        let nums = nums.sorted(by: {$0<=$1})
+        var res = [[Int]]()
+        // 一层循环，注意结束位置
+        for index1 in 0 ..< nums.count-3 {
+            let ele1 = nums[index1]
+            if ele1+nums[index1+1]+nums[index1+2]+nums[index1+3]>target {
+                // 这里直接return就好了，以后也不会有合适的了，官方是是break
+                return res
+            }
+            
+            if ele1+nums[nums.count - 3]+nums[nums.count - 2]+nums[nums.count - 1]<target {
+                continue
+            }
+            
+            // 二次循环注意起始和结束位置
+            for index2 in index1+1 ..< nums.count-2 {
+                let ele2 = nums[index2]
+                let cha = target - ele1 - ele2
+                var left = index2+1
+                var right = nums.count-1
+                // 开始剪枝
+                if ele1+ele2+nums[index2+1]+nums[index2+2]>target {
+                    // 这里要注意，如果满足这个条件后，要使用break跳出循环，不能使用return，因为后面还有可能比前面的小，因为每次第一次循环开始Index2会被重置为Index1+1的位置，所以index2是有可能往回走的
+                    break
+                }
+                
+                // // 开始剪枝
+                if ele1+ele2+nums[nums.count-1]+nums[nums.count-2] < target{
+                    continue
+                }
+                
+                // 使用双指针 完成剩下两个数的求和
+                while left < right {
+                    if nums[left]+nums[right] == cha {
+                        if !res.contains([nums[index1],nums[index2],nums[left],nums[right]]) {
+                            res.append([nums[index1],nums[index2],nums[left],nums[right]])
+                        }
+                        left += 1
+                        right -= 1
+                        continue
+                    } else if nums[left]+nums[right] < cha {
+                        left += 1
+                    } else {
+                        right -= 1
+                    }
+                }
+            }
+        }
+        return res
+    }
+    
+    //第22题 括号生成
+    @objc func generateParenthesis_22() -> Void {
+        self.showAlert(title: "generateParenthesis_22", message: self.generateParenthesis(5).description)
+    }
+    
+    func generateParenthesis(_ n: Int) -> [String] {
+        return ["1","2"]
+    }
+
 }
         
