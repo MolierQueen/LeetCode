@@ -4373,11 +4373,34 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     //第22题 括号生成
     @objc func generateParenthesis_22() -> Void {
-        self.showAlert(title: "generateParenthesis_22", message: self.generateParenthesis(5).description)
+        self.showAlert(title: "generateParenthesis_22", message: self.generateParenthesis(3).description)
     }
     
     func generateParenthesis(_ n: Int) -> [String] {
-        return ["1","2"]
+        var finalRes:[String] = [String]()
+        var curStringArr:[String] = [String]()
+        self.generate(curStringArr: &curStringArr, leftCount: 0, rightCount: 0, n: n, finalRes: &finalRes)
+        return finalRes
+    }
+    
+    func generate(curStringArr:inout [String],leftCount:Int, rightCount:Int, n:Int, finalRes:inout [String]) -> Void {
+        
+        if curStringArr.count == 2*n {
+            finalRes.append(curStringArr.joined())
+            return
+        }
+        
+        if leftCount < n {
+            curStringArr.append("(")
+            self.generate(curStringArr: &curStringArr, leftCount: leftCount+1, rightCount: rightCount, n: n, finalRes: &finalRes)
+            curStringArr.removeLast()
+        }
+        
+        if rightCount < leftCount {
+            curStringArr.append(")")
+            self.generate(curStringArr: &curStringArr, leftCount: leftCount, rightCount: rightCount+1, n: n, finalRes: &finalRes)
+            curStringArr.removeLast()
+        }
     }
 
 }
