@@ -97,7 +97,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "isMatch_10",
                                "isValid_20",
                                "fourSum_18",
-                               "generateParenthesis_22"
+                               "generateParenthesis_22",
+                               "strStr_28",
+                               "interview_1",
+                               "interview_2",
+                               "interview_3"
     ];
     
     
@@ -4311,7 +4315,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // 第十八题 四数之和
     @objc func fourSum_18() {
-        self.showAlert(title: "fourSum_18", message: self.fourSum([-3,-2,-1,0,0,1,2,3], 0).description)
+        self.showAlert(title: "第十八题：四数之和", message: self.fourSum([-3,-2,-1,0,0,1,2,3], 0).description)
     }
     
     func fourSum(_ nums: [Int], _ target: Int) -> [[Int]] {
@@ -4373,7 +4377,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     //第22题 括号生成
     @objc func generateParenthesis_22() -> Void {
-        self.showAlert(title: "generateParenthesis_22", message: self.generateParenthesis(3).description)
+        self.showAlert(title: "第22题：括号生成", message: self.generateParenthesis(3).description)
     }
     
     func generateParenthesis(_ n: Int) -> [String] {
@@ -4402,6 +4406,242 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             curStringArr.removeLast()
         }
     }
+    
+    //    28. 找出字符串中第一个匹配项的下标
+    @objc func strStr_28() -> Void{
+        let haystack = "mississippi"
+        let needle = "issip"
+        self.showAlert(title: "第二十八题：找出字符串中第一个匹配项的下标", message: String(self.strStr(haystack, needle)))
+    }
+    
+    func strStr(_ haystack: String, _ needle: String) -> Int {
+        
+
+//        if needle.count > haystack.count {
+//            return -1
+//        }
+//        let bigArr = haystack.map({String($0)})
+//        let smallArr = needle.map({String($0)})
+//        var bigPoint = 0
+//        var smallPoint = 0
+//
+//        while bigPoint <= bigArr.count - 1 {
+//            let currentBig = bigArr[bigPoint]
+//            let currentSmall = smallArr[smallPoint]
+//            print("currentB = \(currentBig),currentS = \(currentSmall), Bpoint = \(bigPoint), SPoint = \(smallPoint)")
+//            if currentBig == currentSmall {
+//                if smallPoint == smallArr.count - 1 {
+//                    return bigPoint+1-smallArr.count
+//                }
+//                smallPoint += 1
+//                bigPoint += 1
+//            } else {
+//                bigPoint = bigPoint - smallPoint + 1
+//                smallPoint = 0
+//            }
+//        }
+        return -1
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        var res:[Int] = [0]
+//        var smallIndex = 0
+//        for (index,ele) in haystack.enumerated() {
+//            print("元素 = \(ele),, index = \(index),, res = \(res)")
+//            smallIndex = index
+//            if smallIndex > smallArr.count - 1 {
+//                smallIndex = 0
+//            }
+//            if bigArr.count - 1 - res.last < smallArr.count {
+//                res.remove(at: res.count-1)
+//                return res
+//            }
+//
+//            if(bigArr[index] != smallArr[smallIndex]) {
+//                res.append(index + 1)
+//                if res.last > bigArr.count - 1 {
+//                    res.remove(at: res.count-1)
+//
+//                    res = -1
+//                }
+//            } else {
+//                if index == smallArr.count - 1 {
+//                    break
+//                } else {
+//                    continue
+//                }
+//            }
+//        }
+//        return res
+    }
+    
+    // 604题：压缩字符串
+    @objc func interview_1() -> Void{
+//        self.showAlert(title: "604题：压缩字符串", message: String(self.test("L1e2t1C1o1d1e1")))
+        StringIterator("L10e20t1C1o1d1e1")
+        next()
+        next()
+    }
+    
+    var tmpArr = [[String:Int]]()
+    func StringIterator(_ compressedString: String) {
+        let totalArrr = compressedString.map({String($0)})
+        var totalArr = [String]()
+        var number = 0
+        var numbercount = 1
+        for (index, ele) in totalArrr.enumerated().reversed() {
+            if !Character(ele).isNumber {
+                totalArr.insert(ele, at: 0)
+                number = 0
+                numbercount = 1
+            } else {
+                let count = Int(ele)! * numbercount
+                number += count
+                numbercount *= 10
+                if (index>=1 && !Character(totalArrr[index-1]).isNumber) ||
+                    index == 0{
+                    totalArr.insert(String(number), at: 0)
+                }
+            }
+        }
+
+        
+        
+            for (index, ele) in totalArr.enumerated() {
+                if index % 2 == 0 && index <= totalArrr.count - 2 {
+                    var dic = [String:Int]()
+                    dic[ele] = Int(totalArr[index+1])
+                    tmpArr.append(dic)
+                }
+            }
+            print(tmpArr)
+        }
+        
+    func next() -> Character {
+        guard let mydic = tmpArr.first else { return " " }
+        let dicCount = mydic.values.first!
+        
+        let c = mydic.keys.first!
+        
+        tmpArr.remove(at: 0)
+        var currentInt = dicCount
+        if currentInt > 1 {
+            currentInt -= 1
+            var tmpDic = [String : Int]()
+            tmpDic[mydic.keys.first!] = currentInt
+            tmpArr.insert(tmpDic, at: 0)
+        }
+        
+        return Character(c)
+    }
+    
+    func hasNext() -> Bool {
+        return tmpArr.count>0
+    }
+    
+    // 模拟面试2 - 423. 从英文中重建数字  - 有问题
+    @objc func interview_2() -> Void {
+        self.showAlert(title: "测试题：", message: originalDigits("fviefuro"))
+    }
+    
+    
+    func originalDigits(_ s: String) -> String {
+        let numberArr = ["zero",
+                         "one",
+                         "two",
+                         "three",
+                         "four",
+                         "five",
+                         "six",
+                         "seven",
+                         "eight",
+                         "nine"]
+        var dic = [String:Int]()
+        let sArr = s.map({String($0)})
+        for (_, ele) in sArr.enumerated() {
+            if dic[ele] != nil {
+                let curInt = dic[ele]!
+                dic[ele] = curInt+1
+            } else {
+                dic[ele] = 1
+            }
+        }
+        
+        var resStr = ""
+        for (index, ele) in numberArr.enumerated() {
+            let tmpArr = ele.map({String($0)})
+            for (index2,ele2) in tmpArr.enumerated() {
+                if dic[ele2] != nil && dic[ele2]! > 0 {
+                    
+                    dic[ele2] = dic[ele2]! - 1
+                    if dic[ele2]! == 0 {
+                        dic.removeValue(forKey: ele2)
+                    }
+                    
+                    if index2 == tmpArr.count - 1 {
+                        resStr += String(index)
+                    }
+                }
+            }
+        }
+        
+        return resStr
+    }
+    
+    // 模拟面试2 - 1818. 绝对差值和 - 有问题
+    @objc func minAbsoluteSumDiff_1818() -> Void {
+        let nums1 = [1,7,5]
+        let nums2 = [2,3,5]
+        self.showAlert(title: "第1818题. 绝对差值和", message: String(minAbsoluteSumDiff(nums1, nums2)))
+    }
+    
+    func minAbsoluteSumDiff(_ nums1: [Int], _ nums2: [Int]) -> Int {
+        let arr1 = nums1.map({$0})
+        let arr2 = nums2.map({$0})
+        var biggest = 0
+        var biggestnumber2 = 0
+        
+        var smallest = 0
+
+        var res = 0
+        
+        var cha = 0
+        var cha2 = 0
+        for (index, _) in arr1.enumerated(){
+            let int1 = arr1[index]
+            let int2 = arr2[index]
+            cha = abs(int1 - int2)
+            if cha >= biggest {
+                biggest = cha
+                biggestnumber2 = arr2[index]
+            }
+            res = res + cha
+        }
+        
+        
+        for (index, ele) in arr1.enumerated() {
+            cha2 = abs(ele - biggestnumber2)
+            if index == 0 {
+                smallest = cha2
+            } else {
+                if cha2 <= smallest {
+                    smallest = cha2
+                }
+            }
+        }
+        
+        res = res - (biggest - smallest)
+        return res
+    }
+    
 
 }
         
