@@ -101,7 +101,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "strStr_28",
                                "interview_1",
                                "interview_2",
-                               "interview_3"
+                               "interview_3",
+                               "kuaisupaixu",
+                               "insertIntoBST_701",
+                               "majorityElement_169",
+                               "longestOnes_1004"
     ];
     
     
@@ -4642,6 +4646,149 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return res
     }
     
+    
+    //  再练习一遍快速排序
+    @objc func kuaisupaixu() -> Void {
+        var arr = [2,5,8,7,5,8,8,9,7,5,7,1,3,1,1,4];
+    
+        self.sort(resultArr: &arr, leftPoint: 0, rightPoint: arr.count - 1)
+        print("result = \(arr)");
+    }
+    
+    func findMiddle(arr:inout [Int], leftIndex:Int, rightIndex:Int) -> Int {
+        let middleValue = arr[leftIndex];
+        var count = 0
+        var tmpArr = [Int]()
+        for i in leftIndex + 1 ... rightIndex {
+            let current = arr[i]
+            if current <= middleValue {
+                tmpArr.insert(current, at: 0)
+                count += 1
+            } else {
+                tmpArr.insert(current, at: (tmpArr.count-1 >= 0) ? tmpArr.count : 0)
+            }
+        }
+        tmpArr.insert(middleValue, at: count)
+        arr = tmpArr
+        return count
+        
+        
+        
+        
+//        var moveleftIndex = leftIndex + 1
+//        let middleValue = arr[leftIndex];
+//
+//        for i in leftIndex+1 ... rightIndex {
+//            let current = arr[i]
+//            if current <= middleValue {
+//                arr.swapAt(moveleftIndex, i)
+//                moveleftIndex += 1
+//            }
+//        }
+//        arr.swapAt(leftIndex, moveleftIndex-1)
+//        return moveleftIndex-1
+    }
+    
+    
+    func sort( resultArr: inout [Int], leftPoint: Int, rightPoint: Int) -> Void {
+        if leftPoint >= rightPoint {
+            return
+        }
+        let middel = findMiddle(arr: &resultArr, leftIndex: leftPoint, rightIndex: rightPoint)
+        sort(resultArr: &resultArr, leftPoint: leftPoint, rightPoint: middel - 1)
+        sort(resultArr: &resultArr, leftPoint: middel + 1, rightPoint: rightPoint)
+    }
+ 
+//    701. 二叉搜索树中的插入操作
 
+    @objc func insertIntoBST_701() -> Void {
+        self.showAlert(title: "701. 二叉搜索树中的插入操作", message: self.insertIntoBST(nil, 5).debugDescription)
+    }
+    func insertIntoBST(_ root: TreeNode?, _ val: Int) -> TreeNode? {
+        
+        guard let root = root else {return TreeNode.init(val)}
+        var tmpNode = root
+        while tmpNode != nil {
+            if val > tmpNode.val {
+                if tmpNode.right == nil {
+                    tmpNode.right = TreeNode.init(val)
+                    break
+                    
+                } else {
+                    tmpNode = tmpNode.right!
+                }
+            } else {
+                if tmpNode.left == nil {
+                    tmpNode.left = TreeNode.init(val)
+                    break
+                } else {
+                    tmpNode = tmpNode.left!
+                }
+            }
+        }
+        return root
+    }
+    
+//    169. 多数元素
+    @objc func majorityElement_169() -> Void {
+        self.showAlert(title: "169. 多数元素", message: String(self.majorityElement([2,2,1,1,1,2,2])))
+    }
+                                                                          
+    func majorityElement(_ nums: [Int]) -> Int {
+        // 方案1 遍历数数组 存成字典 Key 数组元素，Value出现次数
+        let count = nums.count / 2
+//        var dic = [Int:Int]()
+//        var max = 0
+//        for (_, ele) in nums.enumerated() {
+//            var num = dic[ele] ?? 0
+//            num += 1
+//            dic[ele] = num
+//        }
+//
+//        for (_,ele) in dic.enumerated() {
+//            if ele.value > count {
+//                return ele.key
+//            }
+//        }
+//        return 0
+        
+        //        方案2 既然题目要求找众数，也就是出现次数超过整个数组一半的数字，那么吧数组排序后，n/2下标一定是次数，因为这个数的个数都过半了，越过并覆盖了了中线，所以中线处一定是这个数
+        var nums = nums
+        nums.sort(by: {$0 < $1})
+        return nums[count]
+    }
+    
+    @objc func longestOnes_1004() -> Void {
+        self.showAlert(title: "longestOnes_1004", message: String(self.longestOnes([1,1,1,0,0,0,1,1,1,1,0], 2)))
+    }
+
+    func longestOnes(_ nums: [Int], _ k: Int) -> Int {
+            var right = 0
+            var left = 0
+            var final = 0
+            var myk = k
+            while right < nums.count {
+                var current = nums[right]
+    // 当当前值为0的时候开始处理替换
+                if current == 0 {
+    // 用一次K
+                    myk -= 1
+    // 上一步K用完后如果K小于0了，那就要左侧开始滑动，收回一次K的次数，保证K不能小于0，这里要使用循环遍历，直到左侧移动到为0的位置才可收回次数。
+                    while myk < 0 {
+                        // 如果当前左侧的值为零，那么之前他用过一次K的次数，所以我们把左侧指针往右移动的时候可以收回一次K的次数
+                        if nums[left] == 0 {
+                            myk += 1
+                        }
+                        // 左侧移动
+                        left += 1
+                    }
+                }
+    // 最后两个指针之间的距离就是最长子串
+                final = max(final, right - left + 1)
+                            right += 1
+
+            }
+            return final
+        }
 }
         
