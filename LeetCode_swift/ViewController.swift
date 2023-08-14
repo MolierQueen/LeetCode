@@ -105,7 +105,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "kuaisupaixu",
                                "insertIntoBST_701",
                                "majorityElement_169",
-                               "longestOnes_1004"
+                               "longestOnes_1004",
+                               "removeNthFromEnd_19",
+                               "mergeKLists_23",
+                               "removeDuplicates_26",
+                               "searchInsert_35",
+                               "lengthOfLastWord_58",
+                               "isSameTree_100",
+                               "deleteDuplicates_83",
+                               "climbStairs_70"
     ];
     
     
@@ -4763,32 +4771,322 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func longestOnes(_ nums: [Int], _ k: Int) -> Int {
-            var right = 0
-            var left = 0
-            var final = 0
-            var myk = k
-            while right < nums.count {
-                var current = nums[right]
-    // 当当前值为0的时候开始处理替换
-                if current == 0 {
-    // 用一次K
-                    myk -= 1
-    // 上一步K用完后如果K小于0了，那就要左侧开始滑动，收回一次K的次数，保证K不能小于0，这里要使用循环遍历，直到左侧移动到为0的位置才可收回次数。
-                    while myk < 0 {
-                        // 如果当前左侧的值为零，那么之前他用过一次K的次数，所以我们把左侧指针往右移动的时候可以收回一次K的次数
-                        if nums[left] == 0 {
-                            myk += 1
-                        }
-                        // 左侧移动
-                        left += 1
+        var right = 0
+        var left = 0
+        var final = 0
+        var myk = k
+        while right < nums.count {
+            var current = nums[right]
+            // 当当前值为0的时候开始处理替换
+            if current == 0 {
+                // 用一次K
+                myk -= 1
+                // 上一步K用完后如果K小于0了，那就要左侧开始滑动，收回一次K的次数，保证K不能小于0，这里要使用循环遍历，直到左侧移动到为0的位置才可收回次数。
+                while myk < 0 {
+                    // 如果当前左侧的值为零，那么之前他用过一次K的次数，所以我们把左侧指针往右移动的时候可以收回一次K的次数
+                    if nums[left] == 0 {
+                        myk += 1
                     }
+                    // 左侧移动
+                    left += 1
                 }
-    // 最后两个指针之间的距离就是最长子串
-                final = max(final, right - left + 1)
-                            right += 1
+            }
+            // 最后两个指针之间的距离就是最长子串
+            final = max(final, right - left + 1)
+            right += 1
+            
+        }
+        return final
+    }
+    
+//    19. 删除链表的倒数第 N 个结点
+    @objc func removeNthFromEnd_19() -> Void {
+        showAlert(title: "19. 删除链表的倒数第 N 个结点", message: self.removeNthFromEnd(self.l11, 2).debugDescription)
+    }
+
+    func removeNthFromEnd(_ head: ListNode?, _ n: Int) -> ListNode? {
+        // 先排除异常情况
+               if head == nil || head!.next == nil {
+                   return nil
+               }
+               
+               // 计数
+               var count = 0
+               // 弄个哑结点
+               var tmpNode = ListNode.init(0, head)
+               // 左节点
+               var leftPoint = tmpNode
+               // 右节点
+               var rightPoint = head
+               // 开始循环
+               while rightPoint != nil {
+                   // 右侧指针开始移动
+                   rightPoint = rightPoint!.next
+                   // 当右侧指针移动次数大于等于n次后，左指针开始移动
+                   if count >= n {
+                       leftPoint = leftPoint.next!
+                   }
+                   // 计数+1
+                   count += 1
+               }
+               // 当右侧指针移到末尾，此时左指针指向的位置就是即将被删除节点的上一个节点，开始执行删除
+               leftPoint.next = leftPoint.next!.next ?? nil
+               return tmpNode.next
+    }
+    
+//    23. 合并 K 个升序链表
+    
+   @objc func mergeKLists_23() {
+        showAlert(title: "23. 合并 K 个升序链表", message: self.mergeKLists([l11, l21]).debugDescription)
+    }
+
+    func mergeKLists(_ lists: [ListNode?]) -> ListNode? {
+            if lists.count <= 0 {
+                return nil
+            }
+
+            if lists.count == 1 {
+                return lists.first!
+            }
+
+            var resultList:ListNode? = nil
+            for (index, ele) in lists.enumerated() {
+                resultList = combineList(list1: resultList, list2: ele)
 
             }
-            return final
+            return resultList
         }
+
+    func combineList(list1:ListNode?,list2:ListNode?) -> ListNode? {
+        // 核心函数，合并两个升序链表
+        if list1 == nil || list2 == nil {
+            return list1 != nil ? list1 : list2
+        }
+        
+        var point1 = list1
+        var point2 = list2
+        var tmp = ListNode.init(0)
+        var movePoint = tmp
+        
+        while point1 != nil && point2 != nil {
+            if point1!.val < point2!.val {
+                movePoint.next = point1
+                point1 = point1!.next ?? nil
+            } else {
+                movePoint.next = point2
+                point2 = point2!.next ?? nil
+            }
+            movePoint = movePoint.next!
+        }
+        
+        if point1 == nil {
+            movePoint.next = point2
+        } else {
+            movePoint.next = point1
+        }
+        
+        return tmp.next
+        
+    }
+    
+//    26. 删除有序数组中的重复项
+    @objc func removeDuplicates_26() {
+        var ar = [1,3,1,4,8,9,7,5,7]
+        showAlert(title: "26. 删除有序数组中的重复项", message: String(removeDuplicates(&ar)))
+    }
+    func removeDuplicates(_ nums: inout [Int]) -> Int {
+        
+//        // 方法1 ： 使用哈希表
+//        var dic = [Int:Int]()
+//        for (index,ele) in nums.enumerated() {
+//            dic [ele] = index
+//        }
+//
+//        nums = dic.keys.sorted()
+//        return dic.values.count
+//
+//        // 方法2：使用数组
+//        var tmpArr = [Int]()
+//        for (index,ele) in nums.enumerated() {
+//            if index > 0 {
+//                let last = nums[index - 1]
+//                if last != ele {
+//                    tmpArr.append(ele)
+//                }
+//            } else {
+//                tmpArr.append(ele)
+//            }
+//        }
+//        nums = tmpArr
+//        return nums.count
+//
+//        // 方法3：利用 升序 数组的条件
+//        var tmpArr2 = [Int]()
+//        for (index,ele) in nums.enumerated() {
+//            if tmpArr2.count == 0 ||
+//                ele > tmpArr2.last! {
+//                tmpArr2.append(ele)
+//            }
+//        }
+//        nums = tmpArr2
+//        return nums.count
+        
+        // 方法4：快慢指针法，同时想到数组交换
+        var firstPoint = 0
+        for (index, ele) in nums.enumerated() {
+            // 如果快指针和慢指针指向的内容不相等，说明该值可以放到慢指针的范围中去
+            if ele != nums[firstPoint] {
+                // 慢指针范围+1
+                firstPoint += 1
+                // 接受新的元素
+                nums[firstPoint] = ele
+            }
+        }
+        // 因为指针指向的是下标，所以这个直接+1 就是元素个数
+        return firstPoint + 1
+        
+    }
+    
+//    35. 搜索插入位置
+    @objc func searchInsert_35() -> Void {
+        showAlert(title: "35. 搜索插入位置", message: String(searchInsert([1,3,5,6], 2)))
+    }
+    func searchInsert(_ nums: [Int], _ target: Int) -> Int {
+        
+        return find(arr:nums,left: 0, right: nums.count-1, target: target)
+    }
+    
+    
+    func find(arr:[Int],left:Int, right:Int, target:Int) -> Int {
+        let middle = (left + right) / 2
+        if arr[middle] == target {
+            return middle
+        }
+        if left > right{
+            return left
+        }
+        
+        if arr[middle] >  target {
+            return self.find(arr: arr, left: left, right: middle-1, target: target)
+        }
+        return self.find(arr: arr, left: middle+1, right: right, target: target)
+    }
+    
+//    58. 最后一个单词的长度
+    @objc func lengthOfLastWord_58() -> Void {
+        showAlert(title: "58. 最后一个单词的长度", message: String(lengthOfLastWord("Hello World")))
+    }
+    func lengthOfLastWord(_ s: String) -> Int {
+        // 先转成数组
+        var arr = s.map({String($0)})
+        
+        // 设定一个起始位置
+        var begin = false
+        
+        // 计数
+        var count = 0
+        
+        // 开始从后往前遍历
+        for (index, ele) in arr.enumerated().reversed() {
+            
+            // 当遇到第一个不是空格的字符时候标记为置为true 证明找到最后一个单词，同时开始计数
+            if ele != " " {
+                begin = true
+                count += 1
+            }
+            
+            // 当标记为true后（遇到最后一个单词后）且再遇到空格时候证明最后一个单词遍历结束，此时count就是最后一个单词长度
+            if begin && ele == " " {
+                // 这里可以适当剪枝
+                return count
+            }
+        }
+        return count
+    }
+
+    //    100. 相同的树
+    @objc func isSameTree_100() -> Void {
+        showAlert(title: "100. 相同的树", message: String(isSameTree(nil, nil)))
+    }
+    func isSameTree(_ p: TreeNode?, _ q: TreeNode?) -> Bool {
+        // 递归退出条件，如果都遍历到最后的节点了 那就说明之前没有退出，肯定就是true了
+        if p == nil && q == nil {
+            return true
+        }
+        
+        // 如果节点不相等就是不等
+        if p?.val != q?.val {
+            return false
+        }
+        // 如果节点相等，就递归遍历剩下的节点（左右分别遍历）
+        return (isSameTree(p?.left, q?.left) == true) && (isSameTree(p?.right, q?.right) == true)
+    }
+    
+//    83. 删除排序链表中的重复元素
+   @objc func deleteDuplicates_83() -> Void {
+       showAlert(title: "83. 删除排序链表中的重复元素", message: deleteDuplicates(l11).debugDescription)
+    }
+
+    func deleteDuplicates(_ head: ListNode?) -> ListNode? {
+        guard let tmpHead = head else{return nil}
+        
+        // 搞两个指针 左指针指左侧范围都是去重的链表节点
+        var leftPoint = tmpHead
+        
+        // 右指针从左指针的下一个节点开始遍历
+        var rightPoint = tmpHead.next
+        
+        // 开始遍历
+        while rightPoint != nil {
+            
+            // 如果遇到不同的
+            if rightPoint!.val != leftPoint.val {
+                
+                // 那就拼接到左指针之后
+                leftPoint.next = rightPoint
+                
+                // 同时左指针往后移动一个
+                leftPoint = leftPoint.next!
+            }
+            
+            // 有指针往后移动
+            rightPoint = rightPoint!.next
+        }
+        
+        // 都处理好后 左指针截断后面的内容
+        leftPoint.next = nil
+        
+        // 返回头结点
+        return tmpHead
+    }
+    
+//    70. 爬楼梯
+    @objc func climbStairs_70() -> Void {
+        showAlert(title: "70. 爬楼梯", message: String(climbStairs(5)))
+    }
+    
+    func climbStairs(_ n: Int) -> Int {
+
+        var a = 1
+        var b = 2
+        var tmp = 0
+        for i in 3 ... n {
+            tmp = a
+            a = b
+            b = tmp + b
+        }
+        return b
+        
+        
+        
+//        if n == 1 {
+//            return 1
+//        }
+//
+//        if n == 2 {
+//            return 2
+//        }
+//        return climbStairs(n - 1) + climbStairs(n-2)
+    }
 }
         
