@@ -113,7 +113,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "lengthOfLastWord_58",
                                "isSameTree_100",
                                "deleteDuplicates_83",
-                               "climbStairs_70"
+                               "climbStairs_70",
+                               "plusOne_66",
+                               "addBinary_67"
     ];
     
     
@@ -5067,6 +5069,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func climbStairs(_ n: Int) -> Int {
 
+//        斐波那契数列
         var a = 1
         var b = 2
         var tmp = 0
@@ -5078,7 +5081,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return b
         
         
-        
+//        递归解法
+//        先排除异常情况
 //        if n == 1 {
 //            return 1
 //        }
@@ -5086,7 +5090,86 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        if n == 2 {
 //            return 2
 //        }
+        
 //        return climbStairs(n - 1) + climbStairs(n-2)
+    }
+    
+//    66. 加一
+    @objc func plusOne_66() -> Void {
+        showAlert(title: "66. 加一", message: plusOne([9,9,9]).description)
+    }
+    
+    func plusOne(_ digits: [Int]) -> [Int] {
+        // 创建变量用于保存进位
+        var tmp = 0
+        
+        // 将数组变成可变的
+        var digits = digits
+        
+        // 开始逆序遍历
+        for (index, ele) in digits.enumerated().reversed() {
+            
+            // 确认当前这一位的最终值（当前这一位的数+进位 如果是最后一位要+1）
+            var current = (ele + tmp + (index == digits.count - 1 ? 1 : 0))
+            
+            // 跟10取模取出个位的部分
+            digits[index] = current % 10
+            
+            // 除以10 取出要进位的部分
+            tmp = current / 10
+        }
+        
+        // 如果是最后一位还要进位那就数组前头多加个1
+        if tmp > 0 {
+            digits.insert(1, at: 0)
+        }
+        return digits
+    }
+    
+//    67. 二进制求和
+    @objc func addBinary_67() -> Void {
+        showAlert(title: "67. 二进制求和", message: addBinary("1010", "1011"))
+    }
+    
+    func addBinary(_ a: String, _ b: String) -> String {
+        // 转数组
+        var arrA = a.map({Int(String($0))})
+        var arrB = b.map({Int(String($0))})
+        
+        // 创建指针
+        var ia = arrA.count - 1
+        var ib = arrB.count - 1
+        
+        // 创建进位
+        var tmp = 0
+        
+        // 创建结果
+        var result = ""
+        
+        // 开始便利
+        while ia >= 0 || ib >= 0 {
+            var currentA = ((ia >= 0) ? arrA[ia]! : 0)
+            var currentB = ((ib >= 0) ? arrB[ib]! : 0)
+            
+            // 该位置的值为 a + b + 进位
+            var current = currentA + currentB + tmp
+            
+            // 和2取模 就是该位置的值
+            result = String(current % 2) + result
+            
+            // 和2取商就是进位的值
+            tmp = current / 2
+            
+            // 指针移动
+            ia -= 1
+            ib -= 1
+        }
+        
+        // 处理最高位的情况，如过进位大于零 还要补一个最高位
+        if tmp > 0 {
+            result = "1" + result
+        }
+        return result
     }
 }
         
