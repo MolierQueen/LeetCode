@@ -115,7 +115,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "deleteDuplicates_83",
                                "climbStairs_70",
                                "plusOne_66",
-                               "addBinary_67"
+                               "addBinary_67",
+                               "findReplaceString_833"
     ];
     
     
@@ -5169,6 +5170,72 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if tmp > 0 {
             result = "1" + result
         }
+        return result
+    }
+    
+//    833. 字符串中的查找与替换
+    @objc func findReplaceString_833() -> Void {  // "vbfrssozp"
+        showAlert(title: "833. 字符串中的查找与替换", message: findReplaceString("vmokgggqzp", [3,5,1], ["kg","ggq","mo"], ["s","so","bfr"]))
+    }
+    func findReplaceString(_ s: String, _ indices: [Int], _ sources: [String], _ targets: [String]) -> String {
+        var sArr = s.map({String($0)})
+        // 先用两个哈希表 存下 下标对应的 字符串和target
+        var dic1 = [Int:String]()
+        var dic2 = [Int:String]()
+        for i in 0 ..< indices.count {
+            let key = indices[i]
+            let val1 = sources[i]
+            let val2 = targets[i]
+            dic1[key] = val1
+            dic2[key] = val2
+        }
+        
+        // 把indices排个序
+        var newIndices = indices.sorted()
+        
+        var index = 0
+        var result = s
+        
+        // 这里注意要记录差值因为你字符串替换后原有的下标就不对了，需要根据差值进行修正
+        var cha = 0
+        
+        // 循环遍历去比较
+        for i in 0..<newIndices.count {
+            // 先取出下标
+            var tmpIndex = newIndices[i]
+            
+            // 根据下表取出source和target
+            let tmpSourceArr = dic1[tmpIndex]!.map({String($0)})
+            let tmpTargets = dic2[tmpIndex]!
+            var index = 0
+            
+            // 循环遍历去比较
+            while index < tmpSourceArr.count {
+                let currentSource = tmpSourceArr[index]
+                let currentS = sArr[tmpIndex]
+                if currentS == currentSource {
+                    index += 1
+                    tmpIndex += 1
+                } else {
+                    break
+                }
+            }
+            
+            // 如果比较完了并且已经比较到tmpSource数组的末尾，说明符合了，可以考虑替换
+            if index == tmpSourceArr.count {
+                // 记录首尾位置 注意这里要加上修正值
+                let start = result.index(result.startIndex, offsetBy: newIndices[i] + cha)
+                let end = result.index(result.startIndex, offsetBy: newIndices[i] + cha + tmpSourceArr.count-1)
+                let range = start...end
+                
+                // 进行替换，这里注意API的使用
+                result.replaceSubrange(range, with:tmpTargets)
+                
+                // 这里要记录修正值，逻辑就是对比替换后和原始字符串的长度，差值就是下标修正值
+                cha = result.count - s.count
+            }
+        }
+        // 返回结果
         return result
     }
 }
