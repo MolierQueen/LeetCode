@@ -116,7 +116,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "climbStairs_70",
                                "plusOne_66",
                                "addBinary_67",
-                               "findReplaceString_833"
+                               "findReplaceString_833",
+                               "search_33",
+                               "removeDuplicatesII_80",
+                               "isValidBST_98"
     ];
     
     
@@ -5237,6 +5240,102 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         // 返回结果
         return result
+    }
+    // 33 搜素旋转排序数组
+    @objc func search_33() -> Void {
+        showAlert(title: "33 搜素旋转排序数组", message: String(search([4,5,6,0,1,2,3], 1)))
+    }
+
+    func search(_ nums: [Int], _ target: Int) -> Int {
+        if nums == [] { return -1 }
+        if target == nums[0] { return 0 }
+        var left = 0
+        var right = nums.count-1
+        
+        while left <= right {
+            let mid = (left + right)/2
+            if nums[mid] == target {
+                return mid
+            }
+            if target > nums[0] {
+                if nums[mid] > target {
+                    right = mid - 1
+                } else if target > nums[mid] {
+                    if nums[mid] < nums[0] {
+                        right = mid - 1
+                    } else {
+                        left = mid + 1
+                    }
+                }
+            } else if target < nums[0] {
+                if nums[mid] < target {
+                    left = mid + 1
+                } else {
+                    if nums[mid] >= nums[0] {
+                        left = mid + 1
+                    } else {
+                        right = mid - 1
+                    }
+                }
+            }
+        }
+        return -1
+    }
+    
+    //    80. 删除有序数组中的重复项 II
+    @objc func removeDuplicatesII_80() -> Void {
+        var arr = [1,1,1,2,3,4,4,5]
+        showAlert(title: "80. 删除有序数组中的重复项 II", message: "结果是 == \(String(removeDuplicatesII(&arr))) 数组是 == \(arr)")
+    }
+    func removeDuplicatesII(_ nums: inout [Int]) -> Int {
+        // 先排除异常情况
+        if nums.count <= 2 {
+            return nums.count
+        }
+        // 定义两个指针，其中Point1 是用来遍历的，point2 是指向排序好的数组，有点类似归并排序
+        var point1 = 2
+        var point2 = 2
+        // 开始遍历
+        while point1 < nums.count {
+            // 如果当前的point1 指向的数字满足和前两个不重复，那把这个数字给到point2区域，同时point2 往后移动一个
+            if nums[point1] != nums[point2 - 2] {
+                nums[point2] = nums[point1]
+                point2 += 1
+            }
+            // point1 继续走
+            point1 += 1
+        }
+
+        // 最后point2 就是最终数组的元素个数，这里需要注意point2本身是下标，但是因为point2 本身是从下标2（第三个元素）开始，如果最后一个重复，所以point2就是元素个数
+        return point2
+    }
+
+
+    //    98. 验证二叉搜索树
+    @objc func isValidBST_98() -> Void {
+        showAlert(title: "98. 验证二叉搜索树", message: isValidBST(TreeNode(0, nil,nil)).description)
+    }
+    func isValidBST(_ root: TreeNode?) -> Bool {
+        return find(left:nil,right:nil,root:root)
+    }
+    
+    func find(left:Int?,right:Int?,root:TreeNode?) -> Bool {
+        // 递归终止条件
+        if root == nil {
+            return true
+        }
+        if left != nil && left! <= root!.val {
+            return false
+        }
+        
+        if right != nil && right! >= root!.val {
+            return false
+        }
+        // 开始左右分别递归
+        // 这里需要注意需要把当前节点也要带入下一次递归中，因为后面要进行比较，而且因为是左右分别递归，所以需要两个参数来区分左右（虽然left和right传入的都是当前节点的值）
+        let leftBool = find(left: root!.val, right: right, root: root!.left)
+        let rightBool = find(left: left, right: root!.val, root: root!.right)
+        return leftBool == true && rightBool == true
     }
 }
         
