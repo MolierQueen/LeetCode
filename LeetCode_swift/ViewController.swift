@@ -119,7 +119,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "findReplaceString_833",
                                "search_33",
                                "removeDuplicatesII_80",
-                               "isValidBST_98"
+                               "isValidBST_98",
+                               "findSubstring_30"
     ];
     
     
@@ -5337,5 +5338,61 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let rightBool = find(left: left, right: root!.val, root: root!.right)
         return leftBool == true && rightBool == true
     }
+    
+    //    30. 串联所有单词的子串
+    @objc func findSubstring_30() -> Void {
+        showAlert(title: "30. 串联所有单词的子串", message: findSubstring("aaaaaaaaaaaaaa", ["aa","aa"]).description)
+    }
+//    以下解法   171 / 179 个通过的测试用例  后面几个测试用例耗时太高了，还没有找到合适的方法
+    func findSubstring(_ s: String, _ words: [String]) -> [Int] {
+        let sLength = words.first!.count * words.count
+        let signalLength = words.first!.count
+        if s.count < sLength {
+            return []
+        }
+        
+        var dic = [String:Int]()
+        for (_, ele) in words.enumerated() {
+            var count = dic[ele] ?? 0
+            count += 1
+            dic[ele] = count
+        }
+        
+        let sArr = s.map({String($0)})
+        var resPoint = 0
+        var startPoint = 0
+        var endPoint = signalLength - 1
+        var compartCount = 0
+        var resArr = [Int]()
+        var tmpDic = dic
+        while endPoint < sArr.count {
+            var startIndex = s.index(s.startIndex, offsetBy: startPoint)
+            var endIndex = s.index(s.startIndex, offsetBy: endPoint)
+            var currentStr = String(s[startIndex...endIndex])
+            if dic[currentStr] != nil && dic[currentStr]! > 0 && compartCount <= words.count {
+                compartCount += 1
+                dic[currentStr]! -= 1
+                if compartCount == words.count {
+                    resArr.append(resPoint)
+                    resetFlag(resPoint: &resPoint, startPoint: &startPoint, endPoint: &endPoint, compartCount: &compartCount, dic: &dic, signalLength: signalLength, tmpDic: tmpDic)
+                } else {
+                    startPoint = endPoint + 1
+                    endPoint = (startPoint + signalLength - 1)
+                }
+            } else {
+                resetFlag(resPoint: &resPoint, startPoint: &startPoint, endPoint: &endPoint, compartCount: &compartCount, dic: &dic, signalLength: signalLength, tmpDic: tmpDic)
+            }
+        }
+        return resArr
+    }
+    
+    func resetFlag(resPoint:inout Int, startPoint:inout Int, endPoint :inout Int,compartCount:inout Int, dic:inout [String:Int], signalLength:Int,tmpDic:[String:Int]) {
+        resPoint += 1
+        startPoint = resPoint
+        endPoint = startPoint + signalLength - 1
+        compartCount = 0
+        dic = tmpDic
+    }
+    
 }
         
