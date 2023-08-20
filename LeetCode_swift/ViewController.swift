@@ -120,10 +120,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "search_33",
                                "removeDuplicatesII_80",
                                "isValidBST_98",
-                               "findSubstring_30"
+                               "findSubstring_30",
+                               "swapPairs_24",
+                               "nextPermutation_31",
+                               "combinationSum_39"
     ];
-    
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.dataSource.count
@@ -5394,5 +5395,139 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         dic = tmpDic
     }
     
+    //24. 两两交换链表中的节点
+    @objc func swapPairs_24() -> Void {
+        showAlert(title: "    //24. 两两交换链表中的节点", message: swapPairs(l11).debugDescription)
+    }
+
+    func swapPairs(_ head: ListNode?) -> ListNode? {
+        // 先排除一些异常情况 这没的说
+        guard var head = head else {
+            return nil
+        }
+        
+        if head.next == nil {
+            return head
+        }
+        
+        // 开始递归
+        return change(first: head, second: head.next)
+    }
+    
+    
+    // 递归函数原理：每次交换两个元素（一个小组），交换完成后 两个指针往后移动两位指向下两个需要被交换的元素，然后再重复操作，最后吧每个小组连起来
+    func change(first:ListNode?, second:ListNode?) -> ListNode? {
+        // 退出条件1：如果最后一个小组连第一个元素都没有那就返回nil吧
+        guard let first = first else {
+            return nil
+        }
+        // 退出条件2：如果最后一个小组第二个元素没有那就返回第一个吧
+        guard var second = second else {
+            return first
+        }
+        // 保存下第二个节点的下一个，因为后面要用到这个值
+        var secondNext = second.next
+        
+        // 两两交换步骤1：把第一个指针指向第二个的下一个
+        first.next = second.next
+        
+        // 两两交换步骤2：把第二个指针指向第一个
+        second.next = first
+        
+        // 交换完毕后开始进行收尾相接，因为交换完毕后first变成尾部，second变成头部了，所以用first.去接下一次操作
+        first.next = change(first: first.next, second: secondNext?.next)
+        
+        // 同样因为交换完毕后first变成尾部，second变成头部了，所以这里返回头部就是返回second。
+        return second
+    }
+    
+    //    31. 下一个排列
+    @objc func nextPermutation_31() {
+        var arr = [1,3,2]
+        nextPermutation(&arr)
+        showAlert(title: "31. 下一个排列", message: arr.description)
+    }
+    func nextPermutation(_ nums: inout [Int]) {
+        // 元素肯定要大于等于2
+        if nums.count >= 2 {
+            var index = nums.count - 2
+            // 开始遍历
+            while index >= 0 {
+                // 找到需要交换的下标
+                let needChangeIndex = findMin(current: nums[index], index: index+1, nums: nums)
+                if needChangeIndex > 0 {
+                    // 如果找到了就开始交换
+                    nums.swapAt(index, needChangeIndex)
+                    
+                    // 和目标位置交换完成后需要保证该位置右侧的数是从小到大排列（位越高值越小）所以需要做个排序
+                    // 如果这里不想使用额外的存储空间，那么可以自己写二分查找等，主要是要挤住这里需要额外一次排序
+                    let tmpArr = nums[index+1 ... nums.count-1].sorted()
+                    for i in 0 ..< tmpArr.count {
+                        nums[i+index+1] = tmpArr[i]
+                    }
+                    return
+                }
+                index -= 1
+            }
+            // 如果没找到，说明本身就是逆序了，那就输出正序数组
+            nums = nums.sorted()
+        }
+    }
+    
+    // 此函数用来寻找需要交换的下标
+    func findMin(current:Int, index:Int, nums:[Int]) -> Int {
+        // 初始化一些变量
+        var result = Int.max
+        var index = index
+        var resultIndex = -1
+        // 原理就是找到当前位置右侧中大于该元素的最小值来和他交换
+        while index < nums.count {
+            let cur = nums[index]
+            if cur > current {
+                if cur < result {
+                    result = cur
+                    resultIndex = index
+                }
+            }
+            index += 1
+        }
+        return resultIndex
+    }
+    
+    //    39. 组合总和
+    @objc func combinationSum_39() -> Void {
+        showAlert(title: "39. 组合总和", message: combinationSum([2,3,6,7], 7).description)
+    }
+    func combinationSum(_ candidates: [Int], _ target: Int) -> [[Int]] {
+        // 使用回溯递归
+        var candidates = candidates.sorted()
+        if target < candidates.first! {
+            return []
+        }
+        var result = [[Int]]()
+        var combine = [Int]()
+        var index = 0
+        dfs(result: &result, combine: &combine, index: index, target: target, oriNums: candidates)
+        return result
+    }
+    
+    func dfs(result:inout [[Int]], combine:inout [Int], index:Int, target:Int, oriNums:[Int]) -> Void {
+        
+        if index == oriNums.count {
+            return
+        }
+        
+        if target == 0 {
+            result.append(combine)
+            return
+        }
+        
+        self.dfs(result: &result, combine: &combine, index: index+1, target: target, oriNums: oriNums)
+        if target - oriNums[index] >= 0 {
+            combine.append(oriNums[index])
+            self.dfs(result: &result, combine: &combine, index: index, target: target - oriNums[index], oriNums: oriNums)
+            combine.removeLast()
+        }
+    }
 }
         
