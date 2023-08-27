@@ -123,7 +123,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                "findSubstring_30",
                                "swapPairs_24",
                                "nextPermutation_31",
-                               "combinationSum_39"
+                               "combinationSum_39",
+                               "isValidSudoku_36",
+                               "merge_56",
+                               "myPow_50"
     ];
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -5528,6 +5531,165 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.dfs(result: &result, combine: &combine, index: index, target: target - oriNums[index], oriNums: oriNums)
             combine.removeLast()
         }
+    }
+    
+    //    36. 有效的数独
+    @objc func isValidSudoku_36() -> Void {
+        showAlert(title: "36. 有效的数独", message: String(self.isValidSudoku([["5","3",".",".","7",".",".",".","."],["6",".",".","1","9","5",".",".","."],[".","9","8",".",".",".",".","6","."],["8",".",".",".","6",".",".",".","3"],["4",".",".","8",".","3",".",".","1"],["7",".",".",".","2",".",".",".","6"],[".","6",".",".",".",".","2","8","."],[".",".",".","4","1","9",".",".","5"],[".",".",".",".","8",".",".","7","9"]])))
+        
+    }
+    func isValidSudoku(_ board: [[Character]]) -> Bool {
+        // 定义数据结构，类型为数组里面嵌套集合
+        
+        // 行数组：里面的元素为每一行的元素
+        var rowSets: [Set<Character>] = Array.init(repeating: Set<Character>(), count: 9)
+        
+        // 列数组：里面的元素为每一列的元素
+        var colSets: [Set<Character>] = Array.init(repeating: Set<Character>(), count: 9)
+        
+        // 9宫格数组：里面的元素为每一个9宫格内的元素
+        var squareSets: [Set<Character>] = Array.init(repeating: Set<Character>(), count: 9)
+        
+        // 开始双重遍历给到的二维数组
+        for (row, chars) in board.enumerated() {
+            for (col, char) in chars.enumerated() {
+                // 如果是“.”就不考虑了，本身也没啥用
+                if char == "." { continue }
+                
+                // 如果行数组中当前这个行数的集合中已经有了这个元素了，那就不是数独了，同一行中不能有重复元素，所以返回false
+                guard !rowSets[row].contains(char) else { return false }
+                
+                // 如果没有就加进去
+                rowSets[row].insert(char)
+                
+                // 如果列数组中当前这个列的集合中已经有了这个元素了，那就不是数独了，同一列中不能有重复元素，所以返回false
+                guard !colSets[col].contains(char) else { return false }
+                
+                // 如果没有就加进去
+                colSets[col].insert(char)
+                
+                // 开始定义宫格（给宫格分组）
+                var squareIndex = 0
+                // 宫格为
+                // 0  1  2
+                // 3  4  5
+                // 6  7  8
+                if row <= 2 {
+                    if col <= 2 {
+                        // 满足此情况的元素，我们分到0号宫格，后面以此类推
+                        squareIndex = 0
+                    } else if col <= 5 {
+                        squareIndex = 1
+                    } else {
+                        squareIndex = 2
+                    }
+                } else if row <= 5 {
+                    if col <= 2 {
+                        squareIndex = 3
+                    } else if col <= 5 {
+                        squareIndex = 4
+                    } else {
+                        squareIndex = 5
+                    }
+                } else {
+                    if col <= 2 {
+                        squareIndex = 6
+                    } else if col <= 5 {
+                        squareIndex = 7
+                    } else {
+                        squareIndex = 8
+                    }
+                }
+                // 如果宫格数组中当前这个宫格的集合中已经有了这个元素了，那就不是数独了，同一宫格中不能有重复元素，所以返回false
+                guard !squareSets[squareIndex].contains(char) else { return false }
+                
+                // 如果没有就加进宫格去
+                squareSets[squareIndex].insert(char)
+            }
+        }
+        return true
+    }
+    
+//    56. 合并区间
+    @objc func merge_56() -> Void {
+        showAlert(title: "56. 合并区间", message: merge([[1,3],[2,6],[8,10],[15,18]]).description)
+    }
+    func merge(_ intervals: [[Int]]) -> [[Int]] {
+        // 先排除一下异常情况
+        if intervals.count <= 1 {
+            return intervals
+        }
+        
+        // 把数组排个序，这个叼毛一开始没说这个区间是无序的，结果被坑了
+        var intervals = intervals
+        intervals.sort(by: {$0.first! < $1.first!})
+        
+        // 创建结果数组
+        var result = [[Int]]()
+        
+        // 开始遍历数组
+        for (index, ele) in intervals.enumerated() {
+            if result.count <= 0 {
+                // 如果结果数组中还没有东西，就无脑添加
+                result.append(ele)
+            } else {
+                // 如果结果数组中有东西了，那就需要把当前的区间和结果数组中的最后一个区间做比对，看看有没有重合区域，无非就是看下一个区间的两边是否是在另一个区间中
+                
+                if (result.last!.first! >= ele.first! && result.last!.first! <= ele.last!) ||
+                    (result.last!.last! >= ele.first! && result.last!.last! <= ele.last!) ||
+                    (ele.first! >= result.last!.first! && ele.first! <= result.last!.last!) ||
+                    (ele.last! >= result.last!.first! && ele.last! <= result.last!.last!) {
+                    // 如果有重合区域，那就两个区间左侧取最小值，当做新区间的左侧起始，右侧取最大值当做新区间的右侧结束。
+                    let newBegin = min(result.last!.first!, ele.first!)
+                    let newEnd = max(result.last!.last!, ele.last!)
+                    
+                    // 然后删除结果数组中的最后一个元素，因为这个叼毛已经是重合区间了。
+                    result.removeLast()
+                    
+                    // 把我们刚刚计算出来的新区间放进去
+                    result.append([newBegin,newEnd])
+                } else {
+                    // 如果和结果数组里面的区间没有重合，直接无脑添加
+                    result.append(ele)
+                }
+            }
+        }
+        // 最后返回结果数组
+        return result
+    }
+    
+//    50. Pow(x, n)幂函数
+    @objc func myPow_50() -> Void {
+        showAlert(title: "50. Pow(x, n)幂函数", message: String(myPow(2, 3)))
+    }
+    
+    func myPow(_ x: Double, _ n: Int) -> Double {
+        // 两种方法，迭代法和 二分递归法，迭代就不讲了，太简单了，下面讲递归
+
+        // 先排除异常情况
+        if n == 0 {
+            return 1.0
+        }
+
+        if x == 0.0 {
+            return 0
+        }
+
+        // 开始二分递归，递推公式是 f(n) = f(n/2) * f(n/2)  如果n是奇数的话 还要再 * x
+        // 比如 2^6 = 2^3 * 2^3     2^7 = 2^3 * 2^3 * 2
+        return n > 0 ? calculate(x: x, n: abs(n)) : 1 / calculate(x: x, n: abs(n))
+    }
+
+    func calculate(x:Double, n:Int) -> Double {
+        // 退出条件，此方法中n 已经是正整数了，不用考虑符号
+        if n <= 1 {return x}
+        // 计算出一半
+        let half = calculate(x: x, n: n/2)
+        // 判断下奇偶性 返回对应的值
+        if n%2 != 0 {
+            return half * half * x
+        }
+        return half * half
     }
 }
         
